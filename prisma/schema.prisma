@@ -83,8 +83,8 @@ model User {
   updatedAt               DateTime               @updatedAt
   role                    Role                   @default(USER)
   accounts                Account[]
-  savedCards              SavedCards[] // 1:M relation to Card
-  cartItems               CartItem[] // 1:M relation to CartItem
+  incomes                 Income[]
+  expenses                Expense[]
   isTwoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation   TwoFactorConfirmation? // 1:1 relation to TwoFactorConfirmation
   twoFactorConfirmationId String?
@@ -92,33 +92,6 @@ model User {
   // put these indexes in later to measure the performance and database size difference
   // @@index([id, email, firstName, lastName, createdAt, updatedAt])
   @@map("users")
-}
-
-model YugiohCard {
-  id             Int          @id
-  SavedCards     SavedCards[] // M:1 yugioh card can be saved in multiple user's saved cards
-  CartItem       CartItem[] // M:1 yugioh card can be in multiple user's cart items
-  name           String
-  price          Float
-  imageUrl       String
-  type           String
-  frameType      String
-  desc           String
-  atk            Int?
-  def            Int?
-  level          Int?
-  race           String
-  attribute      String?
-  archetype      String?
-  ygoprodeck_url String
-  pend_desc      String?
-  monster_desc   String?
-  scale          Int?
-  linkval        Int?
-
-  // put these indexes in later to measure the performance and database size difference
-  // @@index([atk, def, level, race, attribute, archetype, scale, linkval, frameType, type, price, name])
-  @@map("yugioh_cards")
 }
 
 enum TradeRealized {
@@ -147,30 +120,26 @@ model Trade {
   realized             TradeRealized
 }
 
-model SavedCards {
-  id           String     @id @default(uuid())
-  userId       String
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade) // 1:M relation to User
-  yugiohCardId Int
-  yugiohCard   YugiohCard @relation(fields: [yugiohCardId], references: [id], onDelete: Cascade) // 1:M relation to YugiohCard
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-
-  @@map("saved_cards")
+model Income {
+  id          String   @id @default(cuid())
+  amount      Float
+  date        DateTime
+  description String?
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
 }
 
-model CartItem {
-  id           String     @id @default(uuid())
-  userId       String
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade) // 1:M relation to User
-  yugiohCardId Int
-  yugiohCard   YugiohCard @relation(fields: [yugiohCardId], references: [id], onDelete: Cascade) // 1:M relation to YugiohCard
-  name         String
-  quantity     Int
-  price        Float
-  desc         String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-
-  @@map("cart_items")
+model Expense {
+  id          String   @id @default(cuid())
+  amount      Float
+  date        DateTime
+  description String?
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
 }
