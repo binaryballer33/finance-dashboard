@@ -1,0 +1,176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  id           String   @id @default(cuid())
+  email        String
+  token        String   @unique
+  expires      DateTime
+  sixDigitCode Int
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id           String   @id @default(cuid())
+  email        String
+  token        String   @unique
+  expires      DateTime
+  sixDigitCode Int
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id           String   @id @default(cuid())
+  email        String
+  token        String   @unique
+  expires      DateTime
+  sixDigitCode Int
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id                      String                 @id @default(uuid())
+  email                   String                 @unique
+  emailVerified           DateTime?              @map("email_verified")
+  encryptedPassword       String? // if you are using oauth to create the user, you will not have a password
+  firstName               String
+  lastName                String
+  name                    String?
+  imageUrl                String?
+  image                   String
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  role                    Role                   @default(USER)
+  accounts                Account[]
+  savedCards              SavedCards[] // 1:M relation to Card
+  cartItems               CartItem[] // 1:M relation to CartItem
+  isTwoFactorEnabled      Boolean                @default(false)
+  twoFactorConfirmation   TwoFactorConfirmation? // 1:1 relation to TwoFactorConfirmation
+  twoFactorConfirmationId String?
+
+  // put these indexes in later to measure the performance and database size difference
+  // @@index([id, email, firstName, lastName, createdAt, updatedAt])
+  @@map("users")
+}
+
+model YugiohCard {
+  id             Int          @id
+  SavedCards     SavedCards[] // M:1 yugioh card can be saved in multiple user's saved cards
+  CartItem       CartItem[] // M:1 yugioh card can be in multiple user's cart items
+  name           String
+  price          Float
+  imageUrl       String
+  type           String
+  frameType      String
+  desc           String
+  atk            Int?
+  def            Int?
+  level          Int?
+  race           String
+  attribute      String?
+  archetype      String?
+  ygoprodeck_url String
+  pend_desc      String?
+  monster_desc   String?
+  scale          Int?
+  linkval        Int?
+
+  // put these indexes in later to measure the performance and database size difference
+  // @@index([atk, def, level, race, attribute, archetype, scale, linkval, frameType, type, price, name])
+  @@map("yugioh_cards")
+}
+
+enum TradeRealized {
+  GAIN
+  LOSS
+}
+
+enum TradeType {
+  SELL_CALL
+  SELL_PUT
+}
+
+model Trade {
+  id                   String        @id @default(cuid())
+  contracts            Int
+  profitLoss           Float
+  profitLossPercentage Float
+  buyToClose           Float
+  sellToOpen           Float
+  strike               Float
+  ticker               String
+  date                 DateTime
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  type                 TradeType
+  realized             TradeRealized
+}
+
+model SavedCards {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade) // 1:M relation to User
+  yugiohCardId Int
+  yugiohCard   YugiohCard @relation(fields: [yugiohCardId], references: [id], onDelete: Cascade) // 1:M relation to YugiohCard
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("saved_cards")
+}
+
+model CartItem {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade) // 1:M relation to User
+  yugiohCardId Int
+  yugiohCard   YugiohCard @relation(fields: [yugiohCardId], references: [id], onDelete: Cascade) // 1:M relation to YugiohCard
+  name         String
+  quantity     Int
+  price        Float
+  desc         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("cart_items")
+}
