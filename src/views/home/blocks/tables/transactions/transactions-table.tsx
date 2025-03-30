@@ -1,6 +1,6 @@
 "use client"
 
-import useGetYugiohCardsInfiniteQuery from "@/api/yu-gi-oh/queries/use-get-yu-gi-oh-cards-infinite-query"
+import useGetTransactionsInfiniteQuery from "@/api/transactions/queries/use-get-yu-gi-oh-cards-infinite-query"
 
 import { Button } from "@/components/ui/button"
 
@@ -9,13 +9,13 @@ import CustomTable from "@/components/tables/table"
 import useCreateTableColumns from "./use-create-yugioh-table-columns"
 import YugiohExpandRowDetail from "./yugioh-expand-row-detail"
 
-export default function YugiohTable() {
+export default function TransactionsTable() {
     const { columns, hideForColumns } = useCreateTableColumns()
 
-    const { data: yugiohCardPages, fetchNextPage, hasNextPage, isFetching } = useGetYugiohCardsInfiniteQuery()
+    const { data: transactionPages, fetchNextPage, hasNextPage, isFetching } = useGetTransactionsInfiniteQuery()
 
-    // Flatten all pages of cards into a single array
-    const yugiohCards = yugiohCardPages?.pages.flatMap((page) => page) ?? []
+    // Flatten all pages of transactions into a single array
+    const transactions = transactionPages?.pages.flatMap((page) => page) ?? []
 
     const fetchMoreDataComponent = () => (
         <Button disabled={!hasNextPage || isFetching} onClick={() => fetchNextPage()} size="sm">
@@ -26,7 +26,7 @@ export default function YugiohTable() {
     return (
         <CustomTable
             columns={columns as any}
-            data={yugiohCards as any}
+            data={transactions as any}
             expandRowDetailComponent={YugiohExpandRowDetail as any}
             fetchMoreDataComponent={fetchMoreDataComponent}
             hideForColumns={hideForColumns}

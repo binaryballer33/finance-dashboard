@@ -1,5 +1,3 @@
-import type { YuGiOhCard } from "@/types/yu-gi-oh/yu-gi-oh"
-
 import { randomUUID } from "crypto"
 
 import { hash } from "bcryptjs"
@@ -36,37 +34,6 @@ async function batchCreateTrades() {
     } catch (error) {
         console.error("Error inserting records to trades table", error)
     }
-}
-
-async function batchCreateYuGiOhCards(yugiohCards: YuGiOhCard[]) {
-    console.log("Attempting To Create Yugioh Cards")
-
-    yugiohCards.forEach((card) => {
-        // delete the data that is not needed for the yugiohCard table, these related tables have inconsistent data in my yu-gi-oh-cards.json file and I don't have time to fix and put into a relational database
-        delete card?.card_sets
-        delete card?.card_images
-        delete card?.card_prices
-        // @ts-ignore
-        delete card?.linkmarkers // TODO: figure out how to get typescript to see that this field could exist on this card
-        delete card?.banlist_info
-        delete card?.misc_info
-    })
-
-    const cardsBatch1 = yugiohCards.slice(0, 9999) // 9999 is the max number of records that can be inserted at once with Prisma
-    const cardsBatch2 = yugiohCards.slice(9999, 14000)
-    const batches = [cardsBatch1, cardsBatch2]
-
-    batches.map(async (batch, index) => {
-        try {
-            const result = await prisma.yugiohCard.createMany({
-                data: batch,
-                skipDuplicates: true, // Optional: skips inserting records that would cause a unique constraint violation
-            })
-            console.log(`Successfully Inserted ${result.count} Records To YugiohCard Table\n`)
-        } catch (error) {
-            console.error(`Error While Inserting Records To YugiohCard Table, Failed On Batch ${index}`, error)
-        }
-    })
 }
 
 async function createUsers() {

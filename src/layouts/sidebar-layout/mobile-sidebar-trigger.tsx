@@ -30,7 +30,7 @@ export default function MobileSidebarTrigger() {
 
                         <SheetTitle className="sr-only">Finance Dashboard</SheetTitle>
 
-                        <div className="bg-sidebar text-sidebar-foreground h-full">
+                        <div className="h-full bg-sidebar text-sidebar-foreground">
                             <div className="flex flex-col gap-0 py-4">
                                 <div className="flex items-center px-4">
                                     <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
@@ -42,9 +42,9 @@ export default function MobileSidebarTrigger() {
                             <div className="px-2 py-2">
                                 {navItems.map((item) => (
                                     <a
-                                        className={`hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                                        className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
                                             item.isActive
-                                                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                                                ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
                                                 : ""
                                         }`}
                                         href={item.href}

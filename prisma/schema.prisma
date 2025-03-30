@@ -85,6 +85,7 @@ model User {
   accounts                Account[]
   incomes                 Income[]
   expenses                Expense[]
+  transactions            Transaction[]
   isTwoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation   TwoFactorConfirmation? // 1:1 relation to TwoFactorConfirmation
   twoFactorConfirmationId String?
@@ -133,6 +134,18 @@ model Income {
 }
 
 model Expense {
+  id          String   @id @default(cuid())
+  amount      Float
+  date        DateTime
+  description String?
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
+model Transaction {
   id          String   @id @default(cuid())
   amount      Float
   date        DateTime
