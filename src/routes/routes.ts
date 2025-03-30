@@ -13,6 +13,7 @@ const transactionApi = {
 }
 
 const user = {
+    home: "/",
     profile: `/user/profile`,
     settings: `/user/settings`,
 }
@@ -36,18 +37,12 @@ const publicRoutes = {
     403: "/error/403",
     404: "/error/404",
     500: "/error/500",
-    about: "/about",
     comingSoon: "/coming-soon",
-    contact: "/contact",
     dummy: "",
     error: "/error",
     faq: "/faq",
-    home: "/",
     maintenance: "/maintenance",
-    payment: "/payment",
-    pricing: "/pricing",
     resetPassword: "/forgot-password",
-    services: "/services",
 }
 
 const routes = {

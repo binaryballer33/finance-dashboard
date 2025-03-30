@@ -4,7 +4,7 @@ import routes from "@/routes/routes"
 
 const navItems = [
     {
-        href: routes.home,
+        href: routes.user.home,
         icon: Home,
         isActive: true,
         title: "Dashboard",
