@@ -3,10 +3,9 @@ import type { Trade as PrismaTrade } from "@prisma/client"
 import { TradeRealized, TradeType } from "@prisma/client"
 
 // prisma db will automatically add the id and createdAt and updatedAt fields to the trade table
-type Trade = Omit<PrismaTrade, "createdAt" | "id" | "updatedAt">
+type Trade = Omit<PrismaTrade, "createdAt" | "id" | "updatedAt" | "userId">
 
-// eslint-disable-next-line import/prefer-default-export
-export const trades: Trade[] = [
+const trades: Trade[] = [
     {
         buyToClose: 0,
         contracts: 5,
@@ -632,3 +631,5 @@ export const trades: Trade[] = [
         type: "SELL_PUT",
     },
 ]
+
+export default trades
