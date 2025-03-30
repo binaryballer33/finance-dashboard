@@ -6,6 +6,8 @@ import ReactQueryClientProvider from "@/layouts/providers/client-providers/query
 import ThemeProvider from "@/layouts/providers/client-providers/theme-provider"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
+import { SidebarProvider } from "@/components/ui/sidebar"
+
 type LayoutProps = {
     children: ReactNode
 }
@@ -14,7 +16,9 @@ export default function ClientProviders({ children }: LayoutProps) {
     return (
         <ThemeProvider>
             <NuqsAdapter>
-                <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+                <SidebarProvider>
+                    <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+                </SidebarProvider>
             </NuqsAdapter>
         </ThemeProvider>
     )

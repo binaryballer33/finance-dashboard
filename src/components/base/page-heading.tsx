@@ -24,7 +24,7 @@ export default function PageHeading(props: PageHeadingProps) {
     const { t } = useTranslation()
 
     return (
-        <div className={cn("flex flex-col", background && `bg-[${background}]`, className)}>
+        <div className={cn("mt-2 flex flex-col", background && `bg-[${background}]`, className)}>
             <div className="flex w-full flex-col items-center justify-between md:flex-row">
                 <div className="PageTitleContent flex flex-col items-center overflow-hidden md:flex-row md:space-x-4">
                     {iconBox}

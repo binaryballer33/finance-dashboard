@@ -64,6 +64,16 @@ const config = {
                 },
                 customPrimary: "#14191e",
                 customPrimaryDark: "#009688",
+                sidebar: {
+                    DEFAULT: "hsl(var(--sidebar-background))",
+                    foreground: "hsl(var(--sidebar-foreground))",
+                    primary: "hsl(var(--sidebar-primary))",
+                    "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+                    accent: "hsl(var(--sidebar-accent))",
+                    "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+                    border: "hsl(var(--sidebar-border))",
+                    ring: "hsl(var(--sidebar-ring))",
+                },
             },
             borderRadius: {
                 lg: "var(--radius)",
@@ -72,10 +82,13 @@ const config = {
             },
             keyframes: {
                 "caret-blink": {
-                    "0%,70%,100%": { opacity: "1" },
-                    "20%,50%": { opacity: "0" },
+                    "0%,70%,100%": {
+                        opacity: "1",
+                    },
+                    "20%,50%": {
+                        opacity: "0",
+                    },
                 },
-
                 "accordion-down": {
                     from: {
                         height: "0",

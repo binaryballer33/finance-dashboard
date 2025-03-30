@@ -19,7 +19,7 @@ export default function HomeView(props: HomeViewProps) {
 
     return (
         <Container maxWidth="xl">
-            <PageHeading bottomText="This Is A Sample Page" title="Home Page" />
+            <PageHeading bottomText="This Is A Sample Page" title="Dashboard" />
 
             <Tabs className="w-full" defaultValue="trades">
                 <TabsList className="grid w-full grid-cols-2 border">

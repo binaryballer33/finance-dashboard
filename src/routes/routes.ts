@@ -1,20 +1,18 @@
 import { BACKEND_BASE_URL } from "@/lib/secrets" // API URLs
 
 // API URLs
-const YU_GI_OH_API_BASE_URL = `${BACKEND_BASE_URL}/api/yu-gi-oh`
+const TRANSACTION_API_BASE_URL = `${BACKEND_BASE_URL}/api/transaction`
 
-const yugiohApi = {
-    create: `${YU_GI_OH_API_BASE_URL}/post`,
-    delete: (cardId: number) => `${YU_GI_OH_API_BASE_URL}/delete/${cardId}`,
-    details: (cardId: number) => `${YU_GI_OH_API_BASE_URL}/get/${cardId}`, // get specific card
-    read: `${YU_GI_OH_API_BASE_URL}/get`, // get all cards
-    root: YU_GI_OH_API_BASE_URL,
-    update: (cardId: number) => `${YU_GI_OH_API_BASE_URL}/patch/${cardId}`,
+const transactionApi = {
+    create: `${TRANSACTION_API_BASE_URL}/post`,
+    delete: (transactionId: number) => `${TRANSACTION_API_BASE_URL}/delete/${transactionId}`,
+    details: (transactionId: number) => `${TRANSACTION_API_BASE_URL}/get/${transactionId}`, // get specific card
+    read: `${TRANSACTION_API_BASE_URL}/get`, // get all cards
+    root: TRANSACTION_API_BASE_URL,
+    update: (transactionId: number) => `${TRANSACTION_API_BASE_URL}/patch/${transactionId}`,
 }
 
 const user = {
-    cart: `/user/cart`,
-    orders: `/user/orders`,
     profile: `/user/profile`,
     settings: `/user/settings`,
 }
@@ -58,7 +56,7 @@ const routes = {
 
     // used for making api calls
     api: {
-        yugioh: { ...yugiohApi },
+        transaction: { ...transactionApi },
     },
 
     // routes used for user authentication

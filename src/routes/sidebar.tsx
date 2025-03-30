@@ -149,16 +149,6 @@ export const loggedInAuthItems: NavBarItemWithIcon[] = [
         title: "Account Settings",
     },
     {
-        icon: ShoppingCart,
-        route: routes.user.cart,
-        title: "Cart",
-    },
-    {
-        icon: Receipt,
-        route: routes.user.orders,
-        title: "Orders",
-    },
-    {
         icon: LogOut,
         route: routes.auth.signOut,
         title: "Sign Out",
