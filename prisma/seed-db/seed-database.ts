@@ -121,7 +121,7 @@ async function seedDatabase() {
         await createUsers()
         await createTrades(gmailUserId)
         await createTrades(outlookUserId)
-        await createTransactions(gmailUserId, 100)
+        await createTransactions(gmailUserId, 10000)
         await createTransactions(outlookUserId, 100)
 
         // sometime the seed will not fully work because all the yugioh cards or users are not created yet

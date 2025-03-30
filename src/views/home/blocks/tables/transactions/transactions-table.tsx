@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button"
 
 import CustomTable from "@/components/tables/table"
 
-import useCreateTableColumns from "./use-create-yugioh-table-columns"
-import YugiohExpandRowDetail from "./yugioh-expand-row-detail"
+import useCreateTableColumns from "./use-create-transaction-table-columns"
 
 export default function TransactionsTable() {
     const { columns, hideForColumns } = useCreateTableColumns()
@@ -27,7 +26,6 @@ export default function TransactionsTable() {
         <CustomTable
             columns={columns as any}
             data={transactions as any}
-            expandRowDetailComponent={YugiohExpandRowDetail as any}
             fetchMoreDataComponent={fetchMoreDataComponent}
             hideForColumns={hideForColumns}
             recordsPerPage={[10, 20, 30, 40, 50, 100]}

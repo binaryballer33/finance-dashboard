@@ -5,6 +5,8 @@ import prisma from "@/lib/database/prisma"
 export default async function getTransactions(page = 0, limit = 100) {
     const skipPreviousRecords = page * limit
 
+    console.log("Get Transactions Was Called", page, limit)
+
     try {
         return await prisma.transaction.findMany({
             skip: skipPreviousRecords,
