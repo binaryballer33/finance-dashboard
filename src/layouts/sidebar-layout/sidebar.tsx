@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { DollarSign } from "lucide-react"
+import { DollarSign, LogOut } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
+import signOut from "@/actions/auth/sign-out"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -138,7 +140,7 @@ export default function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <div className="flex items-center gap-2 p-4 group-data-[collapsible=icon]:justify-center">
+                <div className="flex items-center gap-2 p-4 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
                     <Avatar className="h-8 w-8">
                         <AvatarImage alt="Avatar" src="/avatars/3.png" />
                         <AvatarFallback>JD</AvatarFallback>
@@ -147,6 +149,16 @@ export default function AppSidebar() {
                         <span className="text-sm font-medium">John Doe</span>
                         <span className="text-xs text-muted-foreground">john@example.com</span>
                     </div>
+
+                    <Button
+                        className="h-8 w-8"
+                        onClick={async () => {
+                            await signOut()
+                        }}
+                        variant="ghost"
+                    >
+                        <LogOut className="h-4 w-4" />
+                    </Button>
                 </div>
             </SidebarFooter>
 

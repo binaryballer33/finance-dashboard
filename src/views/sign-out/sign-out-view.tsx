@@ -16,7 +16,7 @@ function SignOutView() {
     return (
         <FlexCenteredFullScreenContainer minHeight="75dvh">
             <p className="text-base">{t("You've Been Signed Out Successfully")}</p>
-            <FormLink linkTitle={t("Go Back To The Home Page")} linkTo={routes.home} />
+            <FormLink linkTitle={t("Go Back To The Home Page")} linkTo={routes.user.home} />
         </FlexCenteredFullScreenContainer>
     )
 }

@@ -1,4 +1,4 @@
-import { ArrowLeftRight, BarChart3, Home, Lock, LogIn, LogOut, PiggyBank, Settings, User, UserPlus } from "lucide-react"
+import { ArrowLeftRight, BarChart3, Home, LogOut, PiggyBank, Settings, User } from "lucide-react"
 
 import routes from "@/routes/routes"
 
@@ -38,21 +38,6 @@ const navItems = [
         href: routes.auth.signOut,
         icon: LogOut,
         title: "Logout",
-    },
-    {
-        href: routes.auth.login,
-        icon: LogIn,
-        title: "Login",
-    },
-    {
-        href: routes.auth.register,
-        icon: UserPlus,
-        title: "Sign Up",
-    },
-    {
-        href: routes.auth.forgotPassword,
-        icon: Lock,
-        title: "Forgot Password",
     },
 ]
 
