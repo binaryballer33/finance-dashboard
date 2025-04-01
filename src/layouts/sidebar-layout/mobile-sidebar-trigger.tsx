@@ -1,6 +1,8 @@
 "use client"
 
-import { Bell, Menu } from "lucide-react"
+import { Bell, LogOut, Menu } from "lucide-react"
+
+import signOut from "@/actions/auth/sign-out"
 
 import useMediaQuery from "@/hooks/use-media-query"
 
@@ -54,6 +56,14 @@ export default function MobileSidebarTrigger() {
                                         {item.title}
                                     </a>
                                 ))}
+                                <Button
+                                    onClick={async () => {
+                                        await signOut()
+                                    }}
+                                    variant="ghost"
+                                >
+                                    <LogOut className="h-4 w-4" />
+                                </Button>
                             </div>
                         </div>
                     </SheetContent>

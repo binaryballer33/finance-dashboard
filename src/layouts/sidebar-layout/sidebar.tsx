@@ -3,10 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { DollarSign, LogOut } from "lucide-react"
+import { toast } from "sonner"
 
+import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
 import { cn } from "@/lib/utils"
 
 import signOut from "@/actions/auth/sign-out"
+
+import routes from "@/routes/routes"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -21,6 +25,7 @@ import {
     SidebarRail,
     useSidebar,
 } from "@/components/ui/sidebar"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 import navItems from "./temp-nav-items"
 
@@ -82,6 +87,11 @@ export default function AppSidebar() {
         setHoverOpen(false)
     }, [isPinned, setOpen])
 
+    const handleSignOut = useCallback(async (): Promise<void> => {
+        const response = await signOut() // sign out the user with next auth
+        await handleServerResponse({ redirectTo: routes.auth.signOut, response, toast })
+    }, [])
+
     // Desktop sidebar
     return (
         <Sidebar
@@ -118,6 +128,7 @@ export default function AppSidebar() {
 
             <SidebarContent>
                 <SidebarMenu className="space-y-4">
+                    {/* Nav items */}
                     {navItems.map((item) => (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton
@@ -141,6 +152,7 @@ export default function AppSidebar() {
 
             <SidebarFooter>
                 <div className="flex items-center gap-2 p-4 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
+                    {/* User info */}
                     <Avatar className="h-8 w-8">
                         <AvatarImage alt="Avatar" src="/avatars/3.png" />
                         <AvatarFallback>JD</AvatarFallback>
@@ -150,15 +162,19 @@ export default function AppSidebar() {
                         <span className="text-xs text-muted-foreground">john@example.com</span>
                     </div>
 
-                    <Button
-                        className="h-8 w-8"
-                        onClick={async () => {
-                            await signOut()
-                        }}
-                        variant="ghost"
-                    >
-                        <LogOut className="h-4 w-4" />
-                    </Button>
+                    {/* Logout button */}
+                    <TooltipProvider delayDuration={0}>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button className="h-8 w-8" onClick={handleSignOut} variant="ghost">
+                                    <LogOut className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Logout</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             </SidebarFooter>
 

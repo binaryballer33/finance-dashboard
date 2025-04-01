@@ -42,7 +42,7 @@ export default function LoginView() {
             await setShowTwoFactorInput(true)
         } else {
             // if no 2FA Token, user is not using 2FA
-            const redirectLocation = "error" in response ? "" : routes.user.profile
+            const redirectLocation = "error" in response ? "" : routes.user.home
             await handleServerResponse({ redirectTo: redirectLocation, response, toast })
         }
     })

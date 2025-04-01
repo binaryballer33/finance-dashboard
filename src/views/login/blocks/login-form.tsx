@@ -10,6 +10,7 @@ import Container from "@/components/base/container"
 import FlexBetweenContainer from "@/components/base/flex-box/flex-between-container"
 import FlexCenteredFullScreenContainer from "@/components/base/flex-box/flex-center-full-screen-container"
 import FlexContainer from "@/components/base/flex-box/flex-container"
+import { H1 } from "@/components/base/typography"
 import FormDivider from "@/components/forms/form/form-divider"
 import FormHead from "@/components/forms/form/form-head"
 import FormLink from "@/components/forms/form/form-link"
@@ -27,6 +28,8 @@ export default function LoginForm(props: LoginFormProps) {
 
     return (
         <FlexCenteredFullScreenContainer minHeight="85dvh">
+            <H1 className="mb-4 text-center">Finance Dashboard</H1>
+
             <FormHead
                 description="Login To Your Account For Full Access"
                 icon={<LogIn className="h-20 w-20 text-primary" />}

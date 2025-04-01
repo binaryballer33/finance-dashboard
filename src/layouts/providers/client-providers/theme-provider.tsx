@@ -25,10 +25,10 @@ export default function ThemeProvider({ children, props }: ThemeProviderProps) {
             value={{ dark: "dark", light: "light", system: "system" }}
             {...props}
         >
-            <div className="flex min-h-screen">
+            <>
                 {children}
                 <Toaster duration={3000} expand position="top-right" richColors />
-            </div>
+            </>
         </NextThemesProvider>
     )
 }

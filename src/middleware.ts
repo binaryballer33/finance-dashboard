@@ -24,7 +24,9 @@ export default middleware((req) => {
     // if the user is visiting a login/register/etc page and is already authenticated redirect them
     if (isAuthRoute) {
         if (isAuthenticated) return Response.redirect(new URL(routes.user.profile, nextUrl))
-        return undefined // auth route and not authenticated, allow access to auth route
+
+        // auth route and not authenticated, allow access to auth route
+        return undefined
     }
 
     // if the user is visiting a private page and is not authenticated redirect them to the login page

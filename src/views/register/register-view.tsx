@@ -22,6 +22,7 @@ import Container from "@/components/base/container"
 import FlexBetweenContainer from "@/components/base/flex-box/flex-between-container"
 import FlexCenteredFullScreenContainer from "@/components/base/flex-box/flex-center-full-screen-container"
 import FlexContainer from "@/components/base/flex-box/flex-container"
+import { H1 } from "@/components/base/typography"
 import Form from "@/components/forms/form-provider"
 import FormDivider from "@/components/forms/form/form-divider"
 import FormHead from "@/components/forms/form/form-head"
@@ -47,6 +48,8 @@ export default function RegisterView() {
     return (
         <Form form={form} onSubmit={onSubmit}>
             <FlexCenteredFullScreenContainer>
+                <H1 className="mb-4 text-center">Finance Dashboard</H1>
+
                 <Container maxWidth="sm">
                     <FormHead
                         description={t("Join Our Platform By Creating A New Account For Exclusive Access")}
