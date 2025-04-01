@@ -11,6 +11,7 @@ const QUERY_KEYS = {
 
     // get many
     GET_ALL_TRADES: ["trades"],
+    GET_ALL_TRADES_BY_USER_ID: (userId: string) => ["trades", { userId }],
     GET_ALL_TRANSACTIONS: ["transactions"],
     GET_ALL_TRANSACTIONS_BY_USER_ID: (userId: string) => ["transactions", { userId }],
     GET_ALL_USERS: ["user"],

@@ -1,4 +1,4 @@
-import type { TwoFactorConfirmation, User, VerificationToken } from "@prisma/client"
+import type { Trade, TwoFactorConfirmation, User, VerificationToken } from "@prisma/client"
 
 type StatusSuccess = 200 | 201
 
@@ -24,6 +24,10 @@ type ServerEmailSuccessResponse = {
     email: string
 } & ServerSuccessResponse
 
+type ServerTradeSuccessResponse = {
+    trades: Trade[]
+} & ServerSuccessResponse
+
 type ServerTokenSuccessResponse = {
     token: VerificationToken
 } & ServerSuccessResponse
@@ -37,5 +41,6 @@ export type ServerResponse =
     | ServerErrorResponse
     | ServerSuccessResponse
     | ServerTokenSuccessResponse
+    | ServerTradeSuccessResponse
     | ServerTwoFactorConfirmationSuccessResponse
     | ServerUserSuccessResponse

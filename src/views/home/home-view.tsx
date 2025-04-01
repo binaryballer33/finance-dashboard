@@ -1,6 +1,6 @@
 "use client"
 
-import type { Trade } from "@prisma/client"
+import { useSession } from "next-auth/react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -10,12 +10,11 @@ import PageHeading from "@/components/base/page-heading"
 import TradeTable from "./blocks/tables/trades/trade-table"
 import TransactionsTable from "./blocks/tables/transactions/transactions-table"
 
-type HomeViewProps = {
-    trades: Trade[]
-}
+export default function HomeView() {
+    const { data: session } = useSession()
+    const userId = session?.user?.id
 
-export default function HomeView(props: HomeViewProps) {
-    const { trades } = props
+    if (!userId) return null
 
     return (
         <Container maxWidth="xl">
@@ -28,7 +27,7 @@ export default function HomeView(props: HomeViewProps) {
                 </TabsList>
 
                 <TabsContent value="trades">
-                    <TradeTable trades={trades} />
+                    <TradeTable userId={userId} />
                 </TabsContent>
 
                 <TabsContent value="transactions">

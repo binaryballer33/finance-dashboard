@@ -8,8 +8,8 @@ import { dehydrate } from "@tanstack/react-query"
 
 import { auth } from "@/auth/auth"
 
-import getTrades from "@/actions/trades/queries/get-trades"
-import getAllTransactionsById from "@/actions/transactions/queries/get-all-transactions-by-id"
+import getTradesByUserId from "@/actions/trades/queries/get-trades-by-userId"
+import getTransactionsByUserId from "@/actions/transactions/queries/get-transactions-by-userId"
 
 type InfiniteQueryData<T> = {
     pageParams: number[]
@@ -33,19 +33,19 @@ export default async function prefetchHomePageDataDehydrateState() {
     // prefetch all transactions using infinite query since there are alot of transactions and store the data in the cache
     await queryClient.prefetchInfiniteQuery({
         initialPageParam: 0,
-
         queryFn: async ({ pageParam = 0 }) => {
-            const transactions = await getAllTransactionsById(userId, pageParam, 100)
+            const transactions = await getTransactionsByUserId(userId, pageParam, 100)
             if (!transactions) throw new Error("Failed To Fetch Transactions")
             return transactions
         },
+
         queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(userId),
     })
 
-    // prefetch all trades and store the data in the cache
+    // prefetch all trades by user id and store the data in the cache
     await queryClient.prefetchQuery({
-        queryFn: async () => (await getTrades()) ?? [],
-        queryKey: QUERY_KEYS.GET_ALL_TRADES,
+        queryFn: async () => (await getTradesByUserId(userId)) ?? [],
+        queryKey: QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(userId),
     })
 
     // get the transactions from the cache and return them in case a component needs them
@@ -54,11 +54,13 @@ export default async function prefetchHomePageDataDehydrateState() {
         ?.pages.flatMap((page) => page)
 
     // get the trades from the cache and return them in case a component needs them
-    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES)
+    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(session.user.id))
+
+    const dehydratedState = dehydrate(queryClient)
 
     return {
         // return the dehydrated state of the queryClient and the transactions from the cache
-        dehydratedState: dehydrate(queryClient),
+        dehydratedState,
         trades,
         transactions,
     }

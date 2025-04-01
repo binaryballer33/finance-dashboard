@@ -3,7 +3,7 @@ import type { Transaction } from "@prisma/client"
 import QUERY_KEYS from "@/api/query-keys"
 import { useInfiniteQuery } from "@tanstack/react-query"
 
-import getAllTransactionsById from "@/actions/transactions/queries/get-all-transactions-by-id"
+import getTransactionsByUserId from "@/actions/transactions/queries/get-transactions-by-userId"
 
 const TRANSACTIONS_PER_PAGE = 100
 
@@ -19,12 +19,11 @@ export default function useGetTransactionsInfiniteQuery(userId: string) {
         },
 
         initialPageParam: 0,
-
         queryFn: async (context) => {
             const pageParam = context.pageParam as number
 
             // fetch the transactions
-            const transactions = await getAllTransactionsById(userId, pageParam, TRANSACTIONS_PER_PAGE)
+            const transactions = await getTransactionsByUserId(userId, pageParam, TRANSACTIONS_PER_PAGE)
 
             // if the transactions are not found, throw an error
             if (!transactions) throw new Error("Failed To Fetch Transactions")
