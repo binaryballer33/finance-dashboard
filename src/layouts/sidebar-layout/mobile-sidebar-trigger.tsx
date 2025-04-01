@@ -1,18 +1,31 @@
 "use client"
 
+import { useCallback } from "react"
+
 import { Bell, LogOut, Menu } from "lucide-react"
+import { toast } from "sonner"
+
+import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
 
 import signOut from "@/actions/auth/sign-out"
 
 import useMediaQuery from "@/hooks/use-media-query"
 
+import routes from "@/routes/routes"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
-import navItems from "./temp-nav-items"
+import navItems from "./sidebar-nav-items"
 
 export default function MobileSidebarTrigger() {
     const isMobile = useMediaQuery("(max-width: 900px)")
+
+    const handleSignOut = useCallback(async (): Promise<void> => {
+        const response = await signOut() // sign out the user with next auth
+        await handleServerResponse({ redirectTo: routes.auth.signOut, response, toast })
+    }, [])
 
     return (
         isMobile && (
@@ -41,29 +54,33 @@ export default function MobileSidebarTrigger() {
                                     <span className="ml-2 text-lg font-semibold">Finance Dashboard</span>
                                 </div>
                             </div>
-                            <div className="px-2 py-2">
-                                {navItems.map((item) => (
-                                    <a
-                                        className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
-                                            item.isActive
-                                                ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
-                                                : ""
-                                        }`}
-                                        href={item.href}
-                                        key={item.title}
-                                    >
-                                        <item.icon className="h-5 w-5" />
-                                        {item.title}
-                                    </a>
-                                ))}
-                                <Button
-                                    onClick={async () => {
-                                        await signOut()
-                                    }}
-                                    variant="ghost"
-                                >
-                                    <LogOut className="h-4 w-4" />
-                                </Button>
+                            <div className="flex h-5/6 flex-col justify-between gap-2 px-2 py-2">
+                                <div>
+                                    {navItems.map((item) => (
+                                        <a
+                                            className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                                                item.isActive
+                                                    ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                                                    : ""
+                                            }`}
+                                            href={item.href}
+                                            key={item.title}
+                                        >
+                                            <item.icon className="h-5 w-5" />
+                                            {item.title}
+                                        </a>
+                                    ))}
+                                </div>
+
+                                <div className="flex items-center justify-center gap-2">
+                                    <Avatar>
+                                        <AvatarImage src="/avatars/3.png" />
+                                        <AvatarFallback>JD</AvatarFallback>
+                                    </Avatar>
+                                    <Button onClick={handleSignOut} variant="ghost">
+                                        <LogOut className="h-4 w-4" />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </SheetContent>

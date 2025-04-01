@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-import navItems from "./temp-nav-items"
+import navItems from "./sidebar-nav-items"
 
 export default function AppSidebar() {
     const { open, setOpen } = useSidebar()

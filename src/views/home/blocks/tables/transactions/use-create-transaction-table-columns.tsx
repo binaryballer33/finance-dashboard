@@ -4,8 +4,6 @@ import { useMemo } from "react"
 
 import { createColumnHelper } from "@tanstack/react-table"
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
 import TableBodyRowCheckbox from "@/components/tables/table-body/table-body-row-checkbox"
 import TableBodyRowDelete from "@/components/tables/table-body/table-body-row-delete"
 import TableBodyRowRowDrag from "@/components/tables/table-body/table-body-row-drag"
@@ -13,17 +11,6 @@ import TableBodyRowExpand from "@/components/tables/table-body/table-body-row-ex
 import TableHeaderCheckboxAll from "@/components/tables/table-header/table-header-checkbox-all"
 import TableHeaderDelete from "@/components/tables/table-header/table-header-delete"
 import customFilter from "@/components/tables/table-utils/filters/custom-filter/custom-filter"
-
-const createCellTooltip = (tooltipTrigger: string, tooltipContent: string) => {
-    return (
-        <TooltipProvider delayDuration={333}>
-            <Tooltip>
-                <TooltipTrigger className="max-w-[300px]">{tooltipTrigger.slice(0, 100)}</TooltipTrigger>
-                <TooltipContent className="max-w-[300px]">{tooltipContent}</TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-    )
-}
 
 const columnHelper = createColumnHelper<Transaction>()
 
