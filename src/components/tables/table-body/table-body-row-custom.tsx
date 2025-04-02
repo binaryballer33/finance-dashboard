@@ -38,11 +38,13 @@ export default function TableBodyRowCustom(props: TableBodyRowCustomProps) {
         zIndex: isDragging ? 1 : 0,
     }
 
+    const isOddRow = row.index % 2 === 1
+
     return (
         <Fragment key={row.id}>
             <TableRow
                 className={`
-                    ${row.index % 2 === 1 ? "bg-black/[.33]" : ""}
+                    ${isOddRow ? "bg-accent" : ""}
                     ${row.getIsSelected() ? "bg-primary" : ""}
                     hover:bg-black/[.05]
                     [&>td]:border-r [&>td]:border-black/10

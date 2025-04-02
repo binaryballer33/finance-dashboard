@@ -3,8 +3,10 @@ import type { Metadata } from "next"
 const APP_NAME = "Next MUI Template"
 
 type AppMetadata = {
+    expenses: Metadata
     forgotPassword: Metadata
     homePage: Metadata
+    income: Metadata
     investments: Metadata
     login: Metadata
     register: Metadata
@@ -20,6 +22,9 @@ type AppMetadata = {
 const icons = {
     auth: "/icons/auth.png",
     dashboard: "/icons/dashboard.png",
+    // TODO: figure out why expenses image is not showing
+    expenses: "/icons/expenses.png",
+    income: "/icons/income.png",
     investments: "/icons/investments.png",
     savings: "/icons/savings.png",
     transactions: "/icons/transactions.png",
@@ -29,6 +34,13 @@ const icons = {
 
 // eslint-disable-next-line import/prefer-default-export
 export const appMetadata: AppMetadata = {
+    expenses: {
+        description: "Expenses Page For The App",
+        icons: {
+            icon: icons.expenses,
+        },
+        title: `Expenses | ${APP_NAME}`,
+    },
     forgotPassword: {
         description: "User Forgot Password Page For The App",
         icons: {
@@ -42,6 +54,13 @@ export const appMetadata: AppMetadata = {
             icon: icons.dashboard,
         },
         title: `Home | ${APP_NAME}`,
+    },
+    income: {
+        description: "Income Page For The App",
+        icons: {
+            icon: icons.income,
+        },
+        title: `Income | ${APP_NAME}`,
     },
     investments: {
         description: "Investments Page For The App",

@@ -13,7 +13,9 @@ const transactionApi = {
 }
 
 const user = {
+    expenses: "/expenses",
     home: "/",
+    income: "/income",
     investments: "/investments",
     profile: `/user/profile`,
     savings: "/savings",
