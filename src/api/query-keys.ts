@@ -10,6 +10,8 @@ const QUERY_KEYS = {
     DELETE_USER_BY_ID: (id: string) => ["delete-user", { id }],
 
     // get many
+    GET_ALL_EXPENSES_BY_USER_ID: (userId: string) => ["expenses", { userId }],
+    GET_ALL_INCOMES_BY_USER_ID: (userId: string) => ["incomes", { userId }],
     GET_ALL_TRADES: ["trades"],
     GET_ALL_TRADES_BY_USER_ID: (userId: string) => ["trades", { userId }],
     GET_ALL_TRANSACTIONS: ["transactions"],

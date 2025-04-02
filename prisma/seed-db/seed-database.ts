@@ -1,4 +1,4 @@
-import type { Transaction as PrismaTransaction } from "@prisma/client"
+import type { Expense as PrismaExpense, Income as PrismaIncome, Transaction as PrismaTransaction } from "@prisma/client"
 
 import { randomUUID } from "crypto"
 
@@ -9,6 +9,8 @@ import prisma from "@/lib/database/prisma"
 import tradesWithUserId from "./trades"
 
 type Transaction = Omit<PrismaTransaction, "createdAt" | "id" | "updatedAt">
+type Expense = Omit<PrismaExpense, "createdAt" | "id" | "updatedAt">
+type Income = Omit<PrismaIncome, "createdAt" | "id" | "updatedAt">
 
 const outlookUserId = randomUUID()
 const gmailUserId = randomUUID()
@@ -22,6 +24,8 @@ async function dropTables() {
     await prisma.verificationToken.deleteMany({})
     await prisma.passwordResetToken.deleteMany({})
     await prisma.trade.deleteMany({})
+    await prisma.expense.deleteMany({})
+    await prisma.income.deleteMany({})
 
     console.log("Dropped Tables Successfully\n")
 }
@@ -70,6 +74,71 @@ async function createTrades(userId: string) {
         console.log(`Successfully Inserted ${result.count} Records To Trades Table\n`)
     } catch (error) {
         console.error("Error Inserting Records To Trades Table", error)
+    }
+}
+
+async function createExpenses(userId: string, count: number = 5) {
+    console.log("Attempting To Create Expenses")
+    const expenses: Expense[] = []
+
+    Array.from({ length: count }).forEach((_, index) => {
+        const amount = Math.random() * 300
+
+        // get random month with the first date of that month within the last year
+        const date = new Date()
+        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
+        date.setDate(1) // Set to the first day of the month
+        date.setMonth(date.getMonth() - Math.floor(Math.random() * 12)) // Random month within the last year
+
+        expenses.push({
+            amount,
+            category: `Lorem ipsum ${index}`,
+            date,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+            userId,
+        })
+    })
+
+    try {
+        const result = await prisma.expense.createMany({
+            data: expenses,
+        })
+        console.log(`Successfully Inserted ${result.count} Records To Expenses Table\n`)
+    } catch (error) {
+        console.error("Error Inserting Records To Expenses Table", error)
+    }
+}
+
+async function createIncome(userId: string, count: number = 5) {
+    console.log("Attempting To Create Income")
+
+    const incomes: Income[] = []
+
+    Array.from({ length: count }).forEach((_, index) => {
+        const amount = Math.random() * 1000
+
+        // get random month with the first date of that month within the last year
+        const date = new Date()
+        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
+        date.setDate(1) // Set to the first day of the month
+        date.setMonth(date.getMonth() - Math.floor(Math.random() * 12)) // Random month within the last year
+
+        incomes.push({
+            amount,
+            category: `Lorem ipsum ${index}`,
+            date,
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+            userId,
+        })
+    })
+
+    try {
+        const result = await prisma.income.createMany({
+            data: incomes,
+        })
+        console.log(`Successfully Inserted ${result.count} Records To Income Table\n`)
+    } catch (error) {
+        console.error("Error Inserting Records To Income Table", error)
     }
 }
 
@@ -123,6 +192,10 @@ async function seedDatabase() {
         await createTrades(outlookUserId)
         await createTransactions(gmailUserId, 10000)
         await createTransactions(outlookUserId, 100)
+        await createExpenses(gmailUserId, 5)
+        await createExpenses(outlookUserId, 5)
+        await createIncome(gmailUserId, 5)
+        await createIncome(outlookUserId, 5)
 
         // sometime the seed will not fully work because all the yugioh cards or users are not created yet
         // await new Promise((resolve) => setTimeout(resolve, 3000))
