@@ -10,17 +10,17 @@ const navItems = [
         title: "Dashboard",
     },
     {
-        href: "#",
+        href: routes.user.transactions,
         icon: ArrowLeftRight,
         title: "Transactions",
     },
     {
-        href: "#",
+        href: routes.user.investments,
         icon: BarChart3,
         title: "Investments",
     },
     {
-        href: "#",
+        href: routes.user.savings,
         icon: PiggyBank,
         title: "Savings",
     },

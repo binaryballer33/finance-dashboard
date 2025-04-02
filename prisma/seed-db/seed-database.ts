@@ -125,7 +125,7 @@ async function seedDatabase() {
         await createTransactions(outlookUserId, 100)
 
         // sometime the seed will not fully work because all the yugioh cards or users are not created yet
-        await new Promise((resolve) => setTimeout(resolve, 3000))
+        // await new Promise((resolve) => setTimeout(resolve, 3000))
     } catch (error) {
         console.error("Error Seeding Database: ", error)
     } finally {

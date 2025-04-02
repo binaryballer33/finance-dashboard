@@ -14,8 +14,11 @@ const transactionApi = {
 
 const user = {
     home: "/",
+    investments: "/investments",
     profile: `/user/profile`,
+    savings: "/savings",
     settings: `/user/settings`,
+    transactions: "/transactions",
 }
 
 const nextAuth = {

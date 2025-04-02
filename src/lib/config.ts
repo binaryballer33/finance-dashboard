@@ -3,15 +3,15 @@ import type { Metadata } from "next"
 const APP_NAME = "Next MUI Template"
 
 type AppMetadata = {
-    about: Metadata
-    contact: Metadata
-    faq: Metadata
     forgotPassword: Metadata
     homePage: Metadata
+    investments: Metadata
     login: Metadata
     register: Metadata
     resetPassword: Metadata
+    savings: Metadata
     signOut: Metadata
+    transactions: Metadata
     userProfile: Metadata
     userSettings: Metadata
     verifyEmail: Metadata
@@ -19,18 +19,6 @@ type AppMetadata = {
 
 // eslint-disable-next-line import/prefer-default-export
 export const appMetadata: AppMetadata = {
-    about: {
-        description: "About Page For The App",
-        title: `About | ${APP_NAME}`,
-    },
-    contact: {
-        description: "Contact Page For The App",
-        title: `Contact | ${APP_NAME}`,
-    },
-    faq: {
-        description: "Frequently Asked Questions Page For The App",
-        title: `FAQ | ${APP_NAME}`,
-    },
     forgotPassword: {
         description: "User Forgot Password Page For The App",
         title: `Forgot Password | ${APP_NAME}`,
@@ -38,6 +26,10 @@ export const appMetadata: AppMetadata = {
     homePage: {
         description: "Home Page For The App",
         title: `Home | ${APP_NAME}`,
+    },
+    investments: {
+        description: "Investments Page For The App",
+        title: `Investments | ${APP_NAME}`,
     },
     login: {
         description: "User Login Page For The App",
@@ -51,9 +43,17 @@ export const appMetadata: AppMetadata = {
         description: "User Reset Password Page For The App",
         title: `Reset Password | ${APP_NAME}`,
     },
+    savings: {
+        description: "Savings Page For The App",
+        title: `Savings | ${APP_NAME}`,
+    },
     signOut: {
         description: "User Sign Out Page For The App",
         title: `Sign Out | ${APP_NAME}`,
+    },
+    transactions: {
+        description: "Transactions Page For The App",
+        title: `Transactions | ${APP_NAME}`,
     },
     userProfile: {
         description: "User Profile Page For The App",
