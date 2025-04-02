@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation"
 
 import { memo, useEffect } from "react"
 
+import { useSession } from "next-auth/react"
+
 import routes from "@/routes/routes"
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -25,6 +27,11 @@ const Sidebar = memo(AppSidebar)
 export default function SidebarLayout(props: SidebarLayoutProps) {
     const { children } = props
 
+    // Get the user from the session
+    const session = useSession()
+    const user = session?.data?.user
+
+    // Get the pathname to check if the route is an auth route
     const pathname = usePathname()
     const isAuthRoute = routes.authRoutes.includes(pathname)
 
@@ -41,17 +48,19 @@ export default function SidebarLayout(props: SidebarLayoutProps) {
         return () => window.removeEventListener("error", errorHandler)
     }, [])
 
+    // If the user is not authenticated, don't render the sidebar
+
     // If the route is an auth route, don't render the sidebar
-    if (isAuthRoute) {
+    if (!user || isAuthRoute) {
         return <FlexCenteredFullScreenContainer minHeight="100dvh">{children}</FlexCenteredFullScreenContainer>
     }
 
     return (
         <SidebarProvider>
             <div className="flex h-screen w-full overflow-hidden">
-                <Sidebar />
+                <Sidebar user={user} />
                 <SidebarInset className="flex min-w-0 flex-1 flex-col">
-                    <MobileSidebarTrigger />
+                    <MobileSidebarTrigger user={user} />
                     <div className="flex-1 overflow-auto">{children}</div>
                 </SidebarInset>
             </div>

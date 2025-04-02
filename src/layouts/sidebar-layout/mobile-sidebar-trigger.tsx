@@ -1,31 +1,25 @@
 "use client"
 
-import { useCallback } from "react"
+import type { User } from "next-auth"
 
-import { Bell, LogOut, Menu } from "lucide-react"
-import { toast } from "sonner"
-
-import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
-
-import signOut from "@/actions/auth/sign-out"
+import { Bell, Menu } from "lucide-react"
 
 import useMediaQuery from "@/hooks/use-media-query"
 
-import routes from "@/routes/routes"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 import navItems from "./sidebar-nav-items"
+import SidebarUserInfo from "./sidebar-user-info"
 
-export default function MobileSidebarTrigger() {
+type MobileSidebarTriggerProps = {
+    user: User
+}
+
+export default function MobileSidebarTrigger(props: MobileSidebarTriggerProps) {
+    const { user } = props
+
     const isMobile = useMediaQuery("(max-width: 900px)")
-
-    const handleSignOut = useCallback(async (): Promise<void> => {
-        const response = await signOut() // sign out the user with next auth
-        await handleServerResponse({ redirectTo: routes.auth.signOut, response, toast })
-    }, [])
 
     return (
         isMobile && (
@@ -72,15 +66,7 @@ export default function MobileSidebarTrigger() {
                                     ))}
                                 </div>
 
-                                <div className="flex items-center justify-center gap-2">
-                                    <Avatar>
-                                        <AvatarImage src="/avatars/3.png" />
-                                        <AvatarFallback>JD</AvatarFallback>
-                                    </Avatar>
-                                    <Button onClick={handleSignOut} variant="ghost">
-                                        <LogOut className="h-4 w-4" />
-                                    </Button>
-                                </div>
+                                <SidebarUserInfo user={user} />
                             </div>
                         </div>
                     </SheetContent>

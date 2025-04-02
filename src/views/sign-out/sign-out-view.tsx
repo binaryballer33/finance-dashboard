@@ -11,7 +11,7 @@ import FormLink from "@/components/forms/form/form-link"
 
 function SignOutView() {
     const { t } = useTranslation()
-    useRedirectIfStale(routes.auth.login, 2000) // redirect if stale on page
+    useRedirectIfStale(routes.auth.login, 1000) // redirect if stale on page
 
     return (
         <FlexCenteredFullScreenContainer minHeight="75dvh">

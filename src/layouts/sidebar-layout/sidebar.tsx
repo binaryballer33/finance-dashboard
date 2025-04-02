@@ -1,20 +1,13 @@
 "use client"
 
+import type { User } from "next-auth"
+
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { DollarSign, LogOut } from "lucide-react"
-import { toast } from "sonner"
+import { DollarSign } from "lucide-react"
 
-import { useSession } from "next-auth/react"
-
-import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
 import { cn } from "@/lib/utils"
 
-import signOut from "@/actions/auth/sign-out"
-
-import routes from "@/routes/routes"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
     Sidebar,
@@ -27,16 +20,20 @@ import {
     SidebarRail,
     useSidebar,
 } from "@/components/ui/sidebar"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 import navItems from "./sidebar-nav-items"
+import SidebarUserInfo from "./sidebar-user-info"
 
-export default function AppSidebar() {
+type SidebarProps = {
+    user: User
+}
+
+export default function AppSidebar(props: SidebarProps) {
+    const { user } = props
+
     const { open, setOpen } = useSidebar()
     const [hoverOpen, setHoverOpen] = useState(false)
     const [isPinned, setIsPinned] = useState(false)
-    const session = useSession()
-    const user = session?.data?.user
 
     // Use a ref to track hover state to avoid unnecessary renders
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -90,11 +87,6 @@ export default function AppSidebar() {
         setOpen(!isPinned)
         setHoverOpen(false)
     }, [isPinned, setOpen])
-
-    const handleSignOut = useCallback(async (): Promise<void> => {
-        const response = await signOut() // sign out the user with next auth
-        await handleServerResponse({ redirectTo: routes.auth.signOut, response, toast })
-    }, [])
 
     // Desktop sidebar
     return (
@@ -155,31 +147,7 @@ export default function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <div className="flex flex-col items-center gap-2 p-4 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
-                    {/* User info */}
-                    <Avatar className="h-8 w-8">
-                        <AvatarImage alt="Avatar" src="/avatars/3.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                        <span className="text-sm font-medium">{user?.firstName}</span>
-                        <span className="text-xs text-muted-foreground">{user?.email}</span>
-                    </div>
-
-                    {/* Logout button */}
-                    <TooltipProvider delayDuration={0}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button className="h-8 w-8" onClick={handleSignOut} variant="ghost">
-                                    <LogOut className="h-4 w-4" />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Logout</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
+                <SidebarUserInfo user={user} />
             </SidebarFooter>
 
             <SidebarRail />
