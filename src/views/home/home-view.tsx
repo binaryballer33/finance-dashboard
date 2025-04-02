@@ -31,7 +31,7 @@ export default function HomeView() {
                 </TabsContent>
 
                 <TabsContent value="transactions">
-                    <TransactionsTable />
+                    <TransactionsTable userId={userId} />
                 </TabsContent>
             </Tabs>
         </Container>

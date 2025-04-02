@@ -5,6 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { DollarSign, LogOut } from "lucide-react"
 import { toast } from "sonner"
 
+import { useSession } from "next-auth/react"
+
 import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
 import { cn } from "@/lib/utils"
 
@@ -33,6 +35,8 @@ export default function AppSidebar() {
     const { open, setOpen } = useSidebar()
     const [hoverOpen, setHoverOpen] = useState(false)
     const [isPinned, setIsPinned] = useState(false)
+    const session = useSession()
+    const user = session?.data?.user
 
     // Use a ref to track hover state to avoid unnecessary renders
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -151,15 +155,15 @@ export default function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <div className="flex items-center gap-2 p-4 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
+                <div className="flex flex-col items-center gap-2 p-4 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
                     {/* User info */}
                     <Avatar className="h-8 w-8">
                         <AvatarImage alt="Avatar" src="/avatars/3.png" />
                         <AvatarFallback>JD</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                        <span className="text-sm font-medium">John Doe</span>
-                        <span className="text-xs text-muted-foreground">john@example.com</span>
+                        <span className="text-sm font-medium">{user?.firstName}</span>
+                        <span className="text-xs text-muted-foreground">{user?.email}</span>
                     </div>
 
                     {/* Logout button */}

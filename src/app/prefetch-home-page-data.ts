@@ -35,7 +35,10 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
 
     // get the currently authenticated user
     const session = await auth()
-    if (!session?.user?.id) return null
+    if (!session?.user?.id) {
+        console.error("No User Authenticated When Prefetching Data")
+        return null
+    }
     const userId = session.user.id
 
     // prefetch all transactions using infinite query since there are alot of transactions and store the data in the cache
@@ -52,7 +55,7 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
 
     // get the transactions from the cache and return them in case a component needs them
     const transactions = queryClient
-        .getQueryData<InfiniteQueryData<Transaction>>(QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(session.user.id))
+        .getQueryData<InfiniteQueryData<Transaction>>(QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(userId))
         ?.pages.flatMap((page) => page)!
 
     // prefetch all trades by user id and store the data in the cache
@@ -62,7 +65,7 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
     })
 
     // get the trades from the cache and return them in case a component needs them
-    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(session.user.id))!
+    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(userId))!
 
     return {
         // return the dehydrated state of the queryClient and the transactions from the cache

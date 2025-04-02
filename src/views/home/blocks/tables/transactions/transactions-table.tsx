@@ -2,20 +2,19 @@
 
 import useGetTransactionsByIdInfiniteQuery from "@/api/transactions/queries/use-get-transactions-by-id-infinite-query"
 
-import { useSession } from "next-auth/react"
-
 import { Button } from "@/components/ui/button"
 
 import CustomTable from "@/components/tables/table"
 
 import useCreateTableColumns from "./use-create-transaction-table-columns"
 
-export default function TransactionsTable() {
-    const { columns, hideForColumns } = useCreateTableColumns()
+type TransactionsTableProps = {
+    userId: string
+}
 
-    // get the currently authenticated user on a client component using next auth
-    const session = useSession()
-    const userId = session.data?.user?.id ?? ""
+export default function TransactionsTable(props: TransactionsTableProps) {
+    const { userId } = props
+    const { columns, hideForColumns } = useCreateTableColumns()
 
     const {
         data: transactionPages,
@@ -23,9 +22,6 @@ export default function TransactionsTable() {
         hasNextPage,
         isFetching,
     } = useGetTransactionsByIdInfiniteQuery(userId)
-
-    // If there's no session or user, don't render the table
-    if (!session.data?.user?.id) return null
 
     // Flatten all pages of transactions into a single array
     const transactions = transactionPages?.pages.flatMap((page) => page) ?? []

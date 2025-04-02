@@ -48,12 +48,13 @@ export default function SidebarLayout(props: SidebarLayoutProps) {
 
     return (
         <SidebarProvider>
-            <Sidebar />
-
-            <SidebarInset className="flex flex-col">
-                <MobileSidebarTrigger />
-                {children}
-            </SidebarInset>
+            <div className="flex h-screen w-full overflow-hidden">
+                <Sidebar />
+                <SidebarInset className="flex min-w-0 flex-1 flex-col">
+                    <MobileSidebarTrigger />
+                    <div className="flex-1 overflow-auto">{children}</div>
+                </SidebarInset>
+            </div>
         </SidebarProvider>
     )
 }
