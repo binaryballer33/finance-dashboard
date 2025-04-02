@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import useAuthUser from "@/hooks/useAuthUser"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -11,10 +11,8 @@ import TradeTable from "./blocks/tables/trades/trade-table"
 import TransactionsTable from "./blocks/tables/transactions/transactions-table"
 
 export default function HomeView() {
-    const { data: session } = useSession()
-    const userId = session?.user?.id
-
-    if (!userId) return null
+    const user = useAuthUser()
+    if (!user) return null
 
     return (
         <Container maxWidth="xl">
@@ -27,11 +25,11 @@ export default function HomeView() {
                 </TabsList>
 
                 <TabsContent value="trades">
-                    <TradeTable userId={userId} />
+                    <TradeTable userId={user.id} />
                 </TabsContent>
 
                 <TabsContent value="transactions">
-                    <TransactionsTable userId={userId} />
+                    <TransactionsTable userId={user.id} />
                 </TabsContent>
             </Tabs>
         </Container>

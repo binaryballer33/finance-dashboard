@@ -6,8 +6,7 @@ import PlaceholderBox from "@/components/base/placeholder-box"
 import { H1 } from "@/components/base/typography"
 
 export default function UserProfileView() {
-    const { user } = useAuthUser()
-
+    const user = useAuthUser()
     if (!user) return null
 
     return (

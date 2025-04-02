@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 
 import { memo, useEffect } from "react"
 
-import { useSession } from "next-auth/react"
+import useAuthUser from "@/hooks/useAuthUser"
 
 import routes from "@/routes/routes"
 
@@ -29,8 +29,7 @@ export default function SidebarLayout(props: SidebarLayoutProps) {
     const { children } = props
 
     // Get the user from the session
-    const session = useSession()
-    const user = session?.data?.user
+    const user = useAuthUser()
 
     // Get the pathname to check if the route is an auth route
     const pathname = usePathname()

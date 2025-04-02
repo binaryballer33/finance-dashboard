@@ -33,7 +33,7 @@ import FormSubmitButton from "@/components/forms/form/form-submit-button"
 import CustomFormInput from "@/components/forms/rhf-custom-input"
 
 export default function UserAccountSettingsView() {
-    const { user } = useAuthUser()
+    const user = useAuthUser()
 
     const defaultValues = {
         firstName: user?.firstName || "",
