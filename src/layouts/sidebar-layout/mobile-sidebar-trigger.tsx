@@ -2,6 +2,9 @@
 
 import type { User } from "next-auth"
 
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
 import { Bell, Menu } from "lucide-react"
 
 import useMediaQuery from "@/hooks/use-media-query"
@@ -10,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 import navItems from "./sidebar-nav-items"
-import SidebarUserInfo from "./sidebar-user-info"
+import SidebarUserInfoAndFeatures from "./sidebar-user-info-and-features"
 
 type MobileSidebarTriggerProps = {
     user: User
@@ -20,6 +23,9 @@ export default function MobileSidebarTrigger(props: MobileSidebarTriggerProps) {
     const { user } = props
 
     const isMobile = useMediaQuery("(max-width: 900px)")
+    const pathname = usePathname()
+
+    const isActive = (href: string) => pathname === href
 
     return (
         isMobile && (
@@ -51,9 +57,9 @@ export default function MobileSidebarTrigger(props: MobileSidebarTriggerProps) {
                             <div className="flex h-5/6 flex-col justify-between gap-2 px-2 py-2">
                                 <div>
                                     {navItems.map((item) => (
-                                        <a
+                                        <Link
                                             className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
-                                                item.isActive
+                                                isActive(item.href)
                                                     ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
                                                     : ""
                                             }`}
@@ -62,11 +68,11 @@ export default function MobileSidebarTrigger(props: MobileSidebarTriggerProps) {
                                         >
                                             <item.icon className="h-5 w-5" />
                                             {item.title}
-                                        </a>
+                                        </Link>
                                     ))}
                                 </div>
 
-                                <SidebarUserInfo user={user} />
+                                <SidebarUserInfoAndFeatures user={user} />
                             </div>
                         </div>
                     </SheetContent>

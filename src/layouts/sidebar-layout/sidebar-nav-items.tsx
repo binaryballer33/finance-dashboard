@@ -1,17 +1,16 @@
-import { ArrowLeftRight, BarChart3, Home, PiggyBank, Settings, User } from "lucide-react"
+import { BarChart3, LayoutDashboard, PiggyBank, ReceiptText, Settings, User } from "lucide-react"
 
 import routes from "@/routes/routes"
 
 const navItems = [
     {
         href: routes.user.home,
-        icon: Home,
-        isActive: true,
+        icon: LayoutDashboard,
         title: "Dashboard",
     },
     {
         href: routes.user.transactions,
-        icon: ArrowLeftRight,
+        icon: ReceiptText,
         title: "Transactions",
     },
     {

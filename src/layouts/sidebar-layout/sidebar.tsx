@@ -2,6 +2,9 @@
 
 import type { User } from "next-auth"
 
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { DollarSign } from "lucide-react"
@@ -22,7 +25,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import navItems from "./sidebar-nav-items"
-import SidebarUserInfo from "./sidebar-user-info"
+import SidebarUserInfoAndFeatures from "./sidebar-user-info-and-features"
 
 type SidebarProps = {
     user: User
@@ -34,6 +37,8 @@ export default function AppSidebar(props: SidebarProps) {
     const { open, setOpen } = useSidebar()
     const [hoverOpen, setHoverOpen] = useState(false)
     const [isPinned, setIsPinned] = useState(false)
+    const pathname = usePathname()
+    const isActive = (href: string) => pathname === href
 
     // Use a ref to track hover state to avoid unnecessary renders
     const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -130,16 +135,16 @@ export default function AppSidebar(props: SidebarProps) {
                             <SidebarMenuButton
                                 asChild
                                 className="pl-6 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:!size-auto group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:!p-0"
-                                isActive={item.isActive}
+                                isActive={isActive(item.href)}
                                 tooltip={item.title}
                             >
-                                <a
+                                <Link
                                     className="flex w-full items-center group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:justify-center"
                                     href={item.href}
                                 >
                                     <item.icon className="h-5 w-5" />
                                     <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
-                                </a>
+                                </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}
@@ -147,7 +152,7 @@ export default function AppSidebar(props: SidebarProps) {
             </SidebarContent>
 
             <SidebarFooter>
-                <SidebarUserInfo user={user} />
+                <SidebarUserInfoAndFeatures user={user} />
             </SidebarFooter>
 
             <SidebarRail />

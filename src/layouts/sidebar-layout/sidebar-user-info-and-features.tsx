@@ -15,11 +15,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-type SidebarUserInfoProps = {
+import ThemeModeToggler from "./theme-mode-toggler"
+
+type SidebarUserInfoAndFeaturesProps = {
     user: User
 }
 
-export default function SidebarUserInfo(props: SidebarUserInfoProps) {
+export default function SidebarUserInfoAndFeatures(props: SidebarUserInfoAndFeaturesProps) {
     const { user } = props
 
     const handleSignOut = useCallback(async (): Promise<void> => {
@@ -30,6 +32,9 @@ export default function SidebarUserInfo(props: SidebarUserInfoProps) {
     return (
         <div className="flex flex-col items-center gap-2 p-4 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
             <div className="flex items-center gap-2">
+                {/* Theme Mode Toggle */}
+                <ThemeModeToggler />
+
                 {/* User avatar */}
                 <Avatar className="h-8 w-8">
                     <AvatarImage alt="Avatar" src={user?.imageUrl ?? ""} />
