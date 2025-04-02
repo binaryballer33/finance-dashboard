@@ -9,7 +9,7 @@ export default async function getTransactionsByUserId(userId: string, skipPrevio
 
     try {
         return await prisma.transaction.findMany({
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
             skip: skipPreviousRecords,
             take: limit,
             where: {

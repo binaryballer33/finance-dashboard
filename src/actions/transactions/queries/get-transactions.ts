@@ -7,6 +7,7 @@ export default async function getTransactions(page = 0, limit = 100) {
 
     try {
         return await prisma.transaction.findMany({
+            orderBy: { date: "desc" },
             skip: skipPreviousRecords,
             take: limit,
         })
