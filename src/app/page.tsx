@@ -8,7 +8,11 @@ import HomeView from "@/views/home/home-view"
 export const metadata = appMetadata.homePage
 
 export default async function HomePage() {
-    const { dehydratedState } = await prefetchHomePageDataDehydrateState()
+    const prefetchResult = await prefetchHomePageDataDehydrateState()
+
+    if (!prefetchResult) return null
+
+    const { dehydratedState } = prefetchResult
 
     return (
         <HydrationBoundary state={dehydratedState}>

@@ -11,7 +11,11 @@ import prefetchIncomePageDataDehydrateState from "./prefetch-income-page-data"
 export const metadata: Metadata = appMetadata.income
 
 export default async function IncomePage() {
-    const { dehydratedState } = await prefetchIncomePageDataDehydrateState()
+    const prefetchResult = await prefetchIncomePageDataDehydrateState()
+
+    if (!prefetchResult) return null
+
+    const { dehydratedState } = prefetchResult
 
     return (
         <HydrationBoundary state={dehydratedState}>

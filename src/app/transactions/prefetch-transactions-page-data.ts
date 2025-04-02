@@ -1,13 +1,12 @@
 "use server"
 
-import type { Trade, Transaction } from "@prisma/client"
-import type { DehydratedState } from "@tanstack/react-query"
+import type { Transaction } from "@prisma/client"
 
 import createQueryClient from "@/api/query-client-server-component"
 import QUERY_KEYS from "@/api/query-keys"
+import { type DehydratedState } from "@tanstack/react-query"
 import { dehydrate } from "@tanstack/react-query"
 
-import getTradesByUserId from "@/actions/trades/queries/get-trades-by-userId"
 import getTransactionsByUserId from "@/actions/transactions/queries/get-transactions-by-userId"
 import getCurrentUser from "@/actions/user/get-current-user"
 
@@ -16,9 +15,8 @@ type InfiniteQueryData<T> = {
     pages: T[][]
 }
 
-type PrefetchHomePageDataDehydrateStateResponse = {
+type PrefetchTransactionsPageDataDehydrateStateResponse = {
     dehydratedState: DehydratedState
-    trades: Trade[]
     transactions: Transaction[]
 }
 
@@ -27,11 +25,10 @@ type PrefetchHomePageDataDehydrateStateResponse = {
  * This is important for SEO and performance, if you want to see the speed difference, comment out the prefetch
  * or comment out the HydrationBoundary or the await keywords on each prefetch
  */
-export default async function prefetchHomePageDataDehydrateState(): Promise<null | PrefetchHomePageDataDehydrateStateResponse> {
+export default async function prefetchTransactionsPageDataDehydrateState(): Promise<null | PrefetchTransactionsPageDataDehydrateStateResponse> {
     // get the react query client
     const queryClient = await createQueryClient() // need to create a new queryClient for each request for server components
 
-    // get the currently authenticated user
     const user = await getCurrentUser()
     if (!user) return null
 
@@ -53,22 +50,11 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
         .getQueryData<InfiniteQueryData<Transaction>>(QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(user.id))
         ?.pages.flatMap((page) => page)!
 
-    // prefetch all trades by user id and store the data in the cache
-    await queryClient.prefetchQuery({
-        queryFn: async () => (await getTradesByUserId(user.id)) ?? [],
-        queryKey: QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(user.id),
-    })
-
-    // get the trades from the cache and return them in case a component needs them
-    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(user.id))!
-
     // Important: Dehydrate the client AFTER prefetching so that the data is available immediately
     const dehydratedState = dehydrate(queryClient)
 
     return {
-        // return the dehydrated state of the queryClient and the transactions from the cache
         dehydratedState,
-        trades,
         transactions,
     }
 }

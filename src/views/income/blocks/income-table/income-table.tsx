@@ -14,7 +14,7 @@ export default function IncomeTable(props: IncomeTableProps) {
     const { userId } = props
     const { columns, hideForColumns } = useCreateIncomeTableColumns()
 
-    const { data: income = [] } = useGetIncomeByUserIdQuery(userId)
+    const { data: income } = useGetIncomeByUserIdQuery(userId)
 
     return (
         <CustomTable

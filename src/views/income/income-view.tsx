@@ -11,7 +11,6 @@ import IncomeTable from "./blocks/income-table/income-table"
 export default function IncomeView() {
     const { data: session } = useSession()
     const userId = session?.user?.id
-
     if (!userId) return null
 
     return (

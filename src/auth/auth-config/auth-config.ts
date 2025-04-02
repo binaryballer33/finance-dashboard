@@ -10,7 +10,7 @@ import { NODE_ENV } from "@/lib/secrets"
 
 import routes from "@/routes/routes"
 
-const session: NextAuthConfig["session"] = { strategy: "jwt" }
+const session: NextAuthConfig["session"] = { maxAge: 30 * 24 * 60 * 60, strategy: "jwt" }
 
 const debug: NextAuthConfig["debug"] = NODE_ENV === "development"
 
