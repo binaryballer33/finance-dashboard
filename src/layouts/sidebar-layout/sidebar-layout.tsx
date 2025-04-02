@@ -16,6 +16,7 @@ import FlexCenteredFullScreenContainer from "@/components/base/flex-box/flex-cen
 
 import MobileSidebarTrigger from "./mobile-sidebar-trigger"
 import AppSidebar from "./sidebar"
+import ThemeModeToggler from "./theme-mode-toggler"
 
 type SidebarLayoutProps = {
     children: ReactNode
@@ -52,7 +53,17 @@ export default function SidebarLayout(props: SidebarLayoutProps) {
 
     // If the route is an auth route, don't render the sidebar
     if (!user || isAuthRoute) {
-        return <FlexCenteredFullScreenContainer minHeight="100dvh">{children}</FlexCenteredFullScreenContainer>
+        return (
+            <FlexCenteredFullScreenContainer minHeight="100dvh">
+                <div className="flex flex-col items-center justify-center gap-4">
+                    <div className="absolute right-4 top-4">
+                        <ThemeModeToggler />
+                    </div>
+
+                    {children}
+                </div>
+            </FlexCenteredFullScreenContainer>
+        )
     }
 
     return (
