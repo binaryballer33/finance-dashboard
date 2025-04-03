@@ -44,7 +44,8 @@ export default function useCreateTransactionsTableColumns() {
                     </div>
                 ),
                 id: hideForColumnsMap.selectAll,
-                maxSize: 50,
+                maxSize: 25,
+                minSize: 25,
             }),
 
             columnHelper.display({

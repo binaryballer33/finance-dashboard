@@ -70,6 +70,7 @@ export default function TableBodyRowCustom(props: TableBodyRowCustomProps) {
                 ))}
             </TableRow>
 
+            {/* TODO: only let this column appear if the user has made a component for expanding the row */}
             {/* if the row is expanded, display the row detail view */}
             {row.getIsExpanded() && ExpandRowDetailComponent && <ExpandRowDetailComponent row={row} table={table} />}
         </Fragment>
