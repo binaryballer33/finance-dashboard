@@ -5,10 +5,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 interface TableExtraCreateNewRecordProps {
     handleCreateNewRecord: () => void
+    tooltipContent?: string
 }
 
 export default function TableExtraCreateNewRecord(props: TableExtraCreateNewRecordProps) {
-    const { handleCreateNewRecord } = props
+    const { handleCreateNewRecord, tooltipContent } = props
 
     return (
         <TooltipProvider delayDuration={100}>
@@ -18,7 +19,7 @@ export default function TableExtraCreateNewRecord(props: TableExtraCreateNewReco
                         +
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent>Create New Record</TooltipContent>
+                <TooltipContent>{tooltipContent ?? "Create New Record"}</TooltipContent>
             </Tooltip>
         </TooltipProvider>
     )

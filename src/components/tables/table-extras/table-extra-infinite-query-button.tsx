@@ -8,10 +8,11 @@ type TableExtraInfiniteQueryButtonProps = {
     fetchNextPage: () => void
     hasNextPage: boolean
     isFetching: boolean
+    tooltipContent?: string
 }
 
 export default function TableExtraInfiniteQueryButton(props: TableExtraInfiniteQueryButtonProps) {
-    const { fetchNextPage, hasNextPage, isFetching } = props
+    const { fetchNextPage, hasNextPage, isFetching, tooltipContent } = props
 
     return isFetching ? (
         <Loader2 className="animate-spin" size={16} />
@@ -23,7 +24,7 @@ export default function TableExtraInfiniteQueryButton(props: TableExtraInfiniteQ
                         <TbDatabaseShare />
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent>Load More Data</TooltipContent>
+                <TooltipContent>{tooltipContent ?? "Load More Data"}</TooltipContent>
             </Tooltip>
         </TooltipProvider>
     )
