@@ -27,7 +27,7 @@ export default function TableExtraPagination(props: TableExtraPaginationProps) {
 
     return (
         <div
-            className={`flex w-full max-w-full flex-col items-center space-x-2 ${lowTableWidth ? "flex-col" : "md:flex-row"} md:justify-between`}
+            className={`flex w-full max-w-full flex-col items-center space-x-2 ${lowTableWidth ? "flex-col" : "lg:flex-row"} md:justify-between`}
             style={{ maxWidth: tableWidth }}
         >
             {/* Records per page option selector */}
@@ -38,7 +38,7 @@ export default function TableExtraPagination(props: TableExtraPaginationProps) {
 
             {/* Pagination buttons */}
             <div
-                className={`${lowTableWidth ? "w-full justify-between" : "justify-end max-md:w-full"} flex items-center gap-2 max-sm:w-full max-sm:justify-between`}
+                className={`${lowTableWidth ? "w-full justify-between" : "justify-end max-lg:w-full"} flex items-center gap-2 max-sm:w-full max-sm:justify-between`}
             >
                 <Button
                     className="flex-1 max-md:w-24 max-sm:!w-16"

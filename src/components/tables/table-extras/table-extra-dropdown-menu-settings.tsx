@@ -26,8 +26,8 @@ export default function TableExtraDropdownMenuSettings(props: TableExtraDropdown
         <NavigationMenu className="z-50 w-auto hover:border-b-2 hover:border-primary">
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="max-sm:!p-0">
-                        <Info className="h-6 w-6 max-sm:!w-4" />
+                    <NavigationMenuTrigger className="!p-0">
+                        <Info className="h-5 w-5 max-sm:!w-4" />
                     </NavigationMenuTrigger>
                     <NavigationMenuContent className="min-w-[120px] p-4">
                         <div className="flex flex-col items-center gap-4">

@@ -32,6 +32,9 @@ type CustomTableProps<T> = {
     /* columns to display in the table */
     columns: ColumnDef<T>[]
 
+    /* tooltip content for the create new record button */
+    createRecordTooltipContent?: string
+
     /* data to display in the table ( the rows ) */
     data: T[]
 
@@ -68,6 +71,7 @@ type CustomTableProps<T> = {
 export default function CustomTable<T extends RowWithId>(props: CustomTableProps<T>) {
     const {
         columns,
+        createRecordTooltipContent,
         data,
         expandRowDetailComponent,
         handleCreateNewRecord,
@@ -107,7 +111,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                 className="flex flex-col items-center justify-between gap-4 md:flex-row"
                 style={{ maxWidth: transformedWidth, minWidth: "250px" }}
             >
-                <div className="flex w-full items-center gap-4 max-sm:gap-2">
+                <div className="flex w-full items-center gap-2 max-sm:gap-2">
                     {table.getIsSomeRowsSelected() || table.getIsAllRowsSelected() ? (
                         <TableExtraDeleteSelected table={table} />
                     ) : (
@@ -124,7 +128,10 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
 
                     {/* create a button to add a new row */}
                     {handleCreateNewRecord && (
-                        <TableExtraCreateNewRecord handleCreateNewRecord={handleCreateNewRecord} />
+                        <TableExtraCreateNewRecord
+                            handleCreateNewRecord={handleCreateNewRecord}
+                            tooltipContent={createRecordTooltipContent}
+                        />
                     )}
 
                     {/* Optional fetch more data component used for infinite queries */}
