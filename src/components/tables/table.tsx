@@ -40,6 +40,9 @@ type CustomTableProps<T> = {
     /* optional component to display when you have alot of data and you are using an infinite query for fetching more data */
     fetchMoreDataComponent?: ComponentType
 
+    /* handle creation of a button to create a new record, this is optional, the user will create the create action */
+    handleCreateNewRecord?: () => void
+
     /* height of the table */
     height?: string
 
@@ -63,6 +66,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         data,
         expandRowDetailComponent,
         fetchMoreDataComponent: FetchMoreDataComponent,
+        handleCreateNewRecord,
         height = "500px",
         hideForColumns,
         recordsPerPage,
@@ -114,7 +118,9 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     <TableExtraGlobalSearchBar table={table} />
 
                     {/* create a button to add a new row */}
-                    <TableExtraCreateNewRecord />
+                    {handleCreateNewRecord && (
+                        <TableExtraCreateNewRecord handleCreateNewRecord={handleCreateNewRecord} />
+                    )}
 
                     {/* Optional fetch more data component used for infinite queries */}
                     {FetchMoreDataComponent && <FetchMoreDataComponent />}

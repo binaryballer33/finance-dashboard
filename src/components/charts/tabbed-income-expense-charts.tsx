@@ -41,7 +41,7 @@ export default function TabbedIncomeExpenseCharts() {
         <Card className="my-8">
             <CardHeader>
                 <CardTitle>Financial Overview</CardTitle>
-                <CardDescription>View your income and expenses in different chart formats</CardDescription>
+                <CardDescription>View Your Income and Expenses in Different Chart Formats</CardDescription>
                 <div className="flex items-center space-x-4 pt-2">
                     <div className="flex items-center space-x-2">
                         <Checkbox
