@@ -18,6 +18,7 @@ import TableExtraCreateNewRecord from "./table-extras/table-extra-create-new-rec
 import TableExtraDeleteSelected from "./table-extras/table-extra-delete-selected"
 import TableExtraDropdownMenuSettings from "./table-extras/table-extra-dropdown-menu-settings"
 import TableExtraGlobalSearchBar from "./table-extras/table-extra-global-search-bar"
+import TableExtraInfiniteQueryButton from "./table-extras/table-extra-infinite-query-button"
 import TableExtraPagination from "./table-extras/table-extra-pagination"
 import TableHeaderCustomHead from "./table-header/table-header-custom-head"
 import useResetColumnFilters from "./table-utils/hooks/use-reset-column-filters"
@@ -37,9 +38,6 @@ type CustomTableProps<T> = {
     /* optional component to expand the row in order to display more information for that row */
     expandRowDetailComponent?: ComponentType<{ row: Row<T>; table: ReactTable<T> }>
 
-    /* optional component to display when you have alot of data and you are using an infinite query for fetching more data */
-    fetchMoreDataComponent?: ComponentType
-
     /* handle creation of a button to create a new record, this is optional, the user will create the create action */
     handleCreateNewRecord?: () => void
 
@@ -48,6 +46,13 @@ type CustomTableProps<T> = {
 
     /* columns to not display header names and header features */
     hideForColumns: string[]
+
+    /* optional component to display when you have alot of data and you are using an infinite query for fetching more data */
+    infiniteQueryHandlers?: {
+        fetchNextPage: () => void
+        hasNextPage: boolean
+        isFetching: boolean
+    }
 
     /* records per page options */
     recordsPerPage?: number[]
@@ -65,10 +70,10 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         columns,
         data,
         expandRowDetailComponent,
-        fetchMoreDataComponent: FetchMoreDataComponent,
         handleCreateNewRecord,
         height = "500px",
         hideForColumns,
+        infiniteQueryHandlers,
         recordsPerPage,
         tableStatsComponent: TableStatsComponent,
         width = "100%",
@@ -123,7 +128,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     )}
 
                     {/* Optional fetch more data component used for infinite queries */}
-                    {FetchMoreDataComponent && <FetchMoreDataComponent />}
+                    {infiniteQueryHandlers && <TableExtraInfiniteQueryButton {...infiniteQueryHandlers} />}
                 </div>
             </div>
 
