@@ -17,7 +17,7 @@ import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
 
 import updateUserAccountSettings from "@/actions/user/update-user-account-settings"
 
-import useAuthUser from "@/hooks/useAuthUser"
+import useAuthUser from "@/hooks/use-auth-user"
 
 import routes from "@/routes/routes"
 

@@ -14,6 +14,7 @@ import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table"
 import TableBodyRowCustom from "./table-body/table-body-row-custom"
 import TableBodyRowNoRecordsFound from "./table-body/table-body-row-no-records-found"
 import TableExtraColumnVisibility from "./table-extras/table-extra-column-visibility"
+import TableExtraCreateNewRecord from "./table-extras/table-extra-create-new-record"
 import TableExtraDeleteSelected from "./table-extras/table-extra-delete-selected"
 import TableExtraDropdownMenuSettings from "./table-extras/table-extra-dropdown-menu-settings"
 import TableExtraGlobalSearchBar from "./table-extras/table-extra-global-search-bar"
@@ -111,6 +112,9 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     )}
                     {/* Table Global Search Bar */}
                     <TableExtraGlobalSearchBar table={table} />
+
+                    {/* create a button to add a new row */}
+                    <TableExtraCreateNewRecord />
 
                     {/* Optional fetch more data component used for infinite queries */}
                     {FetchMoreDataComponent && <FetchMoreDataComponent />}

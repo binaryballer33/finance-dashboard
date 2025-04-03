@@ -1,6 +1,6 @@
 "use client"
 
-import useAuthUser from "@/hooks/useAuthUser"
+import useAuthUser from "@/hooks/use-auth-user"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 

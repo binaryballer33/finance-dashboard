@@ -1,6 +1,6 @@
 "use client"
 
-import useAuthUser from "@/hooks/useAuthUser"
+import useAuthUser from "@/hooks/use-auth-user"
 
 import PlaceholderBox from "@/components/base/placeholder-box"
 import { H1 } from "@/components/base/typography"

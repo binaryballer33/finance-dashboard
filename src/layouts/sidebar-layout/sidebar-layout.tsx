@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 
 import { memo, useEffect } from "react"
 
-import useAuthUser from "@/hooks/useAuthUser"
+import useAuthUser from "@/hooks/use-auth-user"
 
 import routes from "@/routes/routes"
 
