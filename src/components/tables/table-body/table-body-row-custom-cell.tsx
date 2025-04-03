@@ -13,6 +13,7 @@ export default function TableBodyRowCustomCell(props: TableBodyRowCustomCellProp
 
     return (
         <TableCell
+            className="!p-0"
             key={cell.id}
             style={{
                 minWidth: cell.column.columnDef.minSize || 0,
