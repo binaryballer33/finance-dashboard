@@ -33,13 +33,13 @@ export default function useCreateTransactionsTableColumns() {
         () => [
             columnHelper.display({
                 cell: ({ row }) => (
-                    <div className="flex h-full w-full items-center justify-center p-2">
+                    <div className="flex h-full w-full items-center justify-center">
                         <TableBodyRowCheckbox row={row} />
                     </div>
                 ),
                 footer: (props) => props.column.id,
                 header: ({ table }) => (
-                    <div className="flex h-full w-full items-center justify-center p-2">
+                    <div className="flex h-full w-full items-center justify-center">
                         <TableHeaderCheckboxAll table={table} />
                     </div>
                 ),

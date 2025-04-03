@@ -9,9 +9,5 @@ type TableBodyRowCheckboxProps = {
 export default function TableBodyRowCheckbox(props: TableBodyRowCheckboxProps) {
     const { row } = props
 
-    return (
-        <div className="flex items-center justify-center">
-            <Checkbox checked={row.getIsSelected()} onCheckedChange={(checked) => row.toggleSelected(!!checked)} />
-        </div>
-    )
+    return <Checkbox checked={row.getIsSelected()} onCheckedChange={(checked) => row.toggleSelected(!!checked)} />
 }

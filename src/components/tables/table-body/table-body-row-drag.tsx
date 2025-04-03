@@ -16,5 +16,9 @@ export default function TableBodyRowDrag(props: TableBodyRowDragProps) {
         id: rowId,
     })
 
-    return <ArrowUpDown {...attributes} {...listeners} className="h-4 w-4" />
+    return (
+        <div className="flex h-full w-full items-center justify-center">
+            <ArrowUpDown {...attributes} {...listeners} className="h-4 w-4" />
+        </div>
+    )
 }
