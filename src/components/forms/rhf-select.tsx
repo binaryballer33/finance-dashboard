@@ -1,3 +1,5 @@
+import type { Category } from "@/types/forms/transaction-categories"
+
 import { type ReactNode, useState } from "react"
 
 import { useFormContext } from "react-hook-form"
@@ -19,10 +21,7 @@ type RHFSelectProps = {
     helperText?: ReactNode
     label?: string
     name: string
-    options: {
-        label: string
-        value: string
-    }[]
+    options: Category
     placeholder?: string
 }
 
@@ -46,7 +45,10 @@ export default function RHFSelect(props: RHFSelectProps) {
                         <SelectContent>
                             {options.map((option) => (
                                 <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
+                                    <div className="flex items-center gap-2">
+                                        {option.icon && <option.icon className="h-4 w-4" />}
+                                        {option.label}
+                                    </div>
                                 </SelectItem>
                             ))}
                         </SelectContent>

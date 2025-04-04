@@ -1,21 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import type { Transaction } from "@/types/forms/transaction"
+import type { Dispatch, SetStateAction } from "react"
+
+import { defaultValuesTransaction as defaultValues, TransactionSchema } from "@/types/forms/transaction"
 
 import { useForm } from "react-hook-form"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
 import { toast } from "sonner"
-import * as z from "zod"
-
-import { cn } from "@/lib/utils"
 
 import createTransaction from "@/actions/transactions/mutations/create-transaction"
 
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
 import {
     Dialog,
     DialogContent,
@@ -24,61 +21,35 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Form } from "@/components/ui/form"
+
+import RHFCalendar from "@/components/forms/rhf-calendar"
+import CreateTransactionInput from "@/components/forms/rhf-custom-input"
+import RHFSelect from "@/components/forms/rhf-select"
 
 import categories from "./categories"
 
-const formSchema = z.object({
-    amount: z
-        .string()
-        .min(1, "Amount is required")
-        .refine((val) => !Number.isNaN(Number.parseFloat(val)) && Number.parseFloat(val) > 0, {
-            message: "Amount must be a positive number",
-        }),
-    category: z.string().min(1, "Please select a category"),
-    date: z.date({
-        required_error: "Please select a date",
-    }),
-    description: z.string().min(1, "Description is required"),
-})
-
-type FormValues = z.infer<typeof formSchema>
-
-type AddTransactionDialogProps = {
-    onOpenChange: (open: boolean) => void
+type CreateNewRecordDialogProps = {
     open: boolean
+    setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     userId: string
 }
 
-export default function AddTransactionDialog(props: AddTransactionDialogProps) {
-    const { onOpenChange, open, userId } = props
-    const [datePopoverOpen, setDatePopoverOpen] = useState(false)
+export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps) {
+    const { open, setCreateNewRecordDialogOpen, userId } = props
 
-    const form = useForm<FormValues>({
-        defaultValues: {
-            amount: "10",
-            category: "Food",
-            date: new Date(),
-            description: "",
-        },
-        resolver: zodResolver(formSchema),
-    })
+    const form = useForm<Transaction>({ defaultValues, resolver: zodResolver(TransactionSchema) })
 
-    async function onSubmit(data: FormValues) {
-        const amount = Number.parseFloat(data.amount)
-
+    async function onSubmit(data: Transaction) {
         const transaction = await createTransaction({
-            amount,
+            amount: data.amount,
             category: data.category,
             date: new Date(data.date),
             description: data.description,
             userId,
         })
 
-        onOpenChange(false)
+        setCreateNewRecordDialogOpen(false)
 
         if (transaction) {
             toast.success("Transaction Created Successfully")
@@ -88,124 +59,22 @@ export default function AddTransactionDialog(props: AddTransactionDialogProps) {
     }
 
     return (
-        <Dialog onOpenChange={onOpenChange} open={open}>
+        <Dialog onOpenChange={setCreateNewRecordDialogOpen} open={open}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Create New Transaction</DialogTitle>
+                    <DialogTitle>Create A New Transaction</DialogTitle>
                     <DialogDescription>Enter The Details Of Your Transaction Below.</DialogDescription>
                 </DialogHeader>
 
                 <Form {...form}>
                     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="amount"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Amount</FormLabel>
-                                        <FormControl>
-                                            <Input inputMode="decimal" placeholder="0.00" type="text" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-
-                        <FormField
-                            control={form.control}
-                            name="category"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Category</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select category" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {categories.map((category) => (
-                                                <SelectItem key={category.value} value={category.value}>
-                                                    <div className="flex items-center gap-2">
-                                                        <category.icon className="h-4 w-4" />
-                                                        {category.label}
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter description" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="date"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Date</FormLabel>
-                                    <Popover modal onOpenChange={setDatePopoverOpen} open={datePopoverOpen}>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    className={cn(
-                                                        "w-full pl-3 text-left font-normal",
-                                                        !field.value && "text-muted-foreground",
-                                                    )}
-                                                    type="button"
-                                                    variant="outline"
-                                                >
-                                                    {field.value ? (
-                                                        format(field.value, "MM/dd/yyyy")
-                                                    ) : (
-                                                        <span>Pick A Date</span>
-                                                    )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent
-                                            align="start"
-                                            className="w-auto p-0"
-                                            onPointerDownOutside={(e) => e.preventDefault()}
-                                        >
-                                            <Calendar
-                                                initialFocus
-                                                mode="single"
-                                                onSelect={(date) => {
-                                                    if (date) {
-                                                        field.onChange(date)
-                                                        setDatePopoverOpen(false)
-                                                    }
-                                                }}
-                                                selected={field.value}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <CreateTransactionInput inputName="amount" label="Amount" />
+                        <RHFSelect label="Category" name="category" options={categories} />
+                        <CreateTransactionInput inputName="description" label="Description" />
+                        <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>
-                            <Button onClick={() => onOpenChange(false)} type="button" variant="outline">
+                            <Button onClick={() => setCreateNewRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel
                             </Button>
                             <Button type="submit">Create Transaction</Button>

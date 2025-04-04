@@ -1,6 +1,7 @@
 "use client"
 
 import type { RegisterRequest } from "@/types/forms/register"
+import type { Transaction } from "@/types/forms/transaction"
 
 import { type ReactNode } from "react"
 
@@ -18,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import FlexBetweenContainer from "../base/flex-box/flex-between-container"
 import FormFieldVisibilityIcon from "./form/form-field-visibility-icon"
 
-type InputName = "name" | keyof RegisterRequest
+type InputName = "name" | keyof RegisterRequest | keyof Transaction
 
 type CustomInputProps = {
     className?: string
@@ -121,6 +122,10 @@ function getInputType(name: string, label: string, showButtons: boolean | undefi
         inputType = "email"
     } else if (showButtons && !isFieldVisible) {
         inputType = "password"
+    } else if (name.toLowerCase() === "date" || label.toLowerCase() === "date") {
+        inputType = "date"
+    } else if (name.toLowerCase() === "amount" || label.toLowerCase() === "amount") {
+        inputType = "number"
     } else {
         inputType = "text"
     }

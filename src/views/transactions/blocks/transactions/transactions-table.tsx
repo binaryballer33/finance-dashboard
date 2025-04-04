@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import CustomTable from "@/components/tables/table"
 
-import AddTransactionDialog from "./create-transaction-dialog"
+import CreateNewRecordDialog from "./create-transaction-dialog"
 import useCreateTableColumns from "./use-create-transaction-table-columns"
 
 type TransactionsTableProps = {
@@ -52,9 +52,9 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                 width="100%"
             />
 
-            <AddTransactionDialog
-                onOpenChange={setCreateNewRecordDialogOpen}
+            <CreateNewRecordDialog
                 open={createNewRecordDialogOpen}
+                setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
                 userId={userId}
             />
         </>

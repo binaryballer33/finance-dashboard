@@ -1,7 +1,9 @@
+import type { Category } from "@/types/forms/transaction-categories"
+
 import { Car, CircleHelp, Clapperboard, House, ShoppingCart, Zap } from "lucide-react"
 import { IoFastFoodOutline } from "react-icons/io5"
 
-const categories = [
+const categories: Category = [
     {
         icon: IoFastFoodOutline,
         label: "Food",
