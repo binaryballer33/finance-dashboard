@@ -7,10 +7,8 @@ import { defaultValuesTransaction as defaultValues, TransactionSchema } from "@/
 
 import { useForm } from "react-hook-form"
 
+import useCreateTransactionMutation from "@/api/transactions/mutations/use-create-transaction"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
-
-import createTransaction from "@/actions/transactions/mutations/create-transaction"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -39,9 +37,10 @@ export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps)
     const { open, setCreateNewRecordDialogOpen, userId } = props
 
     const form = useForm<Transaction>({ defaultValues, resolver: zodResolver(TransactionSchema) })
+    const { mutateAsync: createTransaction } = useCreateTransactionMutation()
 
     async function onSubmit(data: Transaction) {
-        const transaction = await createTransaction({
+        await createTransaction({
             amount: data.amount,
             category: data.category,
             date: new Date(data.date),
@@ -50,12 +49,6 @@ export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps)
         })
 
         setCreateNewRecordDialogOpen(false)
-
-        if (transaction) {
-            toast.success("Transaction Created Successfully")
-        } else {
-            toast.error("Failed to create transaction")
-        }
     }
 
     return (
