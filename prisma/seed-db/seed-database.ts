@@ -34,7 +34,7 @@ async function createTransactions(userId: string, count: number = 100) {
     const transactions: Transaction[] = []
 
     Array.from({ length: count }).forEach(() => {
-        const amount = Math.random() * 1000 - 500 // Random amount between -500 and 500
+        const amount = Number((Math.random() * 1000).toFixed(2)) // Random amount between 0 and 1000
         const date = new Date()
         date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
         const category = `Lorem ipsum ${Math.floor(Math.random() * 10)}`
@@ -82,7 +82,7 @@ async function createExpenses(userId: string, count: number = 5) {
     const expenses: Expense[] = []
 
     Array.from({ length: count }).forEach((_, index) => {
-        const amount = Math.random() * 300
+        const amount = Number((Math.random() * 300).toFixed(2))
 
         // get random month with the first date of that month within the last year
         const date = new Date()
@@ -115,7 +115,7 @@ async function createIncome(userId: string, count: number = 5) {
     const incomes: Income[] = []
 
     Array.from({ length: count }).forEach((_, index) => {
-        const amount = Math.random() * 1000
+        const amount = Number((Math.random() * 1000).toFixed(2))
 
         // get random month with the first date of that month within the last year
         const date = new Date()

@@ -55,6 +55,9 @@ type CustomTableProps<T> = {
         isFetching: boolean
     }
 
+    /*  tooltip content for the load more data button */
+    loadMoreDataTooltipContent?: string
+
     /* records per page options, default is 10, 20, 30, 40, 50, 100 */
     recordsPerPage?: number[]
 
@@ -75,6 +78,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         handleCreateNewRecord,
         height = "500px",
         infiniteQueryHandlers,
+        loadMoreDataTooltipContent,
         recordsPerPage = [10, 20, 30, 40, 50, 100],
         tableStatsComponent: TableStatsComponent,
         width = "100%",
@@ -135,7 +139,12 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     )}
 
                     {/* Optional fetch more data component used for infinite queries */}
-                    {infiniteQueryHandlers && <TableExtraInfiniteQueryButton {...infiniteQueryHandlers} />}
+                    {infiniteQueryHandlers && (
+                        <TableExtraInfiniteQueryButton
+                            {...infiniteQueryHandlers}
+                            tooltipContent={loadMoreDataTooltipContent}
+                        />
+                    )}
                 </div>
             </div>
 

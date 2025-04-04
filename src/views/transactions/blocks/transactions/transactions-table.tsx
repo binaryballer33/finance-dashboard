@@ -37,6 +37,7 @@ export default function TransactionsTable(props: TransactionsTableProps) {
             data={transactions}
             expandRowDetailComponent={DemoTransactionRowDetail}
             infiniteQueryHandlers={infiniteQueryHandlers}
+            loadMoreDataTooltipContent="Load More Transactions"
             width="100%"
         />
     )
