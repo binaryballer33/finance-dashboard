@@ -2,8 +2,9 @@
 
 import useAuthUser from "@/hooks/use-auth-user"
 
-import PlaceholderBox from "@/components/base/placeholder-box"
 import { H1 } from "@/components/base/typography"
+
+import UserAccountSettingsView from "./blocks/user-account-settings"
 
 export default function UserProfileView() {
     const user = useAuthUser()
@@ -12,7 +13,8 @@ export default function UserProfileView() {
     return (
         <div className="w-full">
             <H1 className="my-4 text-center">Welcome Back {user.firstName}</H1>
-            <PlaceholderBox className="mx-auto w-5/6" height={700} title={user.email} />
+
+            <UserAccountSettingsView />
         </div>
     )
 }

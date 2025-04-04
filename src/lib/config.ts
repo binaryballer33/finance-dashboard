@@ -15,7 +15,6 @@ type AppMetadata = {
     signOut: Metadata
     transactions: Metadata
     userProfile: Metadata
-    userSettings: Metadata
     verifyEmail: Metadata
 }
 
@@ -117,13 +116,6 @@ export const appMetadata: AppMetadata = {
             icon: icons.userProfile,
         },
         title: `User Profile | ${APP_NAME}`,
-    },
-    userSettings: {
-        description: "User Account Settings Page For The App",
-        icons: {
-            icon: icons.userSettings,
-        },
-        title: `Account Settings | ${APP_NAME}`,
     },
     verifyEmail: {
         description: "User Verify Email Page For The App",
