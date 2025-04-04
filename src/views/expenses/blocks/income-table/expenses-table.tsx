@@ -12,17 +12,9 @@ type ExpensesTableProps = {
 
 export default function ExpensesTable(props: ExpensesTableProps) {
     const { userId } = props
-    const { columns, hideForColumns } = useCreateExpensesTableColumns()
+    const { columns } = useCreateExpensesTableColumns()
 
     const { data: expenses = [] } = useGetExpensesByUserIdQuery(userId)
 
-    return (
-        <CustomTable
-            columns={columns as any}
-            data={expenses as any}
-            hideForColumns={hideForColumns}
-            recordsPerPage={[10, 20, 30, 40, 50, 100]}
-            width="100%"
-        />
-    )
+    return <CustomTable columns={columns} data={expenses} width="100%" />
 }

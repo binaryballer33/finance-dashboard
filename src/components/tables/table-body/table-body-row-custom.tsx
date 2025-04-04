@@ -70,9 +70,14 @@ export default function TableBodyRowCustom(props: TableBodyRowCustomProps) {
                 ))}
             </TableRow>
 
-            {/* TODO: only let this column appear if the user has made a component for expanding the row */}
             {/* if the row is expanded, display the row detail view */}
-            {row.getIsExpanded() && ExpandRowDetailComponent && <ExpandRowDetailComponent row={row} table={table} />}
+            {row.getIsExpanded() && ExpandRowDetailComponent && (
+                <TableRow className={isOddRow ? "bg-accent" : ""}>
+                    <TableCell className={cn(paddingConfig[padding])} colSpan={row.getVisibleCells().length}>
+                        <ExpandRowDetailComponent row={row} table={table} />
+                    </TableCell>
+                </TableRow>
+            )}
         </Fragment>
     )
 }

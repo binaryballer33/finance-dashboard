@@ -21,6 +21,7 @@ import TableExtraGlobalSearchBar from "./table-extras/table-extra-global-search-
 import TableExtraInfiniteQueryButton from "./table-extras/table-extra-infinite-query-button"
 import TableExtraPagination from "./table-extras/table-extra-pagination"
 import TableHeaderCustomHead from "./table-header/table-header-custom-head"
+import hideColumns from "./table-utils/hide-columns"
 import useResetColumnFilters from "./table-utils/hooks/use-reset-column-filters"
 import useCreateTableData from "./table-utils/use-create-table-data"
 
@@ -47,9 +48,6 @@ type CustomTableProps<T> = {
     /* height of the table */
     height?: string
 
-    /* columns to not display header names and header features */
-    hideForColumns: string[]
-
     /* optional component to display when you have alot of data and you are using an infinite query for fetching more data */
     infiniteQueryHandlers?: {
         fetchNextPage: () => void
@@ -57,7 +55,7 @@ type CustomTableProps<T> = {
         isFetching: boolean
     }
 
-    /* records per page options */
+    /* records per page options, default is 10, 20, 30, 40, 50, 100 */
     recordsPerPage?: number[]
 
     /* optional component to display table stats, this component has access to the table instance */
@@ -76,9 +74,8 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         expandRowDetailComponent,
         handleCreateNewRecord,
         height = "500px",
-        hideForColumns,
         infiniteQueryHandlers,
-        recordsPerPage,
+        recordsPerPage = [10, 20, 30, 40, 50, 100],
         tableStatsComponent: TableStatsComponent,
         width = "100%",
     } = props
@@ -93,6 +90,9 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         height: transformedHeight,
         width: transformedWidth,
     })
+
+    // columns to not display header names and header features
+    const hideForColumns = Object.values(hideColumns)
 
     const table = useReactTable<T>(tableConfig)
 

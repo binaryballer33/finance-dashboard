@@ -1,8 +1,5 @@
 "use client"
 
-import type { Trade } from "@prisma/client"
-import type { ColumnDef } from "@tanstack/react-table"
-
 import useGetTradesByUserIdQuery from "@/api/trades/queries/use-get-trades-by-userId"
 
 import CustomTable from "@/components/tables/table"
@@ -18,18 +15,14 @@ type TradeTableProps = {
 export default function TradeTable(props: TradeTableProps) {
     const { userId } = props
 
-    const { columns, hideForColumns } = useCreateTradeTableColumns()
-    const { data: trades } = useGetTradesByUserIdQuery(userId)
-
-    if (!trades) return null
+    const { columns } = useCreateTradeTableColumns({ shouldColumnBeExpandable: true })
+    const { data: trades = [] } = useGetTradesByUserIdQuery(userId)
 
     return (
         <CustomTable
-            columns={columns as ColumnDef<Trade>[]}
+            columns={columns}
             data={trades}
             expandRowDetailComponent={TradeExpandRowDetail}
-            hideForColumns={hideForColumns}
-            recordsPerPage={[10, 20, 30, 40, 50, 100]}
             tableStatsComponent={TradeStats}
             width="100%"
         />

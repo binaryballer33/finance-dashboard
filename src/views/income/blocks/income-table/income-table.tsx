@@ -12,17 +12,9 @@ type IncomeTableProps = {
 
 export default function IncomeTable(props: IncomeTableProps) {
     const { userId } = props
-    const { columns, hideForColumns } = useCreateIncomeTableColumns()
+    const { columns } = useCreateIncomeTableColumns()
 
-    const { data: income } = useGetIncomeByUserIdQuery(userId)
+    const { data: income = [] } = useGetIncomeByUserIdQuery(userId)
 
-    return (
-        <CustomTable
-            columns={columns as any}
-            data={income as any}
-            hideForColumns={hideForColumns}
-            recordsPerPage={[10, 20, 30, 40, 50, 100]}
-            width="100%"
-        />
-    )
+    return <CustomTable columns={columns} data={income} recordsPerPage={[10, 20, 30, 40, 50, 100]} width="100%" />
 }

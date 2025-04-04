@@ -1,4 +1,5 @@
 import type { Income } from "@prisma/client"
+import type { ColumnDef } from "@tanstack/react-table"
 
 import { useMemo } from "react"
 
@@ -11,62 +12,65 @@ import TableBodyRowExpand from "@/components/tables/table-body/table-body-row-ex
 import TableHeaderCheckboxAll from "@/components/tables/table-header/table-header-checkbox-all"
 import TableHeaderDelete from "@/components/tables/table-header/table-header-delete"
 import customFilter from "@/components/tables/table-utils/filters/custom-filter/custom-filter"
+import hideColumns from "@/components/tables/table-utils/hide-columns"
 
 const columnHelper = createColumnHelper<Income>()
 
-export default function useCreateIncomeTableColumns() {
-    // don't show the header features like sort, filter, drag and drop, etc for these columns
-    const hideForColumnsMap = useMemo(
-        () => ({
-            delete: "Delete",
-            dragRow: "Drag Row",
-            rowDetails: "Row Details",
-            selectAll: "Select All",
-        }),
-        [],
-    )
+type UseCreateIncomeTableColumnsProps = {
+    shouldColumnBeExpandable?: boolean
+}
 
-    const hideForColumns = Object.values(hideForColumnsMap)
+export default function useCreateIncomeTableColumns(props: UseCreateIncomeTableColumnsProps = {}) {
+    const { shouldColumnBeExpandable } = props
 
     // create the columns for the table, the id is also being used to create the footer and header tooltip content
-    const columns = useMemo(
-        () => [
+    const columns = useMemo(() => {
+        /* columns to display on the table for selecting rows, reordering rows, and expanding rows */
+        const utilityColumns = [
             columnHelper.display({
                 cell: ({ row }) => (
                     <div className="flex h-full w-full items-center justify-center">
                         <TableBodyRowCheckbox row={row} />
                     </div>
                 ),
-                footer: (props) => props.column.id,
+                footer: ({ column }) => column.id,
                 header: ({ table }) => (
                     <div className="flex h-full w-full items-center justify-center">
                         <TableHeaderCheckboxAll table={table} />
                     </div>
                 ),
-                id: hideForColumnsMap.selectAll,
+                id: hideColumns.selectAll,
                 maxSize: 25,
                 minSize: 25,
             }),
 
             columnHelper.display({
                 cell: ({ row }) => <TableBodyRowRowDrag rowId={row.id} />,
-                footer: (props) => props.column.id,
-                id: hideForColumnsMap.dragRow,
+                footer: ({ column }) => column.id,
+                id: hideColumns.dragRow,
                 maxSize: 30,
             }),
+        ]
 
-            columnHelper.display({
-                cell: ({ row }) => (row.getCanExpand() ? <TableBodyRowExpand row={row} /> : null),
-                footer: (props) => props.column.id,
-                id: hideForColumnsMap.rowDetails,
-                maxSize: 30,
-            }),
+        // Only add the expand column if expandRowDetailComponent is provided
+        if (shouldColumnBeExpandable) {
+            utilityColumns.push(
+                columnHelper.display({
+                    cell: ({ row }) => (row.getCanExpand() ? <TableBodyRowExpand row={row} /> : null),
+                    footer: ({ column }) => column.id,
+                    id: hideColumns.rowDetails,
+                    maxSize: 30,
+                }),
+            )
+        }
 
+        /* columns to display the data */
+        const dataColumns = [
             columnHelper.accessor("category", {
                 enableColumnFilter: true,
                 enableResizing: true,
                 filterFn: customFilter,
-                footer: (props) => props.column.id,
+                footer: ({ column }) => column.id,
                 header: () => <span>Category</span>,
                 id: "Category",
                 minSize: 120,
@@ -76,7 +80,7 @@ export default function useCreateIncomeTableColumns() {
                 enableColumnFilter: true,
                 enableResizing: true,
                 filterFn: customFilter,
-                footer: (props) => props.column.id,
+                footer: ({ column }) => column.id,
                 header: () => <span>Amount</span>,
                 id: "Amount",
                 minSize: 120,
@@ -86,7 +90,7 @@ export default function useCreateIncomeTableColumns() {
                 enableColumnFilter: true,
                 enableResizing: true,
                 filterFn: customFilter,
-                footer: (props) => props.column.id,
+                footer: ({ column }) => column.id,
                 header: () => <span>Description</span>,
                 id: "Description",
                 minSize: 120,
@@ -100,21 +104,26 @@ export default function useCreateIncomeTableColumns() {
                 enableColumnFilter: true,
                 enableResizing: true,
                 filterFn: customFilter,
-                footer: (props) => props.column.id,
+                footer: ({ column }) => column.id,
                 header: () => <span>Date</span>,
                 id: "Date",
                 minSize: 120,
             }),
+        ]
 
+        /* columns to display the actions */
+        const actionColumns = [
             columnHelper.display({
                 cell: ({ row, table }) => <TableBodyRowDelete row={row} table={table} />,
-                footer: (props) => props.column.id,
+                footer: ({ column }) => column.id,
                 header: () => <TableHeaderDelete />,
-                id: hideForColumnsMap.delete,
+                id: hideColumns.delete,
             }),
-        ],
-        [hideForColumnsMap],
-    )
+        ]
 
-    return { columns, hideForColumns }
+        /* return the columns */
+        return [...utilityColumns, ...dataColumns, ...actionColumns] as ColumnDef<Income>[]
+    }, [shouldColumnBeExpandable])
+
+    return { columns }
 }

@@ -17,7 +17,7 @@ type TableExtraPaginationProps = {
 // TODO: fix the width of the pagination buttons to be the same as the width of the table -- update fixed
 // TODO: when no width given to table, pagination buttons and table are not aligned
 export default function TableExtraPagination(props: TableExtraPaginationProps) {
-    const { recordsPerPage = [10, 20, 30, 40, 50], table } = props
+    const { recordsPerPage = [10, 20, 30, 40, 50, 100], table } = props
 
     // needed to make the pagination buttons and table align and to make the table width responsive
     const minWidthNeededForStyles = 1100
