@@ -3,12 +3,15 @@
 import type { Transaction } from "@prisma/client"
 import type { Row } from "@tanstack/react-table"
 
+import { useState } from "react"
+
 import useGetTransactionsByIdInfiniteQuery from "@/api/transactions/queries/use-get-transactions-by-id-infinite-query"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import CustomTable from "@/components/tables/table"
 
+import AddTransactionDialog from "./create-transaction-dialog"
 import useCreateTableColumns from "./use-create-transaction-table-columns"
 
 type TransactionsTableProps = {
@@ -17,6 +20,7 @@ type TransactionsTableProps = {
 
 export default function TransactionsTable(props: TransactionsTableProps) {
     const { userId } = props
+
     const { columns } = useCreateTableColumns({
         shouldColumnBeExpandable: true,
     })
@@ -31,15 +35,29 @@ export default function TransactionsTable(props: TransactionsTableProps) {
         isFetching: infiniteQuery.isFetching,
     }
 
+    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+
     return (
-        <CustomTable
-            columns={columns}
-            data={transactions}
-            expandRowDetailComponent={DemoTransactionRowDetail}
-            infiniteQueryHandlers={infiniteQueryHandlers}
-            loadMoreDataTooltipContent="Load More Transactions"
-            width="100%"
-        />
+        <>
+            <CustomTable
+                columns={columns}
+                createNewRecord={{
+                    createNewRecordTooltipContent: "Create New Transaction",
+                    setCreateNewRecordDialogOpen,
+                }}
+                data={transactions}
+                expandRowDetailComponent={DemoTransactionRowDetail}
+                infiniteQueryHandlers={infiniteQueryHandlers}
+                loadMoreDataTooltipContent="Load More Transactions"
+                width="100%"
+            />
+
+            <AddTransactionDialog
+                onOpenChange={setCreateNewRecordDialogOpen}
+                open={createNewRecordDialogOpen}
+                userId={userId}
+            />
+        </>
     )
 }
 

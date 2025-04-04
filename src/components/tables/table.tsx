@@ -1,7 +1,7 @@
 "use client"
 
 import type { ColumnDef, Table as ReactTable, Row } from "@tanstack/react-table"
-import type { ComponentType } from "react"
+import type { ComponentType, Dispatch, SetStateAction } from "react"
 
 import { useMemo } from "react"
 
@@ -33,17 +33,19 @@ type CustomTableProps<T> = {
     /* columns to display in the table */
     columns: ColumnDef<T>[]
 
-    /* tooltip content for the create new record button */
-    createRecordTooltipContent?: string
+    createNewRecord?: {
+        /* tooltip content for the create new record button */
+        createNewRecordTooltipContent?: string
+
+        /* setter for the open state of the create new record dialog */
+        setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+    }
 
     /* data to display in the table ( the rows ) */
     data: T[]
 
     /* optional component to expand the row in order to display more information for that row */
     expandRowDetailComponent?: ComponentType<{ row: Row<T>; table: ReactTable<T> }>
-
-    /* handle creation of a button to create a new record, this is optional, the user will create the create action */
-    handleCreateNewRecord?: () => void
 
     /* height of the table */
     height?: string
@@ -72,10 +74,9 @@ type CustomTableProps<T> = {
 export default function CustomTable<T extends RowWithId>(props: CustomTableProps<T>) {
     const {
         columns,
-        createRecordTooltipContent,
+        createNewRecord,
         data,
         expandRowDetailComponent,
-        handleCreateNewRecord,
         height = "500px",
         infiniteQueryHandlers,
         loadMoreDataTooltipContent,
@@ -131,10 +132,10 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     <TableExtraGlobalSearchBar table={table} />
 
                     {/* create a button to add a new row */}
-                    {handleCreateNewRecord && (
+                    {createNewRecord?.setCreateNewRecordDialogOpen && (
                         <TableExtraCreateNewRecord
-                            handleCreateNewRecord={handleCreateNewRecord}
-                            tooltipContent={createRecordTooltipContent}
+                            setCreateNewRecordDialogOpen={createNewRecord.setCreateNewRecordDialogOpen}
+                            tooltipContent={createNewRecord?.createNewRecordTooltipContent}
                         />
                     )}
 
