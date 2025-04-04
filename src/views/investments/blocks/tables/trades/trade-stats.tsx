@@ -1,6 +1,6 @@
 import type { Table } from "@tanstack/react-table"
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../../../../components/ui/accordion"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 type TableDemoStatsProps = {
     table: Table<any>

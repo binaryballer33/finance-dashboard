@@ -8,8 +8,8 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import TabbedIncomeExpenseCharts from "@/components/charts/tabbed-income-expense-charts"
 
-import TradeTable from "./blocks/tables/trades/trade-table"
-import TransactionsTable from "./blocks/tables/transactions/transactions-table"
+import TradeTable from "../investments/blocks/tables/trades/trade-table"
+import TransactionsTable from "../transactions/blocks/transactions/transactions-table"
 
 export default function HomeView() {
     const user = useAuthUser()

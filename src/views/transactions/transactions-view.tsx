@@ -6,7 +6,7 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
-import TransactionsTable from "../home/blocks/tables/transactions/transactions-table"
+import TransactionsTable from "./blocks/transactions/transactions-table"
 
 export default function TransactionsView() {
     const user = useAuthUser()
