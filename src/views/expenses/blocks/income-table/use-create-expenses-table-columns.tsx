@@ -6,11 +6,11 @@ import { useMemo } from "react"
 import { createColumnHelper } from "@tanstack/react-table"
 
 import TableBodyRowCheckbox from "@/components/tables/table-body/table-body-row-checkbox"
-import TableBodyRowDelete from "@/components/tables/table-body/table-body-row-delete"
 import TableBodyRowRowDrag from "@/components/tables/table-body/table-body-row-drag"
 import TableBodyRowExpand from "@/components/tables/table-body/table-body-row-expand"
+import TableBodyRowHideRow from "@/components/tables/table-body/table-body-row-hide-row"
 import TableHeaderCheckboxAll from "@/components/tables/table-header/table-header-checkbox-all"
-import TableHeaderDelete from "@/components/tables/table-header/table-header-delete"
+import TableHeaderHideRow from "@/components/tables/table-header/table-header-hide-row"
 import customFilter from "@/components/tables/table-utils/filters/custom-filter/custom-filter"
 import hideColumns from "@/components/tables/table-utils/hide-columns"
 
@@ -114,10 +114,10 @@ export default function useCreateExpensesTableColumns(props: UseCreateExpensesTa
         /* columns to display the actions */
         const actionColumns = [
             columnHelper.display({
-                cell: ({ row, table }) => <TableBodyRowDelete row={row} table={table} />,
+                cell: ({ row, table }) => <TableBodyRowHideRow row={row} table={table} />,
                 footer: ({ column }) => column.id,
-                header: () => <TableHeaderDelete />,
-                id: hideColumns.delete,
+                header: () => <TableHeaderHideRow />,
+                id: hideColumns.hideRow,
             }),
         ]
 

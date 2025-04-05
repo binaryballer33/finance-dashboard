@@ -9,8 +9,11 @@ import { KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from 
 import { arrayMove } from "@dnd-kit/sortable"
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel } from "@tanstack/react-table"
 
+import TableBodyRowHideRow from "../table-body/table-body-row-delete"
+import TableHeaderDelete from "../table-header/table-header-delete"
 import customFilter from "./filters/custom-filter/custom-filter"
 import fuzzyFilter from "./filters/fuzzy-filter"
+import hideColumns from "./hide-columns"
 
 // Extend TanStack's TableMeta interface
 declare module "@tanstack/table-core" {
@@ -56,6 +59,14 @@ type UseCreateTableDataProps<T extends RowWithId> = {
 
 export default function useCreateTableData<T extends RowWithId>(props: UseCreateTableDataProps<T>) {
     const { columns, data: initialData, height = "500px", width = "100%" } = props
+
+    // add the delete column to the table
+    columns.push({
+        cell: ({ row, table }) => <TableBodyRowHideRow row={row} table={table} />,
+        footer: ({ column }) => column.id,
+        header: () => <TableHeaderDelete />,
+        id: hideColumns.delete,
+    })
 
     // get table row data
     const [data, setData] = useState(initialData)
@@ -127,19 +138,28 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
 
     // create the table config
     const tableConfig: TableOptions<T> = {
+        // used to resize columns, default is ltr
         columnResizeDirection: "ltr",
+
+        // used to resize columns, default is onChange so it will resize while the mouse is being dragged
         columnResizeMode: "onChange",
+
+        // the columns for the table
         columns,
 
+        // the records for the table
         data,
 
+        // used to select rows
         enableRowSelection: true,
 
+        // used to filter the table
         filterFns: {
             advanced: customFilter,
             fuzzy: fuzzyFilter,
         },
 
+        // used to get all the rows for the table
         getCoreRowModel: getCoreRowModel(),
 
         // filtering for the table
@@ -162,24 +182,37 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
 
         // handle row state deletion
         meta: {
+            /* table height */
             height,
+
+            /* table padding */
             padding: tablePadding,
+
+            /* remove a row from the table */
             removeRow: (rowId: number | string) => {
                 const newData = data.filter((row) => row.id !== rowId)
                 updateData(newData)
             },
+
+            /* remove multiple rows from the table */
             removeRows: (rowIds: (number | string)[]) => {
                 const newData = data.filter((row) => !rowIds.includes(row.id))
                 updateData(newData)
             },
+
+            /* set the table padding */
             setTablePadding,
+
+            /* table width */
             width,
         },
 
         // update the column order for dnd column reordering
         onColumnOrderChange: setColumnOrder,
 
+        // state for the table
         state: {
+            /* column order used for dnd column reordering */
             columnOrder,
         },
     }

@@ -20,6 +20,7 @@ type TransactionsTableProps = {
 
 export default function TransactionsTable(props: TransactionsTableProps) {
     const { userId } = props
+    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
 
     const { columns } = useCreateTableColumns({
         shouldColumnBeExpandable: true,
@@ -29,13 +30,6 @@ export default function TransactionsTable(props: TransactionsTableProps) {
 
     // Flatten all pages of transactions into a single array
     const transactions = infiniteQuery.data?.pages.flatMap((page) => page) ?? []
-    const infiniteQueryHandlers = {
-        fetchNextPage: infiniteQuery.fetchNextPage,
-        hasNextPage: infiniteQuery.hasNextPage,
-        isFetching: infiniteQuery.isFetching,
-    }
-
-    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
 
     return (
         <>
@@ -47,7 +41,11 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                 }}
                 data={transactions}
                 expandRowDetailComponent={DemoTransactionRowDetail}
-                infiniteQueryHandlers={infiniteQueryHandlers}
+                infiniteQueryHandlers={{
+                    fetchNextPage: infiniteQuery.fetchNextPage,
+                    hasNextPage: infiniteQuery.hasNextPage,
+                    isFetching: infiniteQuery.isFetching,
+                }}
                 loadMoreDataTooltipContent="Load More Transactions"
                 width="100%"
             />

@@ -34,6 +34,7 @@ export default function useCreateTransactionMutation() {
             // if there's a validation error, the mutation will not be called and the onError will be called
             TransactionSchema.parse(transaction)
 
+            // show a loading toast while the transaction is being created, this will be dismissed when the transaction is created
             const loadingToastId = toast.loading(`Attempting To Create Transaction: ${transaction.description}`, {
                 duration: 500,
             })
