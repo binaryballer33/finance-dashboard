@@ -33,8 +33,15 @@ export default function TransactionsTable(props: TransactionsTableProps) {
         <>
             <CustomTable
                 columns={columns}
-                createNewRecord={{
-                    createNewRecordTooltipContent: "Create New Transaction",
+                columnsToAdd={{
+                    addDeleteRowColumn: true,
+                    addExpandRowColumn: true,
+                    addHideRowColumn: true,
+                    addRowReorderColumn: true,
+                    addSelectRowsColumn: true,
+                }}
+                createNewRecordButton={{
+                    createNewRecordButtonTooltipContent: "Create New Transaction",
                     setCreateNewRecordDialogOpen,
                 }}
                 data={transactions}
@@ -42,11 +49,9 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                 infiniteQueryHandlers={{
                     fetchNextPage: infiniteQuery.fetchNextPage,
                     hasNextPage: infiniteQuery.hasNextPage,
+                    infiniteQueryButtonTooltipContent: "Load More Transactions",
                     isFetching: infiniteQuery.isFetching,
                 }}
-                loadMoreDataTooltipContent="Load More Transactions"
-                rowsCanExpand
-                width="100%"
             />
 
             <CreateNewRecordDialog

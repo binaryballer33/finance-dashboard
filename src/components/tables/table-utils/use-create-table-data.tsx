@@ -9,7 +9,7 @@ import { KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from 
 import { arrayMove } from "@dnd-kit/sortable"
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel } from "@tanstack/react-table"
 
-import addUtilityColumns from "./addUtilityColumns"
+import addColumns from "./add-columns"
 import customFilter from "./filters/custom-filter/custom-filter"
 import fuzzyFilter from "./filters/fuzzy-filter"
 
@@ -45,23 +45,29 @@ type UseCreateTableDataProps<T extends RowWithId> = {
     /* table columns */
     columns: ColumnDef<T>[]
 
+    /* utility columns to add to the table */
+    columnsToAdd: {
+        addDeleteRowColumn: boolean
+        addExpandRowColumn: boolean
+        addHideRowColumn: boolean
+        addRowReorderColumn: boolean
+        addSelectRowsColumn: boolean
+    }
+
     /* table rows (data) */
     data: T[]
 
     /* table height */
     height?: string
 
-    /* should the table body rows be expandable */
-    rowsCanExpand?: boolean
-
     /* table width */
     width?: string
 }
 
 export default function useCreateTableData<T extends RowWithId>(props: UseCreateTableDataProps<T>) {
-    const { columns: initialColumns, data: initialData, height = "500px", rowsCanExpand = true, width = "100%" } = props
+    const { columns: initialColumns, columnsToAdd, data: initialData, height = "500px", width = "100%" } = props
 
-    const columns = useMemo(() => addUtilityColumns(initialColumns, rowsCanExpand), [initialColumns, rowsCanExpand])
+    const columns = useMemo(() => addColumns({ columns: initialColumns, columnsToAdd }), [initialColumns, columnsToAdd])
 
     // get table row data
     const [data, setData] = useState(initialData)

@@ -21,10 +21,16 @@ export default function TradeTable(props: TradeTableProps) {
     return (
         <CustomTable
             columns={columns}
+            columnsToAdd={{
+                addDeleteRowColumn: true,
+                addExpandRowColumn: true,
+                addHideRowColumn: true,
+                addRowReorderColumn: true,
+                addSelectRowsColumn: true,
+            }}
             data={trades}
             expandRowDetailComponent={TradeExpandRowDetail}
             tableStatsComponent={TradeStats}
-            width="100%"
         />
     )
 }

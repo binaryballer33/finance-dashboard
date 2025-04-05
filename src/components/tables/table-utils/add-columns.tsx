@@ -10,11 +10,27 @@ import TableHeaderDelete from "../table-header/table-header-delete"
 import TableHeaderHideRow from "../table-header/table-header-hide-row"
 import hideColumns from "./hide-columns"
 
-/* TODO: add the ability to specify which utility columns are added to the table */
-export default function addUtilityColumns<T>(columns: ColumnDef<T>[], rowsCanExpand: boolean) {
-    /* columns to display on the table for selecting rows, reordering rows, expanding rows, deleting rows, and hiding rows */
-    const columnsWithUtilityColumnsAdded = [
-        {
+type AddColumnsProps<T> = {
+    /* columns to display on the table */
+    columns: ColumnDef<T>[]
+
+    /* utility columns to add to the table */
+    columnsToAdd?: {
+        addDeleteRowColumn?: boolean
+        addExpandRowColumn?: boolean
+        addHideRowColumn?: boolean
+        addRowReorderColumn?: boolean
+        addSelectRowsColumn?: boolean
+    }
+}
+
+export default function addColumns<T>(props: AddColumnsProps<T>) {
+    const { columns, columnsToAdd } = props
+
+    const cols: ColumnDef<T>[] = []
+
+    if (columnsToAdd?.addSelectRowsColumn) {
+        cols.push({
             cell: ({ row }) => (
                 <div className="flex h-full w-full items-center justify-center">
                     <TableBodyRowCheckbox row={row} />
@@ -29,42 +45,48 @@ export default function addUtilityColumns<T>(columns: ColumnDef<T>[], rowsCanExp
             id: hideColumns.selectAll,
             maxSize: 25,
             minSize: 25,
-        },
+        })
+    }
 
-        {
+    if (columnsToAdd?.addRowReorderColumn) {
+        cols.push({
             cell: () => <TableBodyRowRowDrag />,
             footer: ({ column }) => column.id,
             id: hideColumns.dragRow,
             maxSize: 30,
-        },
+        })
+    }
 
-        // Only add the expand column if expandRowDetailComponent is provided
-        {
-            cell: ({ row }) => (row.getCanExpand() && rowsCanExpand ? <TableBodyRowExpand row={row} /> : null),
+    if (columnsToAdd?.addExpandRowColumn) {
+        cols.push({
+            cell: ({ row }) =>
+                row.getCanExpand() && columnsToAdd.addExpandRowColumn ? <TableBodyRowExpand row={row} /> : null,
             footer: ({ column }) => column.id,
             id: hideColumns.rowDetails,
             maxSize: 30,
-        },
+        })
+    }
 
-        // add the data columns that the table creator created for the table
-        ...columns,
+    /* add the data columns that the table creator created for the table */
+    cols.push(...columns)
 
-        // add the hide row column to the table
-        {
+    if (columnsToAdd?.addHideRowColumn) {
+        cols.push({
             cell: ({ row, table }) => <TableBodyRowHideRow row={row} table={table} />,
             footer: ({ column }) => column.id,
             header: () => <TableHeaderHideRow />,
             id: hideColumns.hideRow,
-        },
+        })
+    }
 
-        // add the delete column to the table
-        {
+    if (columnsToAdd?.addDeleteRowColumn) {
+        cols.push({
             cell: ({ row, table }) => <TableBodyRowDelete row={row} table={table} />,
             footer: ({ column }) => column.id,
             header: () => <TableHeaderDelete />,
             id: hideColumns.delete,
-        },
-    ]
+        })
+    }
 
-    return columnsWithUtilityColumnsAdded
+    return cols
 }

@@ -8,6 +8,7 @@ import { defaultValuesTransaction as defaultValues, TransactionSchema } from "@/
 import { useForm } from "react-hook-form"
 
 import useCreateTransactionMutation from "@/api/transactions/mutations/use-create-transaction"
+import categories from "@/mocks/categories"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from "@/components/ui/button"
@@ -24,8 +25,6 @@ import { Form } from "@/components/ui/form"
 import RHFCalendar from "@/components/forms/rhf-calendar"
 import CreateTransactionInput from "@/components/forms/rhf-custom-input"
 import RHFSelect from "@/components/forms/rhf-select"
-
-import categories from "./categories"
 
 type CreateNewRecordDialogProps = {
     open: boolean

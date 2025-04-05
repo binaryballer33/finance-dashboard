@@ -16,5 +16,16 @@ export default function ExpensesTable(props: ExpensesTableProps) {
 
     const { data: expenses = [] } = useGetExpensesByUserIdQuery(userId)
 
-    return <CustomTable columns={columns} data={expenses} width="100%" />
+    return (
+        <CustomTable
+            columns={columns}
+            columnsToAdd={{
+                addDeleteRowColumn: true,
+                addHideRowColumn: true,
+                addRowReorderColumn: true,
+                addSelectRowsColumn: true,
+            }}
+            data={expenses}
+        />
+    )
 }

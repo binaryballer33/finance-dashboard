@@ -33,9 +33,18 @@ type CustomTableProps<T> = {
     /* columns to display in the table */
     columns: ColumnDef<T>[]
 
-    createNewRecord?: {
+    /* additional utility columns to add to the table */
+    columnsToAdd?: {
+        addDeleteRowColumn?: boolean
+        addExpandRowColumn?: boolean
+        addHideRowColumn?: boolean
+        addRowReorderColumn?: boolean
+        addSelectRowsColumn?: boolean
+    }
+
+    createNewRecordButton?: {
         /* tooltip content for the create new record button */
-        createNewRecordTooltipContent?: string
+        createNewRecordButtonTooltipContent?: string
 
         /* setter for the open state of the create new record dialog */
         setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
@@ -52,19 +61,21 @@ type CustomTableProps<T> = {
 
     /* optional component to display when you have alot of data and you are using an infinite query for fetching more data */
     infiniteQueryHandlers?: {
+        /* fetch the next page of data */
         fetchNextPage: () => void
+
+        /* see if there is more data to fetch */
         hasNextPage: boolean
+
+        /* tooltip content for the load more data button */
+        infiniteQueryButtonTooltipContent?: string
+
+        /* see if the data is being fetched */
         isFetching: boolean
     }
 
-    /*  tooltip content for the load more data button */
-    loadMoreDataTooltipContent?: string
-
     /* records per page options, default is 10, 20, 30, 40, 50, 100 */
     recordsPerPage?: number[]
-
-    /* should the table body rows be expandable */
-    rowsCanExpand?: boolean
 
     /* optional component to display table stats, this component has access to the table instance */
     tableStatsComponent?: ComponentType<{ table: ReactTable<T> }>
@@ -73,18 +84,16 @@ type CustomTableProps<T> = {
     width?: string
 }
 
-// TODO: fix yugioh cards not being deleted when the delete button is clicked, think it has to do with the row id not being unique or it being a number, or number converted to a string
 export default function CustomTable<T extends RowWithId>(props: CustomTableProps<T>) {
     const {
         columns,
-        createNewRecord,
+        columnsToAdd,
+        createNewRecordButton,
         data,
         expandRowDetailComponent,
         height = "500px",
         infiniteQueryHandlers,
-        loadMoreDataTooltipContent,
         recordsPerPage = [10, 20, 30, 40, 50, 100],
-        rowsCanExpand = true,
         tableStatsComponent: TableStatsComponent,
         width = "100%",
     } = props
@@ -95,9 +104,15 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
 
     const { columnOrder, handleDragEnd, rowOrder, sensors, tableConfig } = useCreateTableData<T>({
         columns,
+        columnsToAdd: {
+            addDeleteRowColumn: columnsToAdd?.addDeleteRowColumn || false,
+            addExpandRowColumn: columnsToAdd?.addExpandRowColumn || false,
+            addHideRowColumn: columnsToAdd?.addHideRowColumn || false,
+            addRowReorderColumn: columnsToAdd?.addRowReorderColumn || false,
+            addSelectRowsColumn: columnsToAdd?.addSelectRowsColumn || false,
+        },
         data,
         height: transformedHeight,
-        rowsCanExpand,
         width: transformedWidth,
     })
 
@@ -137,10 +152,10 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     <TableExtraGlobalSearchBar table={table} />
 
                     {/* create a button to add a new row */}
-                    {createNewRecord?.setCreateNewRecordDialogOpen && (
+                    {createNewRecordButton?.setCreateNewRecordDialogOpen && (
                         <TableExtraCreateNewRecord
-                            setCreateNewRecordDialogOpen={createNewRecord.setCreateNewRecordDialogOpen}
-                            tooltipContent={createNewRecord?.createNewRecordTooltipContent}
+                            setCreateNewRecordDialogOpen={createNewRecordButton.setCreateNewRecordDialogOpen}
+                            tooltipContent={createNewRecordButton?.createNewRecordButtonTooltipContent}
                         />
                     )}
 
@@ -148,7 +163,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     {infiniteQueryHandlers && (
                         <TableExtraInfiniteQueryButton
                             {...infiniteQueryHandlers}
-                            tooltipContent={loadMoreDataTooltipContent}
+                            tooltipContent={infiniteQueryHandlers.infiniteQueryButtonTooltipContent}
                         />
                     )}
                 </div>

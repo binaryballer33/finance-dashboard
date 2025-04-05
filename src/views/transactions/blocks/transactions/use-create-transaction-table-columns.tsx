@@ -1,4 +1,5 @@
 import type { Transaction } from "@prisma/client"
+import type { ColumnDef } from "@tanstack/react-table"
 
 import { createColumnHelper } from "@tanstack/react-table"
 
@@ -7,7 +8,7 @@ import customFilter from "@/components/tables/table-utils/filters/custom-filter/
 const columnHelper = createColumnHelper<Transaction>()
 
 export default function useCreateTransactionsTableColumns() {
-    // create the columns for the table, the id is also being used to create the footer and header tooltip content
+    // create the columns for the table, the id is also being used to create the header tooltip content
     const columns = [
         columnHelper.accessor("category", {
             enableColumnFilter: true,
@@ -48,7 +49,7 @@ export default function useCreateTransactionsTableColumns() {
             id: "Date",
             minSize: 120,
         }),
-    ]
+    ] as ColumnDef<Transaction>[]
 
     return { columns }
 }
