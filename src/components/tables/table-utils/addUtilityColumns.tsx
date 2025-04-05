@@ -32,7 +32,7 @@ export default function addUtilityColumns<T>(columns: ColumnDef<T>[], rowsCanExp
         },
 
         {
-            cell: ({ row }) => <TableBodyRowRowDrag rowId={row.id} />,
+            cell: () => <TableBodyRowRowDrag />,
             footer: ({ column }) => column.id,
             id: hideColumns.dragRow,
             maxSize: 30,

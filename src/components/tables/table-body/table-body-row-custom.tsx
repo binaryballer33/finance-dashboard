@@ -23,10 +23,10 @@ export default function TableBodyRowCustom(props: TableBodyRowCustomProps) {
     const padding = table.options.meta?.padding!
 
     // dnd sortable context for the table body cells
-    const { isDragging, setNodeRef, transform, transition } = useSortable({
+    const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
         // this is needed for the dnd sortable to work, it needs to know what if its a column or row
         data: { type: "row" },
-        id: row.id,
+        id: row.id.toString(),
     })
 
     // dnd draggable styles for the table header cell
@@ -51,6 +51,8 @@ export default function TableBodyRowCustom(props: TableBodyRowCustomProps) {
                 `}
                 ref={setNodeRef}
                 style={style}
+                {...attributes}
+                {...listeners}
             >
                 {/* the table body cells */}
                 {row.getVisibleCells().map((cell) => (

@@ -66,19 +66,19 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
     // get table row data
     const [data, setData] = useState(initialData)
 
-    // Update data when initialData changes
-    useEffect(() => {
-        setData(initialData)
-        setRowOrder(initialData.map((row) => row.id.toString()))
-    }, [initialData])
-
     // get the columnIds for column visibility toggling
     const [columnOrder, setColumnOrder] = useState<string[]>(() => columns.map((column) => column.id!))
 
     // row order for dnd row reordering
-    const [rowOrder, setRowOrder] = useState<string[]>(() => data.map((row) => row.id.toString()))
+    const [rowOrder, setRowOrder] = useState<string[]>(() => initialData.map((row) => row.id.toString()))
 
     const [tablePadding, setTablePadding] = useState<"lg" | "md" | "sm" | "xl">("md")
+
+    // Update data and row order when initialData changes
+    useEffect(() => {
+        setData(initialData)
+        setRowOrder(initialData.map((row) => row.id.toString()))
+    }, [initialData])
 
     // sensors for dnd column reordering
     const sensors = useSensors(
@@ -113,12 +113,22 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
             // arrayMove is a function that moves an item in an array to a new index, fancy splice from dnd-kit
             setColumnOrder(arrayMove(columnOrder, oldIndex, newIndex))
         } else if (isRow) {
-            const oldIndex = rowOrder.indexOf(active.id.toString())
-            const newIndex = rowOrder.indexOf(over.id.toString())
+            const activeId = active.id.toString()
+            const overId = over.id.toString()
 
-            // arrayMove is a function that moves an item in an array to a new index, fancy splice from dnd-kit
-            setData(arrayMove(data, oldIndex, newIndex))
-            setRowOrder(arrayMove(rowOrder, oldIndex, newIndex))
+            // get the old index and new index of the row
+            const oldIndex = rowOrder.indexOf(activeId)
+            const newIndex = rowOrder.indexOf(overId)
+
+            // if the old index and new index are not -1, then we can move the row
+            if (oldIndex !== -1 && newIndex !== -1) {
+                // arrayMove is a function that moves an item in an array to a new index, fancy splice from dnd-kit
+                const newRowOrder = arrayMove(rowOrder, oldIndex, newIndex)
+                const newData = arrayMove(data, oldIndex, newIndex)
+
+                setRowOrder(newRowOrder)
+                setData(newData)
+            }
         }
     }
 
