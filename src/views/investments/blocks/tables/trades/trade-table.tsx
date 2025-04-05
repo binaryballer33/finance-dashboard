@@ -15,7 +15,7 @@ type TradeTableProps = {
 export default function TradeTable(props: TradeTableProps) {
     const { userId } = props
 
-    const { columns } = useCreateTradeTableColumns({ shouldColumnBeExpandable: true })
+    const { columns } = useCreateTradeTableColumns()
     const { data: trades = [] } = useGetTradesByUserIdQuery(userId)
 
     return (
@@ -23,6 +23,7 @@ export default function TradeTable(props: TradeTableProps) {
             columns={columns}
             data={trades}
             expandRowDetailComponent={TradeExpandRowDetail}
+            rowsCanExpand
             tableStatsComponent={TradeStats}
             width="100%"
         />

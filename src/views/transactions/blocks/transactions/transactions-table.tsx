@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import CustomTable from "@/components/tables/table"
 
 import CreateNewRecordDialog from "./create-transaction-dialog"
-import useCreateTableColumns from "./use-create-transaction-table-columns"
+import useCreateTransactionsTableColumns from "./use-create-transaction-table-columns"
 
 type TransactionsTableProps = {
     userId: string
@@ -22,9 +22,7 @@ export default function TransactionsTable(props: TransactionsTableProps) {
     const { userId } = props
     const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
 
-    const { columns } = useCreateTableColumns({
-        shouldColumnBeExpandable: true,
-    })
+    const { columns } = useCreateTransactionsTableColumns()
 
     const infiniteQuery = useGetTransactionsByIdInfiniteQuery(userId)
 
@@ -47,6 +45,7 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     isFetching: infiniteQuery.isFetching,
                 }}
                 loadMoreDataTooltipContent="Load More Transactions"
+                rowsCanExpand
                 width="100%"
             />
 

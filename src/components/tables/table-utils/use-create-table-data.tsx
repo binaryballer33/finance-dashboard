@@ -3,17 +3,15 @@
 import type { DragEndEvent } from "@dnd-kit/core"
 import type { ColumnDef, RowData, TableOptions } from "@tanstack/react-table"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core"
 import { arrayMove } from "@dnd-kit/sortable"
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel } from "@tanstack/react-table"
 
-import TableBodyRowHideRow from "../table-body/table-body-row-delete"
-import TableHeaderDelete from "../table-header/table-header-delete"
+import addUtilityColumns from "./addUtilityColumns"
 import customFilter from "./filters/custom-filter/custom-filter"
 import fuzzyFilter from "./filters/fuzzy-filter"
-import hideColumns from "./hide-columns"
 
 // Extend TanStack's TableMeta interface
 declare module "@tanstack/table-core" {
@@ -53,20 +51,17 @@ type UseCreateTableDataProps<T extends RowWithId> = {
     /* table height */
     height?: string
 
+    /* should the table body rows be expandable */
+    rowsCanExpand?: boolean
+
     /* table width */
     width?: string
 }
 
 export default function useCreateTableData<T extends RowWithId>(props: UseCreateTableDataProps<T>) {
-    const { columns, data: initialData, height = "500px", width = "100%" } = props
+    const { columns: initialColumns, data: initialData, height = "500px", rowsCanExpand = true, width = "100%" } = props
 
-    // add the delete column to the table
-    columns.push({
-        cell: ({ row, table }) => <TableBodyRowHideRow row={row} table={table} />,
-        footer: ({ column }) => column.id,
-        header: () => <TableHeaderDelete />,
-        id: hideColumns.delete,
-    })
+    const columns = useMemo(() => addUtilityColumns(initialColumns, rowsCanExpand), [initialColumns, rowsCanExpand])
 
     // get table row data
     const [data, setData] = useState(initialData)

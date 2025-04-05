@@ -63,6 +63,9 @@ type CustomTableProps<T> = {
     /* records per page options, default is 10, 20, 30, 40, 50, 100 */
     recordsPerPage?: number[]
 
+    /* should the table body rows be expandable */
+    rowsCanExpand?: boolean
+
     /* optional component to display table stats, this component has access to the table instance */
     tableStatsComponent?: ComponentType<{ table: ReactTable<T> }>
 
@@ -81,6 +84,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         infiniteQueryHandlers,
         loadMoreDataTooltipContent,
         recordsPerPage = [10, 20, 30, 40, 50, 100],
+        rowsCanExpand = true,
         tableStatsComponent: TableStatsComponent,
         width = "100%",
     } = props
@@ -93,6 +97,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         columns,
         data,
         height: transformedHeight,
+        rowsCanExpand,
         width: transformedWidth,
     })
 
