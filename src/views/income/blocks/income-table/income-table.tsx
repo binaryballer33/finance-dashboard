@@ -16,5 +16,5 @@ export default function IncomeTable(props: IncomeTableProps) {
 
     const { data: income = [] } = useGetIncomeByUserIdQuery(userId)
 
-    return <CustomTable columns={columns} data={income} rowsCanExpand width="100%" />
+    return <CustomTable columns={columns} data={income} width="100%" />
 }

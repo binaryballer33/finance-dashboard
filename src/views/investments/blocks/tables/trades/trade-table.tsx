@@ -23,7 +23,6 @@ export default function TradeTable(props: TradeTableProps) {
             columns={columns}
             data={trades}
             expandRowDetailComponent={TradeExpandRowDetail}
-            rowsCanExpand
             tableStatsComponent={TradeStats}
             width="100%"
         />
