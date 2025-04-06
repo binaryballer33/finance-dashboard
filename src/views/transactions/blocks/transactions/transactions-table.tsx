@@ -3,12 +3,15 @@
 import type { Transaction } from "@prisma/client"
 import type { Row } from "@tanstack/react-table"
 
+import { useState } from "react"
+
 import useGetTransactionsByIdInfiniteQuery from "@/api/transactions/queries/use-get-transactions-by-id-infinite-query"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import CustomTable from "@/components/tables/table"
 
+import CreateNewTransactionDialog from "./create-transaction-dialog"
 import useCreateTransactionsTableColumns from "./use-create-transaction-table-columns"
 
 type TransactionsTableProps = {
@@ -17,6 +20,8 @@ type TransactionsTableProps = {
 
 export default function TransactionsTable(props: TransactionsTableProps) {
     const { userId } = props
+    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+
     const { columns } = useCreateTransactionsTableColumns()
 
     const infiniteQuery = useGetTransactionsByIdInfiniteQuery(userId)
@@ -25,29 +30,38 @@ export default function TransactionsTable(props: TransactionsTableProps) {
     const transactions = infiniteQuery.data?.pages.flatMap((page) => page) ?? []
 
     return (
-        <CustomTable
-            columns={columns}
-            columnsToAdd={{
-                addDeleteRowColumn: true,
-                addExpandRowColumn: true,
-                addHideRowColumn: true,
-                addRowReorderColumn: true,
-                addSelectRowsColumn: true,
-                addUpdateRowColumn: true,
-            }}
-            createNewRecordButton={{
-                createNewRecordButtonTooltipContent: "Create New Transaction",
-                userId,
-            }}
-            data={transactions}
-            expandRowDetailComponent={DemoTransactionRowDetail}
-            infiniteQueryHandlers={{
-                fetchNextPage: infiniteQuery.fetchNextPage,
-                hasNextPage: infiniteQuery.hasNextPage,
-                infiniteQueryButtonTooltipContent: "Load More Transactions",
-                isFetching: infiniteQuery.isFetching,
-            }}
-        />
+        <>
+            <CustomTable
+                columns={columns}
+                columnsToAdd={{
+                    addDeleteRowColumn: true,
+                    addExpandRowColumn: true,
+                    addHideRowColumn: true,
+                    addRowReorderColumn: true,
+                    addSelectRowsColumn: true,
+                    addUpdateRowColumn: true,
+                }}
+                createNewRecordButton={{
+                    createNewRecordButtonTooltipContent: "Create New Transaction",
+                    setCreateNewRecordDialogOpen,
+                    userId,
+                }}
+                data={transactions}
+                expandRowDetailComponent={DemoTransactionRowDetail}
+                infiniteQueryHandlers={{
+                    fetchNextPage: infiniteQuery.fetchNextPage,
+                    hasNextPage: infiniteQuery.hasNextPage,
+                    infiniteQueryButtonTooltipContent: "Load More Transactions",
+                    isFetching: infiniteQuery.isFetching,
+                }}
+            />
+
+            <CreateNewTransactionDialog
+                open={createNewRecordDialogOpen}
+                setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
+                userId={userId}
+            />
+        </>
     )
 }
 
