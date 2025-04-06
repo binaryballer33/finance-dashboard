@@ -201,8 +201,6 @@ async function seedDatabase() {
         // await new Promise((resolve) => setTimeout(resolve, 3000))
     } catch (error) {
         console.error("Error Seeding Database: ", error)
-    } finally {
-        await prisma.$disconnect()
     }
 }
 

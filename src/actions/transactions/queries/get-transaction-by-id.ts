@@ -15,7 +15,5 @@ export default async function getTransactionById(transactionId: string) {
     } catch (error) {
         console.error(`Error Fetching Transaction With Id ${validatedTransactionId}: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

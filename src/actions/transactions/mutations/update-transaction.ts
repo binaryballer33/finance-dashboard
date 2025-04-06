@@ -29,7 +29,5 @@ export default async function updateTransaction(transaction: Transaction) {
     } catch (error) {
         console.error("Error Updating Transaction:", error)
         throw new Error("Failed To Update Transaction")
-    } finally {
-        prisma.$disconnect()
     }
 }

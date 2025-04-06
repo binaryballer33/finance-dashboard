@@ -19,7 +19,5 @@ export default async function getTransactionsByUserId(userId: string, skipPrevio
     } catch (error) {
         console.error(`Error Fetching Transactions With User Id ${validatedUserId}: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

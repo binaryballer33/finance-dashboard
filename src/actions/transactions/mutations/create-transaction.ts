@@ -20,7 +20,5 @@ export default async function createTransaction(transaction: Transaction) {
     } catch (error) {
         console.error(`Error Creating Transaction: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

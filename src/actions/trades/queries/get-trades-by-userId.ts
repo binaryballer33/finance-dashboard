@@ -25,7 +25,5 @@ export default async function getTradesByUserId(
     } catch (error) {
         console.error(`Error Retrieving Trades With User Id ${validatedUserId}: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

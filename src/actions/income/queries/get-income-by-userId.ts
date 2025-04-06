@@ -25,7 +25,5 @@ export default async function getIncomeByUserId(
     } catch (error) {
         console.error(`Error Retrieving Incomes With User Id ${validatedUserId}: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

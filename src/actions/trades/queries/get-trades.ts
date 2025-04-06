@@ -16,7 +16,5 @@ export default async function getTrades(page = 0, limit = 100): Promise<null | T
     } catch (error) {
         console.error(`Error Fetching Trades: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

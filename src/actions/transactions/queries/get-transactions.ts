@@ -14,7 +14,5 @@ export default async function getTransactions(page = 0, limit = 100) {
     } catch (error) {
         console.error(`Error Fetching Transactions: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }

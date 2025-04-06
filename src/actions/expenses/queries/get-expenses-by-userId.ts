@@ -25,7 +25,5 @@ export default async function getExpensesByUserId(
     } catch (error) {
         console.error(`Error Retrieving Expenses With User Id ${validatedUserId}: ${error}`)
         return null
-    } finally {
-        prisma.$disconnect()
     }
 }
