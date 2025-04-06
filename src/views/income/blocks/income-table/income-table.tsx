@@ -22,7 +22,6 @@ export default function IncomeTable(props: IncomeTableProps) {
             columnsToAdd={{
                 addDeleteRowColumn: true,
                 addHideRowColumn: true,
-                addRowReorderColumn: true,
                 addSelectRowsColumn: true,
             }}
             data={income}

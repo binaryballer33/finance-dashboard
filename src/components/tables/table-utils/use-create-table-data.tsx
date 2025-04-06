@@ -2,6 +2,7 @@
 
 import type { DragEndEvent } from "@dnd-kit/core"
 import type { ColumnDef, RowData, TableOptions } from "@tanstack/react-table"
+import type { Dispatch, SetStateAction } from "react"
 
 import { useEffect, useMemo, useState } from "react"
 
@@ -50,7 +51,6 @@ type UseCreateTableDataProps<T extends RowWithId> = {
         addDeleteRowColumn: boolean
         addExpandRowColumn: boolean
         addHideRowColumn: boolean
-        addRowReorderColumn: boolean
         addSelectRowsColumn: boolean
         addUpdateRowColumn: boolean
     }
@@ -61,14 +61,32 @@ type UseCreateTableDataProps<T extends RowWithId> = {
     /* table height */
     height?: string
 
+    updateRecordButton?: {
+        /* setter for the selected record */
+        setSelectedRecord: Dispatch<SetStateAction<null | T>>
+
+        /* setter for the update record dialog open state */
+        setUpdateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+    }
+
     /* table width */
     width?: string
 }
 
 export default function useCreateTableData<T extends RowWithId>(props: UseCreateTableDataProps<T>) {
-    const { columns: initialColumns, columnsToAdd, data: initialData, height = "500px", width = "100%" } = props
+    const {
+        columns: initialColumns,
+        columnsToAdd,
+        data: initialData,
+        height = "500px",
+        updateRecordButton,
+        width = "100%",
+    } = props
 
-    const columns = useMemo(() => addColumns({ columns: initialColumns, columnsToAdd }), [initialColumns, columnsToAdd])
+    const columns = useMemo(
+        () => addColumns({ columns: initialColumns, columnsToAdd, updateRecordButton }),
+        [initialColumns, columnsToAdd, updateRecordButton],
+    )
 
     // get table row data
     const [data, setData] = useState(initialData)

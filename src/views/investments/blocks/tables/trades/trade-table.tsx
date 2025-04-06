@@ -25,7 +25,6 @@ export default function TradeTable(props: TradeTableProps) {
                 addDeleteRowColumn: true,
                 addExpandRowColumn: true,
                 addHideRowColumn: true,
-                addRowReorderColumn: true,
                 addSelectRowsColumn: true,
             }}
             data={trades}

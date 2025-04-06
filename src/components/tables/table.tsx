@@ -38,7 +38,6 @@ type CustomTableProps<T> = {
         addDeleteRowColumn?: boolean
         addExpandRowColumn?: boolean
         addHideRowColumn?: boolean
-        addRowReorderColumn?: boolean
         addSelectRowsColumn?: boolean
         addUpdateRowColumn?: boolean
     }
@@ -84,6 +83,14 @@ type CustomTableProps<T> = {
     /* optional component to display table stats, this component has access to the table instance */
     tableStatsComponent?: ComponentType<{ table: ReactTable<T> }>
 
+    updateRecordButton?: {
+        /* setter for the selected record */
+        setSelectedRecord: Dispatch<SetStateAction<null | T>>
+
+        /* setter for the update record dialog open state */
+        setUpdateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+    }
+
     /* width of the table */
     width?: string
 }
@@ -99,6 +106,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         infiniteQueryHandlers,
         recordsPerPage = [10, 20, 30, 40, 50, 100],
         tableStatsComponent: TableStatsComponent,
+        updateRecordButton,
         width = "100%",
     } = props
 
@@ -112,12 +120,12 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
             addDeleteRowColumn: columnsToAdd?.addDeleteRowColumn || false,
             addExpandRowColumn: columnsToAdd?.addExpandRowColumn || false,
             addHideRowColumn: columnsToAdd?.addHideRowColumn || false,
-            addRowReorderColumn: columnsToAdd?.addRowReorderColumn || false,
             addSelectRowsColumn: columnsToAdd?.addSelectRowsColumn || false,
             addUpdateRowColumn: columnsToAdd?.addUpdateRowColumn || false,
         },
         data,
         height: transformedHeight,
+        updateRecordButton,
         width: transformedWidth,
     })
 

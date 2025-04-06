@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
+import type { Dispatch, SetStateAction } from "react"
 
 import TableBodyRowCheckbox from "../table-body/table-body-row-checkbox"
 import TableBodyRowDelete from "../table-body/table-body-row-delete"
-import TableBodyRowRowDrag from "../table-body/table-body-row-drag"
 import TableBodyRowExpand from "../table-body/table-body-row-expand"
 import TableBodyRowHideRow from "../table-body/table-body-row-hide-row"
 import TableBodyRowUpdate from "../table-body/table-body-row-update-record"
@@ -18,14 +18,21 @@ type AddColumnsProps<T> = {
         addDeleteRowColumn?: boolean
         addExpandRowColumn?: boolean
         addHideRowColumn?: boolean
-        addRowReorderColumn?: boolean
         addSelectRowsColumn?: boolean
         addUpdateRowColumn?: boolean
+    }
+
+    updateRecordButton?: {
+        /* setter for the selected record */
+        setSelectedRecord: Dispatch<SetStateAction<null | T>>
+
+        /* setter for the update record dialog open state */
+        setUpdateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     }
 }
 
 export default function addColumns<T>(props: AddColumnsProps<T>) {
-    const { columns, columnsToAdd } = props
+    const { columns, columnsToAdd, updateRecordButton } = props
 
     const cols: ColumnDef<T>[] = []
 
@@ -48,16 +55,6 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         })
     }
 
-    if (columnsToAdd?.addRowReorderColumn) {
-        cols.push({
-            cell: () => <TableBodyRowRowDrag />,
-            footer: ({ column }) => column.id,
-            header: () => <div className="flex h-full w-full items-center justify-center">DnD</div>,
-            id: hideColumns.dragRow,
-            maxSize: 30,
-        })
-    }
-
     if (columnsToAdd?.addExpandRowColumn) {
         cols.push({
             cell: ({ row }) =>
@@ -69,9 +66,15 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         })
     }
 
-    if (columnsToAdd?.addUpdateRowColumn) {
+    if (columnsToAdd?.addUpdateRowColumn && updateRecordButton) {
         cols.push({
-            cell: () => <TableBodyRowUpdate />,
+            cell: ({ row }) => (
+                <TableBodyRowUpdate
+                    row={row}
+                    setSelectedRecord={updateRecordButton.setSelectedRecord}
+                    setUpdateRecordDialogOpen={updateRecordButton.setUpdateRecordDialogOpen}
+                />
+            ),
             footer: ({ column }) => column.id,
             header: () => <div className="flex h-full w-full items-center justify-center">Update</div>,
             id: hideColumns.updateRow,

@@ -22,7 +22,6 @@ export default function ExpensesTable(props: ExpensesTableProps) {
             columnsToAdd={{
                 addDeleteRowColumn: true,
                 addHideRowColumn: true,
-                addRowReorderColumn: true,
                 addSelectRowsColumn: true,
             }}
             data={expenses}

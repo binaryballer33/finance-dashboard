@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import CustomTable from "@/components/tables/table"
 
 import CreateNewTransactionDialog from "./create-transaction-dialog"
+import UpdateTransactionDialog from "./update-transaction-dialog"
 import useCreateTransactionsTableColumns from "./use-create-transaction-table-columns"
 
 type TransactionsTableProps = {
@@ -21,6 +22,8 @@ type TransactionsTableProps = {
 export default function TransactionsTable(props: TransactionsTableProps) {
     const { userId } = props
     const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+    const [updateTransactionDialogOpen, setUpdateTransactionDialogOpen] = useState(false)
+    const [selectedTransaction, setSelectedTransaction] = useState<null | Transaction>(null)
 
     const { columns } = useCreateTransactionsTableColumns()
 
@@ -37,7 +40,6 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     addDeleteRowColumn: true,
                     addExpandRowColumn: true,
                     addHideRowColumn: true,
-                    addRowReorderColumn: true,
                     addSelectRowsColumn: true,
                     addUpdateRowColumn: true,
                 }}
@@ -54,10 +56,23 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     infiniteQueryButtonTooltipContent: "Load More Transactions",
                     isFetching: infiniteQuery.isFetching,
                 }}
+                updateRecordButton={{
+                    setSelectedRecord: setSelectedTransaction,
+                    setUpdateRecordDialogOpen: setUpdateTransactionDialogOpen,
+                }}
             />
 
+            {selectedTransaction && (
+                <UpdateTransactionDialog
+                    setUpdateRecordDialogOpen={setUpdateTransactionDialogOpen}
+                    transaction={selectedTransaction}
+                    updateRecordDialogOpen={updateTransactionDialogOpen}
+                    userId={userId}
+                />
+            )}
+
             <CreateNewTransactionDialog
-                open={createNewRecordDialogOpen}
+                createNewRecordDialogOpen={createNewRecordDialogOpen}
                 setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
                 userId={userId}
             />

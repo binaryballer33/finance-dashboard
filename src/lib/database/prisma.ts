@@ -9,7 +9,8 @@ declare global {
     var prisma: PrismaClient | undefined
 }
 
-const prisma = global.prisma || new PrismaClient({ log: NODE_ENV === "development" ? ["error", "warn"] : ["error"] })
+const prisma =
+    global.prisma || new PrismaClient({ log: NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"] })
 
 export default prisma
 

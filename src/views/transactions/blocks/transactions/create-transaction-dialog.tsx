@@ -27,13 +27,13 @@ import CreateTransactionInput from "@/components/forms/rhf-custom-input"
 import RHFSelect from "@/components/forms/rhf-select"
 
 type CreateNewRecordDialogProps = {
-    open: boolean
+    createNewRecordDialogOpen: boolean
     setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     userId: string
 }
 
 export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps) {
-    const { open, setCreateNewRecordDialogOpen, userId } = props
+    const { createNewRecordDialogOpen, setCreateNewRecordDialogOpen, userId } = props
 
     const form = useForm<Transaction>({ defaultValues, resolver: zodResolver(TransactionSchema) })
     const { mutateAsync: createTransaction } = useCreateTransactionMutation()
@@ -51,7 +51,7 @@ export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps)
     }
 
     return (
-        <Dialog onOpenChange={setCreateNewRecordDialogOpen} open={open}>
+        <Dialog onOpenChange={setCreateNewRecordDialogOpen} open={createNewRecordDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>Create A New Transaction</DialogTitle>
