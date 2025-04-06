@@ -39,6 +39,5 @@ yarn-error.log*
 next-env.d.ts
 
 # local garbage test code
-delete-later/
-src/dont-commit/
-ignore-for-now/
+src/components/do-not-commit/*
+

@@ -1,15 +1,17 @@
 "use client"
 
 import type { ColumnDef, Table as ReactTable, Row } from "@tanstack/react-table"
-import type { ComponentType, Dispatch, SetStateAction } from "react"
+import type { ComponentType } from "react"
 
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 import { closestCenter, DndContext } from "@dnd-kit/core"
 import { SortableContext } from "@dnd-kit/sortable"
 import { useReactTable } from "@tanstack/react-table"
 
 import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table"
+
+import CreateNewRecordDialog from "@/views/transactions/blocks/transactions/create-transaction-dialog"
 
 import TableBodyRowCustom from "./table-body/table-body-row-custom"
 import TableBodyRowNoRecordsFound from "./table-body/table-body-row-no-records-found"
@@ -47,8 +49,8 @@ type CustomTableProps<T> = {
         /* tooltip content for the create new record button */
         createNewRecordButtonTooltipContent?: string
 
-        /* setter for the open state of the create new record dialog */
-        setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+        /* userId for creating new records */
+        userId: string
     }
 
     /* data to display in the table ( the rows ) */
@@ -99,6 +101,8 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         width = "100%",
     } = props
 
+    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+
     // in case the px on the width is forgotten this will add it, also will still allow percentage widths
     const transformedWidth = !width?.endsWith("px") && !width?.endsWith("%") ? `${width}px` : width
     const transformedHeight = !height?.endsWith("px") && !height?.endsWith("%") ? `${height}px` : height
@@ -121,10 +125,10 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
     // columns to not display header names and header features
     const hideForColumns = Object.values(hideColumns)
 
-    const table = useReactTable<T>(tableConfig)
-
     // Add a stable ID for DnD context to prevent hydration errors and aria describe errors
     const dndContextId = useMemo(() => "table-dnd-context", [])
+
+    const table = useReactTable<T>(tableConfig)
 
     // clear all the table column filters when the table is mounted
     useResetColumnFilters(table)
@@ -154,9 +158,9 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     <TableExtraGlobalSearchBar table={table} />
 
                     {/* create a button to add a new row */}
-                    {createNewRecordButton?.setCreateNewRecordDialogOpen && (
+                    {createNewRecordButton && (
                         <TableExtraCreateNewRecord
-                            setCreateNewRecordDialogOpen={createNewRecordButton.setCreateNewRecordDialogOpen}
+                            setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
                             tooltipContent={createNewRecordButton?.createNewRecordButtonTooltipContent}
                         />
                     )}
@@ -231,6 +235,15 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
 
             {/* Optional table stats component */}
             {TableStatsComponent && <TableStatsComponent table={table} />}
+
+            {/* Render the CreateNewRecordDialog internally if createNewRecordButton is provided */}
+            {createNewRecordButton && (
+                <CreateNewRecordDialog
+                    open={createNewRecordDialogOpen}
+                    setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
+                    userId={createNewRecordButton.userId}
+                />
+            )}
         </div>
     )
 }

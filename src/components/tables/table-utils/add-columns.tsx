@@ -7,8 +7,6 @@ import TableBodyRowExpand from "../table-body/table-body-row-expand"
 import TableBodyRowHideRow from "../table-body/table-body-row-hide-row"
 import TableBodyRowUpdate from "../table-body/table-body-row-update-record"
 import TableHeaderCheckboxAll from "../table-header/table-header-checkbox-all"
-import TableHeaderDelete from "../table-header/table-header-delete"
-import TableHeaderHideRow from "../table-header/table-header-hide-row"
 import hideColumns from "./hide-columns"
 
 type AddColumnsProps<T> = {
@@ -54,6 +52,7 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         cols.push({
             cell: () => <TableBodyRowRowDrag />,
             footer: ({ column }) => column.id,
+            header: () => <div className="flex h-full w-full items-center justify-center">DnD</div>,
             id: hideColumns.dragRow,
             maxSize: 30,
         })
@@ -64,6 +63,7 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
             cell: ({ row }) =>
                 row.getCanExpand() && columnsToAdd.addExpandRowColumn ? <TableBodyRowExpand row={row} /> : null,
             footer: ({ column }) => column.id,
+            header: () => <div className="flex h-full w-full items-center justify-center">Expand</div>,
             id: hideColumns.rowDetails,
             maxSize: 30,
         })
@@ -73,6 +73,7 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         cols.push({
             cell: () => <TableBodyRowUpdate />,
             footer: ({ column }) => column.id,
+            header: () => <div className="flex h-full w-full items-center justify-center">Update</div>,
             id: hideColumns.updateRow,
             maxSize: 30,
         })
@@ -85,7 +86,7 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         cols.push({
             cell: ({ row, table }) => <TableBodyRowHideRow row={row} table={table} />,
             footer: ({ column }) => column.id,
-            header: () => <TableHeaderHideRow />,
+            header: () => <div className="flex h-full w-full items-center justify-center">Hide</div>,
             id: hideColumns.hideRow,
         })
     }
@@ -94,7 +95,7 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         cols.push({
             cell: ({ row, table }) => <TableBodyRowDelete row={row} table={table} />,
             footer: ({ column }) => column.id,
-            header: () => <TableHeaderDelete />,
+            header: () => <div className="flex h-full w-full items-center justify-center">Delete</div>,
             id: hideColumns.delete,
         })
     }
