@@ -52,6 +52,7 @@ type UseCreateTableDataProps<T extends RowWithId> = {
         addHideRowColumn: boolean
         addRowReorderColumn: boolean
         addSelectRowsColumn: boolean
+        addUpdateRowColumn: boolean
     }
 
     /* table rows (data) */

@@ -13,5 +13,5 @@ type TableHeaderDragColumnProps = {
 export default function TableHeaderDragColumn(props: TableHeaderDragColumnProps) {
     const { attributes, listeners } = props
 
-    return <UnfoldHorizontal className="h-5 w-5" {...attributes} {...listeners} />
+    return <UnfoldHorizontal className="h-5 w-5 cursor-move" {...attributes} {...listeners} />
 }

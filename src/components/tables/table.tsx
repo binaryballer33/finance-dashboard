@@ -40,6 +40,7 @@ type CustomTableProps<T> = {
         addHideRowColumn?: boolean
         addRowReorderColumn?: boolean
         addSelectRowsColumn?: boolean
+        addUpdateRowColumn?: boolean
     }
 
     createNewRecordButton?: {
@@ -110,6 +111,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
             addHideRowColumn: columnsToAdd?.addHideRowColumn || false,
             addRowReorderColumn: columnsToAdd?.addRowReorderColumn || false,
             addSelectRowsColumn: columnsToAdd?.addSelectRowsColumn || false,
+            addUpdateRowColumn: columnsToAdd?.addUpdateRowColumn || false,
         },
         data,
         height: transformedHeight,

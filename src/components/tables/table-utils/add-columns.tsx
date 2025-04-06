@@ -5,6 +5,7 @@ import TableBodyRowDelete from "../table-body/table-body-row-delete"
 import TableBodyRowRowDrag from "../table-body/table-body-row-drag"
 import TableBodyRowExpand from "../table-body/table-body-row-expand"
 import TableBodyRowHideRow from "../table-body/table-body-row-hide-row"
+import TableBodyRowUpdate from "../table-body/table-body-row-update-record"
 import TableHeaderCheckboxAll from "../table-header/table-header-checkbox-all"
 import TableHeaderDelete from "../table-header/table-header-delete"
 import TableHeaderHideRow from "../table-header/table-header-hide-row"
@@ -21,6 +22,7 @@ type AddColumnsProps<T> = {
         addHideRowColumn?: boolean
         addRowReorderColumn?: boolean
         addSelectRowsColumn?: boolean
+        addUpdateRowColumn?: boolean
     }
 }
 
@@ -63,6 +65,15 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
                 row.getCanExpand() && columnsToAdd.addExpandRowColumn ? <TableBodyRowExpand row={row} /> : null,
             footer: ({ column }) => column.id,
             id: hideColumns.rowDetails,
+            maxSize: 30,
+        })
+    }
+
+    if (columnsToAdd?.addUpdateRowColumn) {
+        cols.push({
+            cell: () => <TableBodyRowUpdate />,
+            footer: ({ column }) => column.id,
+            id: hideColumns.updateRow,
             maxSize: 30,
         })
     }
