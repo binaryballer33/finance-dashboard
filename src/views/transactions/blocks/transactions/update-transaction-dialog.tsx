@@ -7,7 +7,7 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 type UpdateTransactionDialogProps = {
     setUpdateRecordDialogOpen: (open: boolean) => void
@@ -43,6 +43,7 @@ export default function UpdateTransactionDialog(props: UpdateTransactionDialogPr
         <Dialog onOpenChange={setUpdateRecordDialogOpen} open={updateRecordDialogOpen}>
             <DialogContent>
                 <DialogHeader>
+                    <DialogDescription>Dialog For Updating A Transaction</DialogDescription>
                     <DialogTitle>
                         <Card>
                             <CardHeader>

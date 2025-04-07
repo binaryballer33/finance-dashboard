@@ -11,7 +11,7 @@ import { toast } from "sonner"
 import createTransaction from "@/actions/transactions/mutations/create-transaction"
 
 type Transaction = Omit<PrismaTransaction, "createdAt" | "id" | "updatedAt">
-type MutationContext = { loadingToastId: number | string }
+type MutationContext = { cacheBeforeMutation?: Transaction[]; loadingToastId: number | string }
 
 /*
  * Id gets created after item is added to the database,
@@ -25,9 +25,16 @@ export default function useCreateTransactionMutation() {
     return useMutation<null | PrismaTransaction, Error, Transaction, MutationContext>({
         mutationFn: (transaction: Transaction) => createTransaction(transaction),
 
-        onError(error, transaction, _context) {
+        onError(error, transaction, context) {
             console.error(`Error Creating Transaction: ${error}`)
             toast.error(`Error Creating Transaction ${transaction.description}`)
+
+            if (context?.cacheBeforeMutation) {
+                queryClient.setQueryData(
+                    QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
+                    context.cacheBeforeMutation,
+                )
+            }
         },
 
         onMutate: async (transaction) => {
@@ -39,16 +46,34 @@ export default function useCreateTransactionMutation() {
                 duration: 500,
             })
 
-            return { loadingToastId }
+            // cancel any outgoing re-fetches (so they don't overwrite our optimistic update), this is asynchronous
+            await queryClient.cancelQueries({
+                queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
+            })
+
+            // get the previous state of the cache before modifying the cache, for rollback on error purposes
+            const cacheBeforeMutation = queryClient.getQueryData<Transaction[]>(
+                QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
+            )
+
+            return { cacheBeforeMutation, loadingToastId }
         },
 
         onSettled: async (_data, _error, transaction, context) => {
             if (context?.loadingToastId) {
                 toast.dismiss(context.loadingToastId)
             }
-            await queryClient.invalidateQueries({
-                queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
-            })
+
+            // invalidate the cache after transaction creation, causes a re-fetch of the data from the database, more expensive
+            // await queryClient.invalidateQueries({
+            //     queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
+            // })
+
+            // update local cache with the updated transaction
+            queryClient.setQueryData(
+                QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
+                (oldTransactions: Transaction[]) => [...oldTransactions, transaction],
+            )
         },
 
         onSuccess(_data, transaction, _context) {
