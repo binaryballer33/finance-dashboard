@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import type { Transaction as PrismaTransaction } from "@prisma/client"
 
 import { TransactionSchema } from "@/types/forms/transaction"
@@ -11,7 +9,8 @@ import { toast } from "sonner"
 import createTransaction from "@/actions/transactions/mutations/create-transaction"
 
 type Transaction = Omit<PrismaTransaction, "createdAt" | "id" | "updatedAt">
-type MutationContext = { cacheBeforeMutation?: Transaction[]; loadingToastId: number | string }
+type InfiniteQueryData = { pageParams: number[]; pages: Transaction[][] }
+type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
 
 /*
  * Id gets created after item is added to the database,
@@ -52,7 +51,7 @@ export default function useCreateTransactionMutation() {
             })
 
             // get the previous state of the cache before modifying the cache, for rollback on error purposes
-            const cacheBeforeMutation = queryClient.getQueryData<Transaction[]>(
+            const cacheBeforeMutation = queryClient.getQueryData<InfiniteQueryData>(
                 QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
             )
 
@@ -64,16 +63,10 @@ export default function useCreateTransactionMutation() {
                 toast.dismiss(context.loadingToastId)
             }
 
-            // invalidate the cache after transaction creation, causes a re-fetch of the data from the database, more expensive
-            // await queryClient.invalidateQueries({
-            //     queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
-            // })
-
-            // update local cache with the updated transaction
-            queryClient.setQueryData(
-                QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
-                (oldTransactions: Transaction[]) => [...oldTransactions, transaction],
-            )
+            // invalidate the cache after transaction creation, causes a re-fetch of the data from the database, more expensive but necessary for when the user creates a record in the table
+            await queryClient.invalidateQueries({
+                queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
+            })
         },
 
         onSuccess(_data, transaction, _context) {

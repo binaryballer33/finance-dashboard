@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import CustomTable from "@/components/tables/table"
 
 import CreateNewTransactionDialog from "./create-transaction-dialog"
+import DeleteTransactionDialog from "./delete-transaction-dialog"
 import UpdateTransactionDialog from "./update-transaction-dialog"
 import useCreateTransactionsTableColumns from "./use-create-transaction-table-columns"
 
@@ -24,6 +25,7 @@ export default function TransactionsTable(props: TransactionsTableProps) {
     const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
     const [updateTransactionDialogOpen, setUpdateTransactionDialogOpen] = useState(false)
     const [selectedTransaction, setSelectedTransaction] = useState<null | Transaction>(null)
+    const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
 
     const { columns } = useCreateTransactionsTableColumns()
 
@@ -49,6 +51,10 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     userId,
                 }}
                 data={transactions}
+                deleteRecordButton={{
+                    setDeleteRecordDialogOpen,
+                    setSelectedRecord: setSelectedTransaction,
+                }}
                 expandRowDetailComponent={DemoTransactionRowDetail}
                 infiniteQueryHandlers={{
                     fetchNextPage: infiniteQuery.fetchNextPage,
@@ -67,6 +73,15 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     setUpdateRecordDialogOpen={setUpdateTransactionDialogOpen}
                     transaction={selectedTransaction}
                     updateRecordDialogOpen={updateTransactionDialogOpen}
+                    userId={userId}
+                />
+            )}
+
+            {selectedTransaction && (
+                <DeleteTransactionDialog
+                    deleteRecordDialogOpen={deleteRecordDialogOpen}
+                    setDeleteRecordDialogOpen={setDeleteRecordDialogOpen}
+                    transaction={selectedTransaction}
                     userId={userId}
                 />
             )}

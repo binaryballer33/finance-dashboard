@@ -56,6 +56,14 @@ type CustomTableProps<T> = {
     /* data to display in the table ( the rows ) */
     data: T[]
 
+    deleteRecordButton?: {
+        /* setter for the delete record dialog open state */
+        setDeleteRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+
+        /* setter for the selected record */
+        setSelectedRecord?: Dispatch<SetStateAction<null | T>>
+    }
+
     /* optional component to expand the row in order to display more information for that row */
     expandRowDetailComponent?: ComponentType<{ row: Row<T>; table: ReactTable<T> }>
 
@@ -101,6 +109,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
         columnsToAdd,
         createNewRecordButton,
         data,
+        deleteRecordButton,
         expandRowDetailComponent,
         height = "500px",
         infiniteQueryHandlers,
@@ -124,6 +133,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
             addUpdateRowColumn: columnsToAdd?.addUpdateRowColumn || false,
         },
         data,
+        deleteRecordButton,
         height: transformedHeight,
         updateRecordButton,
         width: transformedWidth,

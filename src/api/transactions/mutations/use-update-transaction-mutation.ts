@@ -9,7 +9,9 @@ import { toast } from "sonner"
 import updateTransaction from "@/actions/transactions/mutations/update-transaction"
 
 type Transaction = Omit<PrismaTransaction, "createdAt" | "updatedAt">
-type MutationContext = { cacheBeforeMutation?: Transaction[]; loadingToastId: number | string }
+type InfiniteQueryData = { pageParams: number[]; pages: Transaction[][] }
+type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
+
 /*
  * Id gets created after item is added to the database,
  * need to invalidate the cache when creating the card because the id is not known until the card is created
@@ -49,11 +51,9 @@ export default function useUpdateTransactionMutation() {
             })
 
             // get the previous state of the cache before modifying the cache, for rollback on error purposes
-            const cacheBeforeMutation = queryClient.getQueryData<Transaction[]>(
+            const cacheBeforeMutation = queryClient.getQueryData<InfiniteQueryData>(
                 QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
             )
-
-            console.log("queryClient", queryClient)
 
             return { cacheBeforeMutation, loadingToastId }
         },
@@ -69,10 +69,18 @@ export default function useUpdateTransactionMutation() {
             // update local cache with the updated transaction
             queryClient.setQueryData(
                 QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
-                (oldTransactions: Transaction[]) =>
-                    oldTransactions.map((oldTransaction) =>
-                        oldTransaction.id === transaction.id ? transaction : oldTransaction,
-                    ),
+                (oldData: InfiniteQueryData | undefined) => {
+                    if (!oldData) return oldData
+
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page) =>
+                            page.map((oldTransaction) =>
+                                oldTransaction.id === transaction.id ? transaction : oldTransaction,
+                            ),
+                        ),
+                    }
+                },
             )
         },
 

@@ -22,6 +22,14 @@ type AddColumnsProps<T> = {
         addUpdateRowColumn?: boolean
     }
 
+    deleteRecordButton?: {
+        /* setter for the delete record dialog open state */
+        setDeleteRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+
+        /* setter for the selected record */
+        setSelectedRecord: Dispatch<SetStateAction<null | T>>
+    }
+
     updateRecordButton?: {
         /* setter for the selected record */
         setSelectedRecord: Dispatch<SetStateAction<null | T>>
@@ -32,7 +40,7 @@ type AddColumnsProps<T> = {
 }
 
 export default function addColumns<T>(props: AddColumnsProps<T>) {
-    const { columns, columnsToAdd, updateRecordButton } = props
+    const { columns, columnsToAdd, deleteRecordButton, updateRecordButton } = props
 
     const cols: ColumnDef<T>[] = []
 
@@ -94,12 +102,19 @@ export default function addColumns<T>(props: AddColumnsProps<T>) {
         })
     }
 
-    if (columnsToAdd?.addDeleteRowColumn) {
+    if (columnsToAdd?.addDeleteRowColumn && deleteRecordButton) {
         cols.push({
-            cell: ({ row, table }) => <TableBodyRowDelete row={row} table={table} />,
+            cell: ({ row }) => (
+                <TableBodyRowDelete
+                    row={row}
+                    setDeleteRecordDialogOpen={deleteRecordButton.setDeleteRecordDialogOpen}
+                    setSelectedRecord={deleteRecordButton.setSelectedRecord}
+                />
+            ),
             footer: ({ column }) => column.id,
             header: () => <div className="flex h-full w-full items-center justify-center">Delete</div>,
             id: hideColumns.delete,
+            maxSize: 30,
         })
     }
 

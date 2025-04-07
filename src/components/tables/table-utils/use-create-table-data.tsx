@@ -58,6 +58,14 @@ type UseCreateTableDataProps<T extends RowWithId> = {
     /* table rows (data) */
     data: T[]
 
+    deleteRecordButton?: {
+        /* setter for the delete record dialog open state */
+        setDeleteRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+
+        /* setter for the selected record */
+        setSelectedRecord: Dispatch<SetStateAction<null | T>>
+    }
+
     /* table height */
     height?: string
 
@@ -78,14 +86,15 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
         columns: initialColumns,
         columnsToAdd,
         data: initialData,
+        deleteRecordButton,
         height = "500px",
         updateRecordButton,
         width = "100%",
     } = props
 
     const columns = useMemo(
-        () => addColumns({ columns: initialColumns, columnsToAdd, updateRecordButton }),
-        [initialColumns, columnsToAdd, updateRecordButton],
+        () => addColumns({ columns: initialColumns, columnsToAdd, deleteRecordButton, updateRecordButton }),
+        [initialColumns, columnsToAdd, deleteRecordButton, updateRecordButton],
     )
 
     // get table row data

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import type { Transaction as PrismaTransaction } from "@prisma/client"
 
 import { TransactionSchema } from "@/types/forms/transaction"
@@ -11,7 +9,8 @@ import { toast } from "sonner"
 import deleteTransaction from "@/actions/transactions/mutations/delete-transaction"
 
 type Transaction = Omit<PrismaTransaction, "createdAt" | "updatedAt">
-type MutationContext = { cacheBeforeMutation?: Transaction[]; loadingToastId: number | string }
+type InfiniteQueryData = { pageParams: number[]; pages: Transaction[][] }
+type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
 
 /*
  * Id gets created after item is added to the database,
@@ -53,7 +52,7 @@ export default function useDeleteTransactionMutation() {
             })
 
             // get the previous state of the cache before modifying the cache, for rollback on error purposes
-            const cacheBeforeMutation = queryClient.getQueryData<Transaction[]>(
+            const cacheBeforeMutation = queryClient.getQueryData<InfiniteQueryData>(
                 QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
             )
 
@@ -74,8 +73,16 @@ export default function useDeleteTransactionMutation() {
             // update local cache with the updated transaction
             queryClient.setQueryData(
                 QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(transaction.userId),
-                (oldTransactions: Transaction[]) =>
-                    oldTransactions.filter((oldTransaction) => oldTransaction.id !== transaction.id),
+                (oldData: InfiniteQueryData | undefined) => {
+                    if (!oldData) return oldData
+
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page) =>
+                            page.filter((oldTransaction) => oldTransaction.id !== transaction.id),
+                        ),
+                    }
+                },
             )
         },
 
