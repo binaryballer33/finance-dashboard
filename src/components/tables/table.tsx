@@ -61,7 +61,7 @@ type CustomTableProps<T> = {
         setDeleteRecordDialogOpen: Dispatch<SetStateAction<boolean>>
 
         /* setter for the selected record */
-        setSelectedRecord?: Dispatch<SetStateAction<null | T>>
+        setSelectedRecord: Dispatch<SetStateAction<null | T>>
     }
 
     /* optional component to expand the row in order to display more information for that row */
