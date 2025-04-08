@@ -1,24 +1,49 @@
 "use client"
 
 import type { Transaction } from "@prisma/client"
+import type { Dispatch, SetStateAction } from "react"
+
+import { TransactionSchema } from "@/types/forms/transaction"
+
+import { useForm } from "react-hook-form"
 
 import useUpdateTransactionMutation from "@/api/transactions/mutations/use-update-transaction-mutation"
+import categories from "@/mocks/categories"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { Form } from "@/components/ui/form"
+
+import RHFCalendar from "@/components/forms/rhf-calendar"
+import CreateTransactionInput from "@/components/forms/rhf-custom-input"
+import RHFSelect from "@/components/forms/rhf-select"
 
 type UpdateTransactionDialogProps = {
-    setUpdateRecordDialogOpen: (open: boolean) => void
+    setUpdateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     transaction: Transaction
     updateRecordDialogOpen: boolean
     userId: string
 }
 
+type FormValues = Pick<Transaction, "amount" | "category" | "date" | "description">
+
 export default function UpdateTransactionDialog(props: UpdateTransactionDialogProps) {
     const { setUpdateRecordDialogOpen, transaction, updateRecordDialogOpen, userId } = props
     const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
+
+    const form = useForm<FormValues>({
+        resolver: zodResolver(TransactionSchema),
+        values: transaction,
+    })
 
     if (!transaction) return null
     if (transaction.userId !== userId) {
@@ -26,12 +51,9 @@ export default function UpdateTransactionDialog(props: UpdateTransactionDialogPr
         return null
     }
 
-    async function onSubmit(data: Transaction) {
+    async function onSubmit(data: FormValues) {
         await updateTransaction({
-            amount: data.amount,
-            category: data.category,
-            date: new Date(data.date),
-            description: data.description,
+            ...data,
             id: transaction.id,
             userId,
         })
@@ -41,28 +63,27 @@ export default function UpdateTransactionDialog(props: UpdateTransactionDialogPr
 
     return (
         <Dialog onOpenChange={setUpdateRecordDialogOpen} open={updateRecordDialogOpen}>
-            <DialogContent>
+            <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogDescription>Dialog For Updating A Transaction</DialogDescription>
-                    <DialogTitle>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Update Transaction</CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-2">
-                                <span>Amount: {transaction.amount} USD</span>
-                                <span>Description: {transaction.description}</span>
-                                <span>Category: {transaction.category}</span>
-                            </CardContent>
-                            <CardFooter className="flex justify-between">
-                                <span>Date Of Transaction: {transaction.date.toLocaleDateString()}</span>
-                                <Button onClick={() => onSubmit(transaction)} variant="default">
-                                    Save Changes
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    </DialogTitle>
+                    <DialogTitle>Update Transaction</DialogTitle>
+                    <DialogDescription>Edit The Details Of Your Transaction Below.</DialogDescription>
                 </DialogHeader>
+
+                <Form {...form}>
+                    <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+                        <CreateTransactionInput inputName="amount" label="Amount" />
+                        <RHFSelect label="Category" name="category" options={categories} />
+                        <CreateTransactionInput inputName="description" label="Description" />
+                        <RHFCalendar label="Date" name="date" />
+
+                        <DialogFooter>
+                            <Button onClick={() => setUpdateRecordDialogOpen(false)} type="button" variant="outline">
+                                Cancel
+                            </Button>
+                            <Button type="submit">Update Transaction</Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     )

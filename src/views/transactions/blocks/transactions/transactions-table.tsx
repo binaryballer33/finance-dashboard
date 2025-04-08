@@ -1,18 +1,16 @@
 "use client"
 
 import type { Transaction } from "@prisma/client"
-import type { Row } from "@tanstack/react-table"
 
 import { useState } from "react"
 
 import useGetTransactionsByIdInfiniteQuery from "@/api/transactions/queries/use-get-transactions-by-id-infinite-query"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
 import CustomTable from "@/components/tables/table"
 
 import CreateNewTransactionDialog from "./create-transaction-dialog"
 import DeleteTransactionDialog from "./delete-transaction-dialog"
+import TransactionRowDetail from "./transaction-row-expand"
 import UpdateTransactionDialog from "./update-transaction-dialog"
 import useCreateTransactionsTableColumns from "./use-create-transaction-table-columns"
 
@@ -55,7 +53,7 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     setDeleteRecordDialogOpen,
                     setSelectedRecord: setSelectedTransaction,
                 }}
-                expandRowDetailComponent={DemoTransactionRowDetail}
+                expandRowDetailComponent={TransactionRowDetail}
                 infiniteQueryHandlers={{
                     fetchNextPage: infiniteQuery.fetchNextPage,
                     hasNextPage: infiniteQuery.hasNextPage,
@@ -92,34 +90,5 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                 userId={userId}
             />
         </>
-    )
-}
-
-type DemoTransactionRowDetailProps = {
-    row: Row<Transaction>
-}
-
-function DemoTransactionRowDetail(props: DemoTransactionRowDetailProps) {
-    const { row } = props
-
-    return (
-        <Card className="w-full">
-            <CardHeader>
-                <CardTitle>Transaction Details</CardTitle>
-            </CardHeader>
-
-            <CardContent className="flex gap-2">
-                <div className="flex flex-col gap-2">
-                    <p>Transaction Category: {row.original.category}</p>
-                    <p>Transaction Amount: {row.original.amount}</p>
-                    <p>Transaction Date: {row.original.date.toLocaleDateString()}</p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <p>Transaction Description: {row.original.description}</p>
-                    <p>Transaction User: {row.original.userId}</p>
-                </div>
-            </CardContent>
-        </Card>
     )
 }
