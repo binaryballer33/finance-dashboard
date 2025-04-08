@@ -43,7 +43,7 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     addSelectRowsColumn: true,
                     addUpdateRowColumn: true,
                 }}
-                createNewRecordButton={{
+                createRecordButton={{
                     createNewRecordButtonTooltipContent: "Create New Transaction",
                     setCreateNewRecordDialogOpen,
                     userId,

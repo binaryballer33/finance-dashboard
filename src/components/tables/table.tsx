@@ -42,7 +42,7 @@ type CustomTableProps<T> = {
         addUpdateRowColumn?: boolean
     }
 
-    createNewRecordButton?: {
+    createRecordButton?: {
         /* tooltip content for the create new record button */
         createNewRecordButtonTooltipContent?: string
 
@@ -107,7 +107,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
     const {
         columns,
         columnsToAdd,
-        createNewRecordButton,
+        createRecordButton,
         data,
         deleteRecordButton,
         expandRowDetailComponent,
@@ -171,14 +171,15 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                             <TableExtraDropdownMenuSettings table={table} />
                         </>
                     )}
+
                     {/* Table Global Search Bar */}
                     <TableExtraGlobalSearchBar table={table} />
 
                     {/* create a button to add a new row */}
-                    {createNewRecordButton && (
+                    {createRecordButton && (
                         <TableExtraCreateNewRecord
-                            setCreateNewRecordDialogOpen={createNewRecordButton.setCreateNewRecordDialogOpen}
-                            tooltipContent={createNewRecordButton?.createNewRecordButtonTooltipContent}
+                            setCreateNewRecordDialogOpen={createRecordButton.setCreateNewRecordDialogOpen}
+                            tooltipContent={createRecordButton?.createNewRecordButtonTooltipContent}
                         />
                     )}
 

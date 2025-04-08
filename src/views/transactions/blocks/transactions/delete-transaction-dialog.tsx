@@ -6,8 +6,15 @@ import useDeleteTransactionMutation from "@/api/transactions/mutations/use-delet
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Card } from "@/components/ui/card"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
 
 type DeleteTransactionDialogProps = {
     deleteRecordDialogOpen: boolean
@@ -33,28 +40,42 @@ export default function DeleteTransactionDialog(props: DeleteTransactionDialogPr
 
     return (
         <Dialog onOpenChange={setDeleteRecordDialogOpen} open={deleteRecordDialogOpen}>
-            <DialogContent>
+            <DialogContent className="sm:max-w-md">
                 <DialogHeader>
+                    <DialogTitle className="text-2xl font-semibold">Delete Transaction</DialogTitle>
                     <DialogDescription>Dialog For Deleting A Transaction</DialogDescription>
-                    <DialogTitle>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Delete Transaction</CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-2">
-                                <span>Amount: {transaction.amount} USD</span>
-                                <span>Description: {transaction.description}</span>
-                                <span>Category: {transaction.category}</span>
-                            </CardContent>
-                            <CardFooter className="flex justify-between">
-                                <span>Date Of Transaction: {transaction.date.toLocaleDateString()}</span>
-                                <Button onClick={() => onSubmit(transaction)} variant="default">
-                                    Delete Transaction
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    </DialogTitle>
                 </DialogHeader>
+                <Card className="flex flex-col space-y-4 p-4">
+                    <div className="flex flex-col space-y-2">
+                        <div className="flex items-center">
+                            <span className="text-lg">Amount: </span>
+                            <span className="ml-2 text-lg font-medium">{transaction.amount} USD</span>
+                        </div>
+                        <div
+                            className={`flex items-center ${transaction.description?.length && transaction.description.length > 15 ? "flex-col !items-start gap-1" : ""}`}
+                        >
+                            <span className="text-lg">Description: </span>
+                            <span className="ml-2 text-lg font-medium">{transaction.description}</span>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="text-lg">Category: </span>
+                            <span className="ml-2 text-lg font-medium">{transaction.category}</span>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="text-lg">Date Of Income: </span>
+                            <span className="ml-2 text-lg font-medium">{transaction.date.toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                </Card>
+                <DialogFooter>
+                    <Button
+                        className="w-full bg-red-600 text-white hover:bg-red-700"
+                        onClick={() => onSubmit(transaction)}
+                        variant="default"
+                    >
+                        Delete Transaction
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

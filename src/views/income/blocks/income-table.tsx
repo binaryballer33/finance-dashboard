@@ -40,7 +40,7 @@ export default function IncomeTable(props: IncomeTableProps) {
                     addSelectRowsColumn: true,
                     addUpdateRowColumn: true,
                 }}
-                createNewRecordButton={{
+                createRecordButton={{
                     createNewRecordButtonTooltipContent: "Create New Income",
                     setCreateNewRecordDialogOpen,
                     userId,
