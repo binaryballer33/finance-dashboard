@@ -12,8 +12,8 @@ export const IncomeSchema = z.object({
 export type Income = z.infer<typeof IncomeSchema>
 
 export const defaultValuesIncome = {
-    amount: 10,
-    category: "Food",
+    amount: 1000,
+    category: "Job",
     date: new Date(),
     description: "",
 } satisfies Income

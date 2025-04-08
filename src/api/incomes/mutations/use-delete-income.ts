@@ -17,7 +17,7 @@ type MutationContext = { cacheBeforeMutation?: PrismaIncome[]; loadingToastId: n
  * and if the cache is not invalidated, if you try to edit or delete that card with its id,
  * you will get an error because the cache doesn't have the id because you didn't re-fetch the data from the database
  */
-export default function useDeleteTransactionMutation() {
+export default function useDeleteIncomeMutation() {
     const queryClient = useQueryClient()
 
     return useMutation<null | PrismaIncome, Error, Income, MutationContext>({

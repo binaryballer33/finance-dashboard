@@ -1,13 +1,13 @@
 "use client"
 
-import type { Transaction } from "@prisma/client"
+import type { Income } from "@prisma/client"
 import type { Dispatch, SetStateAction } from "react"
 
-import { TransactionSchema } from "@/types/forms/transaction"
+import { IncomeSchema } from "@/types/forms/income"
 
 import { useForm } from "react-hook-form"
 
-import useUpdateTransactionMutation from "@/api/transactions/mutations/use-update-transaction"
+import useUpdateIncomeMutation from "@/api/incomes/mutations/use-update-income"
 import categories from "@/mocks/categories"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
@@ -24,37 +24,37 @@ import {
 import { Form } from "@/components/ui/form"
 
 import RHFCalendar from "@/components/forms/rhf-calendar"
-import CreateTransactionInput from "@/components/forms/rhf-custom-input"
+import CreateIncomeInput from "@/components/forms/rhf-custom-input"
 import RHFSelect from "@/components/forms/rhf-select"
 
-type UpdateTransactionDialogProps = {
+type UpdateIncomeDialogProps = {
+    income: Income
     setUpdateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
-    transaction: Transaction
     updateRecordDialogOpen: boolean
     userId: string
 }
 
-type FormValues = Pick<Transaction, "amount" | "category" | "date" | "description">
+type FormValues = Pick<Income, "amount" | "category" | "date" | "description">
 
-export default function UpdateTransactionDialog(props: UpdateTransactionDialogProps) {
-    const { setUpdateRecordDialogOpen, transaction, updateRecordDialogOpen, userId } = props
-    const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
+export default function UpdateIncomeDialog(props: UpdateIncomeDialogProps) {
+    const { income, setUpdateRecordDialogOpen, updateRecordDialogOpen, userId } = props
+    const { mutateAsync: updateIncome } = useUpdateIncomeMutation()
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(TransactionSchema),
-        values: transaction,
+        resolver: zodResolver(IncomeSchema),
+        values: income,
     })
 
-    if (!transaction) return null
-    if (transaction.userId !== userId) {
-        toast.error("You Are Not Authorized To Update This Transaction")
+    if (!income) return null
+    if (income.userId !== userId) {
+        toast.error("You Are Not Authorized To Update This Income")
         return null
     }
 
     async function onSubmit(data: FormValues) {
-        await updateTransaction({
+        await updateIncome({
             ...data,
-            id: transaction.id,
+            id: income.id,
             userId,
         })
 
@@ -65,22 +65,22 @@ export default function UpdateTransactionDialog(props: UpdateTransactionDialogPr
         <Dialog onOpenChange={setUpdateRecordDialogOpen} open={updateRecordDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Update Transaction</DialogTitle>
-                    <DialogDescription>Edit The Details Of Your Transaction Below.</DialogDescription>
+                    <DialogTitle>Update Income</DialogTitle>
+                    <DialogDescription>Edit The Details Of Your Income Below.</DialogDescription>
                 </DialogHeader>
 
                 <Form {...form}>
                     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                        <CreateTransactionInput inputName="amount" label="Amount" />
+                        <CreateIncomeInput inputName="amount" label="Amount" />
                         <RHFSelect label="Category" name="category" options={categories} />
-                        <CreateTransactionInput inputName="description" label="Description" />
+                        <CreateIncomeInput inputName="description" label="Description" />
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>
                             <Button onClick={() => setUpdateRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel
                             </Button>
-                            <Button type="submit">Update Transaction</Button>
+                            <Button type="submit">Update Income</Button>
                         </DialogFooter>
                     </form>
                 </Form>
