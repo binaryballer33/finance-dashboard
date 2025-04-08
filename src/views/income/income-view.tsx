@@ -6,7 +6,7 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
-import IncomeTable from "./blocks/income-table/income-table"
+import IncomeTable from "./blocks/income-table"
 
 export default function IncomeView() {
     const user = useAuthUser()
