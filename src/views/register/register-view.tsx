@@ -66,13 +66,25 @@ export default function RegisterView() {
 
                 <Container maxWidth="sm">
                     <FlexContainer stackOn="mobile">
-                        <AuthFormInput inputName="firstName" label="First Name" />
-                        <AuthFormInput inputName="lastName" label="Last Name" />
+                        <AuthFormInput<RegisterRequest> label="First Name" name="firstName" type="text" />
+                        <AuthFormInput<RegisterRequest> label="Last Name" name="lastName" type="text" />
                     </FlexContainer>
 
-                    <AuthFormInput inputName="email" label="Email" />
-                    <AuthFormInput inputName="password" label="Password" showVisibilityToggle />
-                    <AuthFormInput inputName="confirmPassword" label="Confirm Password" showVisibilityToggle />
+                    <AuthFormInput<RegisterRequest> label="Email" name="email" type="email" />
+
+                    <AuthFormInput<RegisterRequest>
+                        label="Password"
+                        name="password"
+                        showVisibilityToggle
+                        type="password"
+                    />
+
+                    <AuthFormInput<RegisterRequest>
+                        label="Confirm Password"
+                        name="confirmPassword"
+                        showVisibilityToggle
+                        type="password"
+                    />
 
                     <FlexBetweenContainer className="my-3" stackOn="mobile">
                         <FormLink

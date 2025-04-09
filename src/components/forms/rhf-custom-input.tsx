@@ -1,9 +1,5 @@
 "use client"
 
-import type { RegisterRequest } from "@/types/forms/register"
-import type { Transaction } from "@/types/forms/transaction"
-import type { Trade } from "@prisma/client"
-
 import { type ReactNode } from "react"
 
 import { useFormContext } from "react-hook-form"
@@ -20,21 +16,39 @@ import { Input } from "@/components/ui/input"
 import FlexBetweenContainer from "../base/flex-box/flex-between-container"
 import FormFieldVisibilityIcon from "./form/form-field-visibility-icon"
 
-type InputName = "name" | keyof RegisterRequest | keyof Trade | keyof Transaction
-
-type CustomInputProps = {
+type CustomInputProps<T extends Record<string, any>> = {
+    /* custom class styles for the input field */
     className?: string
+
+    /* custom icon for the input field */
     icon?: ReactNode
-    inputName: InputName
+
+    /* label for the input field */
     label: string
+
+    /* name of the input field, has to be a key of the form data */
+    name: keyof T & string
+
+    /* placeholder for the input field */
+    placeholder?: string
+
+    /* show the visibility toggle icon */
     showVisibilityToggle?: boolean
+
+    /* type of the input field */
+    type: "date" | "email" | "number" | "password" | "text"
 }
 
-// TODO: make the user specific input types as a prop
-export default function CustomInput(props: CustomInputProps) {
-    const { className, inputName, label, showVisibilityToggle = false } = props
-
-    const placeholder = getPlaceholder(inputName, label)
+export default function CustomInput<T extends Record<string, any>>(props: CustomInputProps<T>) {
+    const {
+        className,
+        icon: userGivenIcon,
+        label,
+        name,
+        placeholder = `Write Your ${label}`,
+        showVisibilityToggle = false,
+        type = "text",
+    } = props
 
     /* access the state of the parent form using react hook form */
     const { control, setValue } = useFormContext()
@@ -42,16 +56,16 @@ export default function CustomInput(props: CustomInputProps) {
     /* used to toggle the password visibility */
     const { handleToggle: isFieldVisibleToggle, value: isFieldVisible } = useBoolean()
 
-    /* gets the initial input type and changes the input type of the password when icon button is toggled  */
-    const inputType = getInputType(inputName, label, showVisibilityToggle, isFieldVisible)
+    /* determine final input type based on visibility toggle */
+    const finalInputType = handleInputTypeChange(type, showVisibilityToggle, isFieldVisible)
 
     /*  gets the icon for the input */
-    const icon = getStartAdornment(inputName)
+    const icon = userGivenIcon ?? getStartAdornment(name)
 
     return (
         <FormField
             control={control}
-            name={inputName}
+            name={name}
             render={({ field, fieldState }) => (
                 <FormItem className="group flex-grow">
                     <FlexBetweenContainer>
@@ -62,7 +76,7 @@ export default function CustomInput(props: CustomInputProps) {
                         {/* visibility toggle icon */}
                         {showVisibilityToggle ? (
                             <FormFieldVisibilityIcon
-                                inputName={inputName}
+                                inputName={name}
                                 isFieldVisible={isFieldVisible}
                                 isFieldVisibleToggle={isFieldVisibleToggle}
                             />
@@ -83,14 +97,17 @@ export default function CustomInput(props: CustomInputProps) {
                                 {...field}
                                 className={cn("pl-10", className)}
                                 placeholder={placeholder}
-                                type={inputType}
+                                type={finalInputType}
                             />
 
                             {/* Icon on the far right of the input field, used to clear the text in the field */}
                             {field.value !== undefined && field.value !== "" && (
                                 <button
                                     className="absolute inset-y-0 right-3 flex items-center"
-                                    onClick={() => setValue(inputName, inputType === "number" ? 0 : "")}
+                                    onClick={() => {
+                                        // Safe type casting as we're clearing field value
+                                        setValue(name, finalInputType === "number" ? 0 : ("" as any))
+                                    }}
                                     type="button"
                                 >
                                     <X className="h-5 w-5 text-gray-400" />
@@ -105,50 +122,8 @@ export default function CustomInput(props: CustomInputProps) {
     )
 }
 
-/* gives you a basic good placeholder for your input */
-function getPlaceholder(inputName: InputName, label: string) {
-    if (label === "Confirm New Password") return "Write Your New Password Again"
-    if (label === "Confirm Password" || inputName === "confirmPassword") return "Write Your Password Again"
-    return `Write Your ${label}`
-}
-
-/*
- * sets the input type based on whether the visibility icons are shown or not
- * whether the field is currently visible
- * and whether the label and name is email or not
- */
-function getInputType(name: string, label: string, showButtons: boolean | undefined, isFieldVisible: boolean) {
-    let inputType: string
-
-    if (name.toLowerCase() === "email" || label.toLowerCase() === "email") {
-        inputType = "email"
-    } else if (showButtons && !isFieldVisible) {
-        inputType = "password"
-    } else if (name.toLowerCase() === "date" || label.toLowerCase() === "date") {
-        inputType = "date"
-    } else if (
-        name.toLowerCase() === "amount" ||
-        label.toLowerCase() === "amount" ||
-        name.toLowerCase() === "buytoclose" ||
-        label.toLowerCase() === "buytoclose" ||
-        name.toLowerCase() === "selltoopen" ||
-        label.toLowerCase() === "selltoopen" ||
-        name.toLowerCase() === "strike" ||
-        label.toLowerCase() === "strike" ||
-        name.toLowerCase() === "profitloss" ||
-        label.toLowerCase() === "profitloss" ||
-        name.toLowerCase() === "profitlosspercentage" ||
-        label.toLowerCase() === "profitlosspercentage"
-    ) {
-        inputType = "number"
-    } else {
-        inputType = "text"
-    }
-    return inputType
-}
-
-/*  gets the correct icon for each input type  */
-function getStartAdornment(inputName: InputName) {
+/*  gets the default icon for each input type if no custom icon is provided  */
+function getStartAdornment(inputName: string) {
     const iconProps = { className: "h-4 w-4" }
 
     switch (inputName) {
@@ -160,4 +135,11 @@ function getStartAdornment(inputName: InputName) {
         default:
             return <Edit {...iconProps} />
     }
+}
+
+/* toggle the password input type when the visibility toggle icon is clicked */
+function handleInputTypeChange(inputType: string, showVisibilityToggle: boolean, isFieldVisible: boolean) {
+    if (inputType === "password" && showVisibilityToggle && !isFieldVisible) return "password"
+    if (inputType === "password" && showVisibilityToggle && isFieldVisible) return "text"
+    return inputType
 }

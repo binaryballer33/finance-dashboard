@@ -81,8 +81,10 @@ export default function UserAccountSettingsView() {
                         <Input accept="image/*" id="avatar" onChange={handleAvatarChange} type="file" />
                     </div>
 
-                    <CustomFormInput inputName="firstName" label="First Name" />
-                    <CustomFormInput inputName="lastName" label="Last Name" />
+                    <CustomFormInput<UserSettings> label="First Name" name="firstName" type="text" />
+
+                    <CustomFormInput<UserSettings> label="Last Name" name="lastName" type="text" />
+
                     <Field.Switch
                         helperText="Secure your account with two-factor authentication."
                         label="Two-factor Authentication"

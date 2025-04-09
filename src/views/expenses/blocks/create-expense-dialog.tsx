@@ -60,9 +60,9 @@ export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
 
                 <Form {...form}>
                     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                        <CreateExpenseInput inputName="amount" label="Amount" />
+                        <CreateExpenseInput<Expense> label="Amount" name="amount" type="number" />
                         <RHFSelect label="Category" name="category" options={categories} />
-                        <CreateExpenseInput inputName="description" label="Description" />
+                        <CreateExpenseInput<Expense> label="Description" name="description" type="text" />
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>

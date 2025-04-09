@@ -45,7 +45,12 @@ export default function ForgotPasswordView() {
                         icon={<Lock className="h-20 w-20 text-primary" />}
                         title={t("Forgot Your Password?")}
                     />
-                    <AuthFormInput className="my-2" inputName="email" label={t("Email Address")} />
+                    <AuthFormInput<ForgotPassword>
+                        className="my-2"
+                        label={t("Email Address")}
+                        name="email"
+                        type="email"
+                    />
                     <FormSubmitButton loadingTitle={t("Sending Email...")} title={t("Send Email")} />
                 </Form>
                 <FormReturnLink href={routes.auth.login} title={t("Return To Sign In")} />

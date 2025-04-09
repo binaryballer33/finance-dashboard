@@ -11,7 +11,7 @@ import CustomTable from "@/components/tables/table"
 import CreateExpenseDialog from "./create-expense-dialog"
 import DeleteExpenseDialog from "./delete-expense-dialog"
 import ExpenseRowDetail from "./expense-row-expand"
-import UpdateExpenseDialog from "./update-transaction-dialog"
+import UpdateExpenseDialog from "./update-expense-dialog"
 import useCreateExpensesTableColumns from "./use-create-expenses-table-columns"
 
 type ExpensesTableProps = {

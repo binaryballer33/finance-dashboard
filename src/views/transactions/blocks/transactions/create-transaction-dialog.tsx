@@ -60,9 +60,12 @@ export default function CreateTransactionDialog(props: CreateTransactionDialogPr
 
                 <Form {...form}>
                     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                        <CreateTransactionInput inputName="amount" label="Amount" />
+                        <CreateTransactionInput<Transaction> label="Amount" name="amount" type="number" />
+
                         <RHFSelect label="Category" name="category" options={categories} />
-                        <CreateTransactionInput inputName="description" label="Description" />
+
+                        <CreateTransactionInput<Transaction> label="Description" name="description" type="text" />
+
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>

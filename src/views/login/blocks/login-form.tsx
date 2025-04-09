@@ -1,3 +1,4 @@
+import type { LoginRequest } from "@/types/forms/login"
 import type { TFunction } from "i18next"
 
 import oAuthProviders from "@/types/forms/common"
@@ -46,8 +47,8 @@ export default function LoginForm(props: LoginFormProps) {
             <FormDivider title={t("Or Sign In With Email Below")} />
 
             <Container maxWidth="sm">
-                <AuthFormInput inputName="email" label="Email" />
-                <AuthFormInput inputName="password" label="Password" showVisibilityToggle />
+                <AuthFormInput<LoginRequest> label="Email" name="email" type="email" />
+                <AuthFormInput<LoginRequest> label="Password" name="password" showVisibilityToggle type="password" />
 
                 <FlexBetweenContainer>
                     <FormLink linkTitle={t("Forgot Password?")} linkTo={routes.auth.forgotPassword} />

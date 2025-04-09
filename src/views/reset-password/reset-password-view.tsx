@@ -51,13 +51,22 @@ export default function ResetPasswordView() {
                         title={t("Reset Your Password")}
                     />
                     <div className="flex flex-col gap-2">
-                        <AuthFormInput inputName="password" label={t("New Password")} showVisibilityToggle />
-                        <AuthFormInput
-                            inputName="confirmPassword"
-                            label={t("Confirm New Password")}
+                        <AuthFormInput<ResetPassword>
+                            label={t("New Password")}
+                            name="password"
                             showVisibilityToggle
+                            type="password"
                         />
+
+                        <AuthFormInput<ResetPassword>
+                            label={t("Confirm New Password")}
+                            name="confirmPassword"
+                            showVisibilityToggle
+                            type="password"
+                        />
+
                         <Field.Code name="sixDigitCode" />
+
                         <FormSubmitButton loadingTitle={t("Resetting Password...")} title={t("Reset Password")} />
                     </div>
                 </Form>

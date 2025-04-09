@@ -73,15 +73,15 @@ export default function UpdateTradeDialog(props: UpdateTradeDialogProps) {
 
                 <Form {...form}>
                     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                        <CreateTradeInput inputName="buyToClose" label="Buy To Close" />
-                        <CreateTradeInput inputName="contracts" label="Contracts" />
+                        <CreateTradeInput<Trade> label="Buy To Close" name="buyToClose" type="number" />
+                        <CreateTradeInput<Trade> label="Contracts" name="contracts" type="number" />
                         <RHFCalendar label="Date" name="date" />
-                        <CreateTradeInput inputName="profitLoss" label="Profit / Loss" />
-                        <CreateTradeInput inputName="profitLossPercentage" label="Profit / Loss %" />
+                        <CreateTradeInput<Trade> label="Profit / Loss" name="profitLoss" type="number" />
+                        <CreateTradeInput<Trade> label="Profit / Loss %" name="profitLossPercentage" type="number" />
                         <RHFSelect label="Realized" name="realized" options={realizedOptions} />
-                        <CreateTradeInput inputName="sellToOpen" label="Sell To Open" />
-                        <CreateTradeInput inputName="strike" label="Strike" />
-                        <CreateTradeInput inputName="ticker" label="Ticker" />
+                        <CreateTradeInput<Trade> label="Sell To Open" name="sellToOpen" type="number" />
+                        <CreateTradeInput<Trade> label="Strike" name="strike" type="number" />
+                        <CreateTradeInput<Trade> label="Ticker" name="ticker" type="text" />
                         <RHFSelect label="Type" name="type" options={typeOptions} />
 
                         <DialogFooter>

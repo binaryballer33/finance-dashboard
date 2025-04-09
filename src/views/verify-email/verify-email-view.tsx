@@ -69,8 +69,10 @@ export default function VerifyEmailView() {
                         title={t("Please Check Your Email!")}
                     />
                     <div className="flex flex-col gap-2">
-                        <AuthFormInput inputName="email" label={t("Email Address")} />
+                        <AuthFormInput<VerifyEmail> label={t("Email Address")} name="email" type="email" />
+
                         <Field.Code name="sixDigitCode" />
+
                         <FormSubmitButton loadingTitle={t("Verifying Code...")} title={t("Verify")} />
                     </div>
                     <FormResendCode disabled={false} onResendCode={onResendCode} value={0} />

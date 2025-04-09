@@ -71,9 +71,9 @@ export default function UpdateIncomeDialog(props: UpdateIncomeDialogProps) {
 
                 <Form {...form}>
                     <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                        <CreateIncomeInput inputName="amount" label="Amount" />
+                        <CreateIncomeInput<Income> label="Amount" name="amount" type="number" />
                         <RHFSelect label="Category" name="category" options={categories} />
-                        <CreateIncomeInput inputName="description" label="Description" />
+                        <CreateIncomeInput<Income> label="Description" name="description" type="text" />
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>
