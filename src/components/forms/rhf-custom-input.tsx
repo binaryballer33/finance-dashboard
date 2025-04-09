@@ -2,6 +2,7 @@
 
 import type { RegisterRequest } from "@/types/forms/register"
 import type { Transaction } from "@/types/forms/transaction"
+import type { Trade } from "@prisma/client"
 
 import { type ReactNode } from "react"
 
@@ -19,7 +20,7 @@ import { Input } from "@/components/ui/input"
 import FlexBetweenContainer from "../base/flex-box/flex-between-container"
 import FormFieldVisibilityIcon from "./form/form-field-visibility-icon"
 
-type InputName = "name" | keyof RegisterRequest | keyof Transaction
+type InputName = "name" | keyof RegisterRequest | keyof Trade | keyof Transaction
 
 type CustomInputProps = {
     className?: string
@@ -29,6 +30,7 @@ type CustomInputProps = {
     showVisibilityToggle?: boolean
 }
 
+// TODO: make the user specific input types as a prop
 export default function CustomInput(props: CustomInputProps) {
     const { className, inputName, label, showVisibilityToggle = false } = props
 
@@ -50,7 +52,7 @@ export default function CustomInput(props: CustomInputProps) {
         <FormField
             control={control}
             name={inputName}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
                 <FormItem className="group flex-grow">
                     <FlexBetweenContainer>
                         <FormLabel className="flex h-8 items-center justify-center font-medium group-focus-within:text-primary">
@@ -79,16 +81,16 @@ export default function CustomInput(props: CustomInputProps) {
                             {/* input field */}
                             <Input
                                 {...field}
-                                className={cn("bg-accent pl-10", className)}
+                                className={cn("pl-10", className)}
                                 placeholder={placeholder}
                                 type={inputType}
                             />
 
                             {/* Icon on the far right of the input field, used to clear the text in the field */}
-                            {field.value && (
+                            {field.value !== undefined && field.value !== "" && (
                                 <button
                                     className="absolute inset-y-0 right-3 flex items-center"
-                                    onClick={() => setValue(inputName, "")}
+                                    onClick={() => setValue(inputName, inputType === "number" ? 0 : "")}
                                     type="button"
                                 >
                                     <X className="h-5 w-5 text-gray-400" />
@@ -96,7 +98,7 @@ export default function CustomInput(props: CustomInputProps) {
                             )}
                         </div>
                     </FormControl>
-                    <FormMessage />
+                    {fieldState.error?.message && <FormMessage />}
                 </FormItem>
             )}
         />
@@ -124,7 +126,20 @@ function getInputType(name: string, label: string, showButtons: boolean | undefi
         inputType = "password"
     } else if (name.toLowerCase() === "date" || label.toLowerCase() === "date") {
         inputType = "date"
-    } else if (name.toLowerCase() === "amount" || label.toLowerCase() === "amount") {
+    } else if (
+        name.toLowerCase() === "amount" ||
+        label.toLowerCase() === "amount" ||
+        name.toLowerCase() === "buytoclose" ||
+        label.toLowerCase() === "buytoclose" ||
+        name.toLowerCase() === "selltoopen" ||
+        label.toLowerCase() === "selltoopen" ||
+        name.toLowerCase() === "strike" ||
+        label.toLowerCase() === "strike" ||
+        name.toLowerCase() === "profitloss" ||
+        label.toLowerCase() === "profitloss" ||
+        name.toLowerCase() === "profitlosspercentage" ||
+        label.toLowerCase() === "profitlosspercentage"
+    ) {
         inputType = "number"
     } else {
         inputType = "text"

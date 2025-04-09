@@ -8,7 +8,7 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import TabbedIncomeExpenseCharts from "@/components/charts/tabbed-income-expense-charts"
 
-import TradeTable from "../investments/blocks/tables/trades/trade-table"
+import TradeTable from "../investments/blocks/trade-table"
 import TransactionsTable from "../transactions/blocks/transactions/transactions-table"
 
 export default function HomeView() {

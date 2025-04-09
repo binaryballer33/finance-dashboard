@@ -6,7 +6,7 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
-import TradeTable from "./blocks/tables/trades/trade-table"
+import TradeTable from "./blocks/trade-table"
 
 export default function InvestmentsView() {
     const user = useAuthUser()

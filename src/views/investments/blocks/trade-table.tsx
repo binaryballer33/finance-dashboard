@@ -1,33 +1,34 @@
 "use client"
 
-import type { Expense } from "@prisma/client"
+import type { Trade } from "@prisma/client"
 
 import { useState } from "react"
 
-import useGetExpensesByUserIdQuery from "@/api/expenses/queries/use-get-expenses-by-userId"
+import useGetTradesByUserIdQuery from "@/api/trades/queries/use-get-trades-by-userId"
 
 import CustomTable from "@/components/tables/table"
 
-import CreateExpenseDialog from "./create-expense-dialog"
-import DeleteExpenseDialog from "./delete-expense-dialog"
-import ExpenseRowDetail from "./expense-row-expand"
-import UpdateExpenseDialog from "./update-transaction-dialog"
-import useCreateExpensesTableColumns from "./use-create-expenses-table-columns"
+import CreateTradeDialog from "./create-trade-dialog"
+import DeleteTradeDialog from "./delete-trade-dialog"
+import TradeRowDetail from "./trade-row-expand"
+import TradeStats from "./trade-stats"
+import UpdateTradeDialog from "./update-trade-dialog"
+import useCreateTradeTableColumns from "./use-create-trade-table-columns"
 
-type ExpensesTableProps = {
+type TradeTableProps = {
     userId: string
 }
 
-export default function ExpensesTable(props: ExpensesTableProps) {
+export default function TradeTable(props: TradeTableProps) {
     const { userId } = props
-    const { columns } = useCreateExpensesTableColumns()
 
     const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
-    const [selectedRecord, setSelectedRecord] = useState<Expense | null>(null)
+    const [selectedRecord, setSelectedRecord] = useState<null | Trade>(null)
     const [updateRecordDialogOpen, setUpdateRecordDialogOpen] = useState(false)
 
-    const { data: expenses = [] } = useGetExpensesByUserIdQuery(userId)
+    const { columns } = useCreateTradeTableColumns()
+    const { data: trades = [] } = useGetTradesByUserIdQuery(userId)
 
     return (
         <>
@@ -42,15 +43,16 @@ export default function ExpensesTable(props: ExpensesTableProps) {
                 }}
                 createRecordButton={{
                     setCreateRecordDialogOpen,
-                    tooltipContent: "Create New Expense",
+                    tooltipContent: "Create New Trade",
                     userId,
                 }}
-                data={expenses}
+                data={trades}
                 deleteRecordButton={{
                     setDeleteRecordDialogOpen,
                     setSelectedRecord,
                 }}
-                expandRowDetailComponent={ExpenseRowDetail}
+                expandRowDetailComponent={TradeRowDetail}
+                tableStatsComponent={TradeStats}
                 updateRecordButton={{
                     setSelectedRecord,
                     setUpdateRecordDialogOpen,
@@ -58,24 +60,24 @@ export default function ExpensesTable(props: ExpensesTableProps) {
             />
 
             {selectedRecord && (
-                <UpdateExpenseDialog
-                    expense={selectedRecord}
+                <UpdateTradeDialog
                     setUpdateRecordDialogOpen={setUpdateRecordDialogOpen}
+                    trade={selectedRecord}
                     updateRecordDialogOpen={updateRecordDialogOpen}
                     userId={userId}
                 />
             )}
 
             {selectedRecord && (
-                <DeleteExpenseDialog
+                <DeleteTradeDialog
                     deleteRecordDialogOpen={deleteRecordDialogOpen}
-                    expense={selectedRecord}
                     setDeleteRecordDialogOpen={setDeleteRecordDialogOpen}
+                    trade={selectedRecord}
                     userId={userId}
                 />
             )}
 
-            <CreateExpenseDialog
+            <CreateTradeDialog
                 createRecordDialogOpen={createRecordDialogOpen}
                 setCreateRecordDialogOpen={setCreateRecordDialogOpen}
                 userId={userId}
