@@ -8,7 +8,7 @@ import useGetTransactionsByIdInfiniteQuery from "@/api/transactions/queries/use-
 
 import CustomTable from "@/components/tables/table"
 
-import CreateNewTransactionDialog from "./create-transaction-dialog"
+import CreateTransactionDialog from "./create-transaction-dialog"
 import DeleteTransactionDialog from "./delete-transaction-dialog"
 import TransactionRowDetail from "./transaction-row-expand"
 import UpdateTransactionDialog from "./update-transaction-dialog"
@@ -20,7 +20,7 @@ type TransactionsTableProps = {
 
 export default function TransactionsTable(props: TransactionsTableProps) {
     const { userId } = props
-    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+    const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [updateTransactionDialogOpen, setUpdateTransactionDialogOpen] = useState(false)
     const [selectedTransaction, setSelectedTransaction] = useState<null | Transaction>(null)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
@@ -44,8 +44,8 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                     addUpdateRowColumn: true,
                 }}
                 createRecordButton={{
-                    createNewRecordButtonTooltipContent: "Create New Transaction",
-                    setCreateNewRecordDialogOpen,
+                    setCreateRecordDialogOpen,
+                    tooltipContent: "Create New Transaction",
                     userId,
                 }}
                 data={transactions}
@@ -84,9 +84,9 @@ export default function TransactionsTable(props: TransactionsTableProps) {
                 />
             )}
 
-            <CreateNewTransactionDialog
-                createNewRecordDialogOpen={createNewRecordDialogOpen}
-                setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
+            <CreateTransactionDialog
+                createRecordDialogOpen={createRecordDialogOpen}
+                setCreateRecordDialogOpen={setCreateRecordDialogOpen}
                 userId={userId}
             />
         </>

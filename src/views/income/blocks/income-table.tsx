@@ -8,7 +8,7 @@ import useGetIncomeByUserIdQuery from "@/api/incomes/queries/use-get-income-by-u
 
 import CustomTable from "@/components/tables/table"
 
-import CreateNewIncomeDialog from "./create-income-dialog"
+import CreateIncomeDialog from "./create-income-dialog"
 import DeleteIncomeDialog from "./delete-income-dialog"
 import IncomeRowDetail from "./income-row-expand"
 import UpdateIncomeDialog from "./update-income-dialog"
@@ -22,7 +22,7 @@ export default function IncomeTable(props: IncomeTableProps) {
     const { userId } = props
     const { columns } = useCreateIncomeTableColumns()
 
-    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+    const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [updateDialogOpen, setUpdateRecordDialogOpen] = useState(false)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
     const [selectedIncome, setSelectedRecord] = useState<Income | null>(null)
@@ -41,8 +41,8 @@ export default function IncomeTable(props: IncomeTableProps) {
                     addUpdateRowColumn: true,
                 }}
                 createRecordButton={{
-                    createNewRecordButtonTooltipContent: "Create New Income",
-                    setCreateNewRecordDialogOpen,
+                    setCreateRecordDialogOpen,
+                    tooltipContent: "Create New Income",
                     userId,
                 }}
                 data={income}
@@ -75,9 +75,9 @@ export default function IncomeTable(props: IncomeTableProps) {
                 />
             )}
 
-            <CreateNewIncomeDialog
-                createNewIncomeDialogOpen={createNewRecordDialogOpen}
-                setCreateNewIncomeDialogOpen={setCreateNewRecordDialogOpen}
+            <CreateIncomeDialog
+                createRecordDialogOpen={createRecordDialogOpen}
+                setCreateRecordDialogOpen={setCreateRecordDialogOpen}
                 userId={userId}
             />
         </>

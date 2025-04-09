@@ -21,7 +21,7 @@ export default function ExpensesTable(props: ExpensesTableProps) {
     const { userId } = props
     const { columns } = useCreateExpensesTableColumns()
 
-    const [createNewRecordDialogOpen, setCreateNewRecordDialogOpen] = useState(false)
+    const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
     const [selectedRecord, setSelectedRecord] = useState<Expense | null>(null)
     const [updateRecordDialogOpen, setUpdateRecordDialogOpen] = useState(false)
@@ -40,8 +40,8 @@ export default function ExpensesTable(props: ExpensesTableProps) {
                     addUpdateRowColumn: true,
                 }}
                 createRecordButton={{
-                    createNewRecordButtonTooltipContent: "Create New Income",
-                    setCreateNewRecordDialogOpen,
+                    setCreateRecordDialogOpen,
+                    tooltipContent: "Create New Expense",
                     userId,
                 }}
                 data={expenses}
@@ -75,8 +75,8 @@ export default function ExpensesTable(props: ExpensesTableProps) {
             )}
 
             <CreateExpenseDialog
-                createNewRecordDialogOpen={createNewRecordDialogOpen}
-                setCreateNewRecordDialogOpen={setCreateNewRecordDialogOpen}
+                createRecordDialogOpen={createRecordDialogOpen}
+                setCreateRecordDialogOpen={setCreateRecordDialogOpen}
                 userId={userId}
             />
         </>

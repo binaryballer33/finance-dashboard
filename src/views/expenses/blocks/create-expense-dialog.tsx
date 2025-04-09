@@ -27,13 +27,13 @@ import CreateExpenseInput from "@/components/forms/rhf-custom-input"
 import RHFSelect from "@/components/forms/rhf-select"
 
 type CreateExpenseDialogProps = {
-    createNewRecordDialogOpen: boolean
-    setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+    createRecordDialogOpen: boolean
+    setCreateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     userId: string
 }
 
 export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
-    const { createNewRecordDialogOpen, setCreateNewRecordDialogOpen, userId } = props
+    const { createRecordDialogOpen, setCreateRecordDialogOpen, userId } = props
 
     const form = useForm<Expense>({ defaultValues, resolver: zodResolver(ExpenseSchema) })
     const { mutateAsync: createExpense } = useCreateExpenseMutation()
@@ -47,11 +47,11 @@ export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
             userId,
         })
 
-        setCreateNewRecordDialogOpen(false)
+        setCreateRecordDialogOpen(false)
     }
 
     return (
-        <Dialog onOpenChange={setCreateNewRecordDialogOpen} open={createNewRecordDialogOpen}>
+        <Dialog onOpenChange={setCreateRecordDialogOpen} open={createRecordDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>Create A New Expense</DialogTitle>
@@ -66,7 +66,7 @@ export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>
-                            <Button onClick={() => setCreateNewRecordDialogOpen(false)} type="button" variant="outline">
+                            <Button onClick={() => setCreateRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel
                             </Button>
                             <Button type="submit">Create Expense</Button>

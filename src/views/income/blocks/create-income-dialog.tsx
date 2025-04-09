@@ -26,14 +26,14 @@ import RHFCalendar from "@/components/forms/rhf-calendar"
 import CreateIncomeInput from "@/components/forms/rhf-custom-input"
 import RHFSelect from "@/components/forms/rhf-select"
 
-type CreateNewIncomeDialogProps = {
-    createNewIncomeDialogOpen: boolean
-    setCreateNewIncomeDialogOpen: Dispatch<SetStateAction<boolean>>
+type CreateIncomeDialogProps = {
+    createRecordDialogOpen: boolean
+    setCreateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     userId: string
 }
 
-export default function CreateNewIncomeDialog(props: CreateNewIncomeDialogProps) {
-    const { createNewIncomeDialogOpen, setCreateNewIncomeDialogOpen, userId } = props
+export default function CreateIncomeDialog(props: CreateIncomeDialogProps) {
+    const { createRecordDialogOpen, setCreateRecordDialogOpen, userId } = props
 
     const form = useForm<Income>({ defaultValues, resolver: zodResolver(IncomeSchema) })
     const { mutateAsync: createIncome } = useCreateIncomeMutation()
@@ -47,11 +47,11 @@ export default function CreateNewIncomeDialog(props: CreateNewIncomeDialogProps)
             userId,
         })
 
-        setCreateNewIncomeDialogOpen(false)
+        setCreateRecordDialogOpen(false)
     }
 
     return (
-        <Dialog onOpenChange={setCreateNewIncomeDialogOpen} open={createNewIncomeDialogOpen}>
+        <Dialog onOpenChange={setCreateRecordDialogOpen} open={createRecordDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>Create A New Income</DialogTitle>
@@ -66,7 +66,7 @@ export default function CreateNewIncomeDialog(props: CreateNewIncomeDialogProps)
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>
-                            <Button onClick={() => setCreateNewIncomeDialogOpen(false)} type="button" variant="outline">
+                            <Button onClick={() => setCreateRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel
                             </Button>
                             <Button type="submit">Create Income</Button>

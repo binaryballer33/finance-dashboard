@@ -26,14 +26,14 @@ import RHFCalendar from "@/components/forms/rhf-calendar"
 import CreateTransactionInput from "@/components/forms/rhf-custom-input"
 import RHFSelect from "@/components/forms/rhf-select"
 
-type CreateNewRecordDialogProps = {
-    createNewRecordDialogOpen: boolean
-    setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+type CreateTransactionDialogProps = {
+    createRecordDialogOpen: boolean
+    setCreateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
     userId: string
 }
 
-export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps) {
-    const { createNewRecordDialogOpen, setCreateNewRecordDialogOpen, userId } = props
+export default function CreateTransactionDialog(props: CreateTransactionDialogProps) {
+    const { createRecordDialogOpen, setCreateRecordDialogOpen, userId } = props
 
     const form = useForm<Transaction>({ defaultValues, resolver: zodResolver(TransactionSchema) })
     const { mutateAsync: createTransaction } = useCreateTransactionMutation()
@@ -47,11 +47,11 @@ export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps)
             userId,
         })
 
-        setCreateNewRecordDialogOpen(false)
+        setCreateRecordDialogOpen(false)
     }
 
     return (
-        <Dialog onOpenChange={setCreateNewRecordDialogOpen} open={createNewRecordDialogOpen}>
+        <Dialog onOpenChange={setCreateRecordDialogOpen} open={createRecordDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>Create A New Transaction</DialogTitle>
@@ -66,7 +66,7 @@ export default function CreateNewRecordDialog(props: CreateNewRecordDialogProps)
                         <RHFCalendar label="Date" name="date" />
 
                         <DialogFooter>
-                            <Button onClick={() => setCreateNewRecordDialogOpen(false)} type="button" variant="outline">
+                            <Button onClick={() => setCreateRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel
                             </Button>
                             <Button type="submit">Create Transaction</Button>

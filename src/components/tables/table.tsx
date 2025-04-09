@@ -43,11 +43,11 @@ type CustomTableProps<T> = {
     }
 
     createRecordButton?: {
-        /* tooltip content for the create new record button */
-        createNewRecordButtonTooltipContent?: string
-
         /* setter for the create new record dialog */
-        setCreateNewRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+        setCreateRecordDialogOpen: Dispatch<SetStateAction<boolean>>
+
+        /* tooltip content for the create new record button */
+        tooltipContent?: string
 
         /* userId for creating new records */
         userId: string
@@ -178,8 +178,8 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
                     {/* create a button to add a new row */}
                     {createRecordButton && (
                         <TableExtraCreateNewRecord
-                            setCreateNewRecordDialogOpen={createRecordButton.setCreateNewRecordDialogOpen}
-                            tooltipContent={createRecordButton?.createNewRecordButtonTooltipContent}
+                            setCreateNewRecordDialogOpen={createRecordButton.setCreateRecordDialogOpen}
+                            tooltipContent={createRecordButton?.tooltipContent}
                         />
                     )}
 
