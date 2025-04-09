@@ -6,7 +6,7 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
-import ExpensesTable from "./blocks/income-table/expenses-table"
+import ExpensesTable from "./blocks/expenses-table"
 
 export default function ExpensesView() {
     const user = useAuthUser()
