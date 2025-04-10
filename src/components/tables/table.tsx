@@ -15,9 +15,9 @@ import TableBodyRowCustom from "./table-body/table-body-row-custom"
 import TableBodyRowNoRecordsFound from "./table-body/table-body-row-no-records-found"
 import TableExtraColumnVisibility from "./table-extras/table-extra-column-visibility"
 import TableExtraCreateNewRecord from "./table-extras/table-extra-create-new-record"
-import TableExtraDeleteSelected from "./table-extras/table-extra-delete-selected"
 import TableExtraDropdownMenuSettings from "./table-extras/table-extra-dropdown-menu-settings"
 import TableExtraGlobalSearchBar from "./table-extras/table-extra-global-search-bar"
+import TableExtraHideSelected from "./table-extras/table-extra-hide-selected"
 import TableExtraInfiniteQueryButton from "./table-extras/table-extra-infinite-query-button"
 import TableExtraPagination from "./table-extras/table-extra-pagination"
 import TableHeaderCustomHead from "./table-header/table-header-custom-head"
@@ -161,7 +161,7 @@ export default function CustomTable<T extends RowWithId>(props: CustomTableProps
             >
                 <div className="flex w-full items-center gap-2 max-sm:gap-2">
                     {table.getIsSomeRowsSelected() || table.getIsAllRowsSelected() ? (
-                        <TableExtraDeleteSelected table={table} />
+                        <TableExtraHideSelected table={table} />
                     ) : (
                         <>
                             {/* Table Column Visibility */}
