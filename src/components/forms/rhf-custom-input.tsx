@@ -69,7 +69,10 @@ export default function CustomInput<T extends Record<string, any>>(props: Custom
             render={({ field, fieldState }) => (
                 <FormItem className="group flex-grow">
                     <FlexBetweenContainer>
-                        <FormLabel className="flex h-8 items-center justify-center font-medium group-focus-within:text-primary">
+                        <FormLabel
+                            className="flex h-8 items-center justify-center font-medium group-focus-within:text-primary"
+                            htmlFor={`input-${name}`}
+                        >
                             {label}
                         </FormLabel>
 
@@ -95,7 +98,9 @@ export default function CustomInput<T extends Record<string, any>>(props: Custom
                             {/* input field */}
                             <Input
                                 {...field}
+                                autoComplete="on"
                                 className={cn("pl-10", className)}
+                                id={`input-${name}`}
                                 placeholder={placeholder}
                                 type={finalInputType}
                             />

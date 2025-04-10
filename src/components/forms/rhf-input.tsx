@@ -25,13 +25,17 @@ export default function RHFInput(props: RHFInputProps) {
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel className="flex h-8 items-center justify-center font-medium">{name}</FormLabel>
+                    <FormLabel className="flex h-8 items-center justify-center font-medium" htmlFor={`input-${name}`}>
+                        {name}
+                    </FormLabel>
 
                     <FormControl>
                         <div className="relative">
                             <Input
                                 {...field}
+                                autoComplete="on"
                                 className={cn("bg-muted/50 pl-10", className)}
+                                id={`input-${name}`}
                                 placeholder={placeholder}
                                 type={type}
                             />

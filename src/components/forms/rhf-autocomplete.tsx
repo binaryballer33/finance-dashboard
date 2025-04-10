@@ -32,7 +32,7 @@ export default function RHFAutocomplete(props: RHFAutocompleteProps) {
             name={name}
             render={({ field, fieldState: { error } }) => (
                 <FormItem className={className}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel htmlFor={`autocomplete-${name}`}>{label}</FormLabel>}
                     <Popover>
                         <PopoverTrigger asChild>
                             <FormControl>
@@ -42,6 +42,7 @@ export default function RHFAutocomplete(props: RHFAutocompleteProps) {
                                         !field.value && "text-muted-foreground",
                                         error && "border-destructive",
                                     )}
+                                    id={`autocomplete-${name}`}
                                     role="combobox"
                                     variant="outline"
                                 >
@@ -54,11 +55,16 @@ export default function RHFAutocomplete(props: RHFAutocompleteProps) {
                         </PopoverTrigger>
                         <PopoverContent className="w-full min-w-[200px] p-0">
                             <Command>
-                                <CommandInput placeholder={placeholder} />
-                                <CommandEmpty>{emptyMessage}</CommandEmpty>
-                                <CommandGroup>
+                                <CommandInput
+                                    id={`commandinput-${name}`}
+                                    name={`commandinput-${name}`}
+                                    placeholder={placeholder}
+                                />
+                                <CommandEmpty id={`commandempty-${name}`}>{emptyMessage}</CommandEmpty>
+                                <CommandGroup id={`commandgroup-${name}`}>
                                     {options.map((option) => (
                                         <CommandItem
+                                            id={`commanditem-${name}-${option.value}`}
                                             key={option.value}
                                             onSelect={() => {
                                                 field.onChange(option.value)

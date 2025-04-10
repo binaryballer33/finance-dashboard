@@ -41,7 +41,9 @@ export default function TableExtraSkipToPage(props: TableExtraSkipToPageProps) {
 
                 {/* Manual page number input box and page number display */}
                 <Input
+                    aria-label="Go To Page"
                     className="w-[70px] max-sm:w-[35px] max-sm:p-0"
+                    id="table-skip-to-page"
                     // Update input value when page changes via this input box
                     onBlur={() => setInputValue(String(table.getState().pagination.pageIndex + 1))}
                     onChange={handleInputBoxPageChange}

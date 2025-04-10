@@ -35,16 +35,20 @@ export default function RHFSelect(props: RHFSelectProps) {
             name={name}
             render={({ field }) => (
                 <FormItem className={className}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel htmlFor={`select-${name}`}>{label}</FormLabel>}
                     <Select defaultValue={field.value} onValueChange={field.onChange}>
                         <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger id={`select-${name}`}>
                                 <SelectValue placeholder={placeholder} />
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                             {options.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
+                                <SelectItem
+                                    id={`select-item-${name}-${option.value}`}
+                                    key={option.value}
+                                    value={option.value}
+                                >
                                     <div className="flex items-center gap-2">
                                         {option.icon && <option.icon className="h-4 w-4" />}
                                         {option.label}
@@ -84,7 +88,7 @@ export function RHFMultiSelect({ className, helperText, label, name, options, pl
             name={name}
             render={({ field }) => (
                 <FormItem className={cn("flex flex-col", className)}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel htmlFor={`multiselect-${name}`}>{label}</FormLabel>}
                     <Popover onOpenChange={setOpen} open={open}>
                         <PopoverTrigger asChild>
                             <FormControl>
@@ -93,6 +97,7 @@ export function RHFMultiSelect({ className, helperText, label, name, options, pl
                                         "w-full justify-between",
                                         !field.value?.length && "text-muted-foreground",
                                     )}
+                                    id={`multiselect-${name}`}
                                     role="combobox"
                                     variant="outline"
                                 >
@@ -112,13 +117,18 @@ export function RHFMultiSelect({ className, helperText, label, name, options, pl
                         </PopoverTrigger>
                         <PopoverContent className="w-full p-0">
                             <Command>
-                                <CommandInput placeholder="Search..." />
-                                <CommandEmpty>No option found.</CommandEmpty>
-                                <CommandGroup>
+                                <CommandInput
+                                    id={`multiselect-input-${name}`}
+                                    name={`multiselect-input-${name}`}
+                                    placeholder="Search..."
+                                />
+                                <CommandEmpty id={`multiselect-empty-${name}`}>No option found.</CommandEmpty>
+                                <CommandGroup id={`multiselect-group-${name}`}>
                                     {options.map((option) => {
                                         const isSelected = field.value?.includes(option.value)
                                         return (
                                             <CommandItem
+                                                id={`multiselect-item-${name}-${option.value}`}
                                                 key={option.value}
                                                 onSelect={() => {
                                                     const newValue = isSelected

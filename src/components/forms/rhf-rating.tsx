@@ -35,9 +35,13 @@ export default function RHFRating({ className, helperText, label, max = 5, name,
             name={name}
             render={({ field }) => (
                 <FormItem className={cn("space-y-2", className)}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel id={`rating-label-${name}`}>{label}</FormLabel>}
                     <FormControl>
-                        <div className="flex items-center space-x-1">
+                        <div
+                            aria-labelledby={`rating-label-${name}`}
+                            className="flex items-center space-x-1"
+                            role="group"
+                        >
                             {Array.from({ length: max }).map((_, index) => {
                                 const value = index + 1
                                 const isHalf = precision === 0.5 && field.value + 0.5 === value
@@ -45,11 +49,13 @@ export default function RHFRating({ className, helperText, label, max = 5, name,
 
                                 return (
                                     <button
+                                        aria-label={`Rate ${value} out of ${max}`}
                                         className={cn(
                                             "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                                             "transition-transform hover:scale-110",
                                             isFilled ? "text-yellow-400" : "text-muted-foreground",
                                         )}
+                                        id={`rating-${name}-${value}`}
                                         key={value}
                                         onClick={() => field.onChange(value)}
                                         onKeyDown={(e) => {

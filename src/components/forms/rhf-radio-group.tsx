@@ -29,9 +29,10 @@ export default function RHFRadioGroup(props: Props) {
             name={name}
             render={({ field }) => (
                 <FormItem className={className}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel id={`radio-group-${name}-label`}>{label}</FormLabel>}
                     <FormControl>
                         <RadioGroup
+                            aria-labelledby={`radio-group-${name}-label`}
                             className={cn("gap-3", orientation === "horizontal" ? "flex flex-row" : "flex flex-col")}
                             defaultValue={field.value}
                             onValueChange={field.onChange}

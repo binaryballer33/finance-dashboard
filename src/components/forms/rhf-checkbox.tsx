@@ -26,11 +26,16 @@ export default function RHFCheckbox({ className, helperText, label, name }: RHFC
                         <Checkbox
                             aria-label={!label ? `Checkbox ${name}` : undefined}
                             checked={field.value}
+                            id={`checkbox-${name}`}
                             onCheckedChange={field.onChange}
                         />
                     </FormControl>
 
-                    {label && <Label className="text-sm font-normal">{label}</Label>}
+                    {label && (
+                        <Label className="text-sm font-normal" htmlFor={`checkbox-${name}`}>
+                            {label}
+                        </Label>
+                    )}
 
                     {(error || helperText) && (
                         <FormDescription className={cn("mt-1", error && "text-destructive")}>
@@ -68,20 +73,23 @@ export function RHFMultiCheckbox({ className, helperText, label, name, options }
             name={name}
             render={({ field, fieldState: { error } }) => (
                 <FormItem className={className}>
-                    {label && <FormLabel className="text-base">{label}</FormLabel>}
+                    {label && <FormLabel id={`multicheck-group-${name}`}>{label}</FormLabel>}
 
-                    <div className="space-y-2">
+                    <div aria-labelledby={`multicheck-group-${name}`} className="space-y-2" role="group">
                         {options.map((option) => (
                             <div className="flex items-center space-x-3" key={option.value}>
                                 <FormControl>
                                     <Checkbox
                                         aria-label={!option.label ? `Checkbox ${option.label}` : undefined}
                                         checked={field.value.includes(option.value)}
+                                        id={`multicheck-${name}-${option.value}`}
                                         onCheckedChange={() => field.onChange(getSelected(field.value, option.value))}
                                     />
                                 </FormControl>
 
-                                <Label className="text-sm font-normal">{option.label}</Label>
+                                <Label className="text-sm font-normal" htmlFor={`multicheck-${name}-${option.value}`}>
+                                    {option.label}
+                                </Label>
                             </div>
                         ))}
                     </div>

@@ -28,10 +28,11 @@ export default function RHFSlider(props: Props) {
             name={name}
             render={({ field }) => (
                 <FormItem className={cn("space-y-4", className)}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel htmlFor={`slider-${name}`}>{label}</FormLabel>}
                     <FormControl>
                         <Slider
                             defaultValue={defaultValue}
+                            id={`slider-${name}`}
                             max={max}
                             min={min}
                             onValueChange={([value]) => field.onChange(value)}

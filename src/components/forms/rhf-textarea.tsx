@@ -25,13 +25,16 @@ export default function RHFTextArea(props: RHFTextAreaProps) {
             name={name}
             render={({ field }) => (
                 <FormItem className="group">
-                    <FormLabel className="h-8 items-center font-medium group-focus-within:text-primary">
+                    <FormLabel
+                        className="h-8 items-center font-medium group-focus-within:text-primary"
+                        htmlFor={`textarea-${name}`}
+                    >
                         {name}
                     </FormLabel>
 
                     <FormControl>
                         <div className="relative">
-                            <Textarea className={cn("bg-accent pl-2", className)} {...field} />
+                            <Textarea className={cn("bg-accent pl-2", className)} id={`textarea-${name}`} {...field} />
 
                             {/* Icon on the far right of the input field, used to clear the text in the field */}
                             {field.value && (

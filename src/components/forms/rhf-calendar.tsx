@@ -33,16 +33,20 @@ export default function RHFCalendar(props: RHFCalendarProps) {
             name={name}
             render={({ field }) => (
                 <FormItem className={className}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel htmlFor={`calendar-${name}`}>{label}</FormLabel>}
 
                     <Popover modal onOpenChange={setDatePopoverOpen} open={datePopoverOpen}>
                         <PopoverTrigger asChild>
                             <FormControl>
                                 <Button
+                                    aria-expanded={datePopoverOpen}
+                                    aria-haspopup="dialog"
+                                    aria-label={label || `Select date for ${name}`}
                                     className={cn(
                                         "w-full pl-3 text-left font-normal",
                                         !field.value && "text-muted-foreground",
                                     )}
+                                    id={`calendar-${name}`}
                                     type="button"
                                     variant="outline"
                                 >

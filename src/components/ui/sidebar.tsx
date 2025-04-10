@@ -348,6 +348,8 @@ const SidebarInput = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <Input
+      aria-label="Sidebar Input"
+      id="sidebar-input"
       ref={ref}
       data-sidebar="input"
       className={cn(

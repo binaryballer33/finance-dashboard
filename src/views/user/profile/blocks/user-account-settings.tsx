@@ -78,7 +78,13 @@ export default function UserAccountSettingsView() {
                             <AvatarImage alt="Profile picture" src={avatar || placeholderImage} />
                             <AvatarFallback>SM</AvatarFallback>
                         </Avatar>
-                        <Input accept="image/*" id="avatar" onChange={handleAvatarChange} type="file" />
+                        <Input
+                            accept="image/*"
+                            aria-label="Upload Profile Picture"
+                            id="avatar"
+                            onChange={handleAvatarChange}
+                            type="file"
+                        />
                     </div>
 
                     <CustomFormInput<UserSettings> label="First Name" name="firstName" type="text" />

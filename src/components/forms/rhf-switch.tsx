@@ -24,13 +24,18 @@ export default function RHFSwitch({ className, helperText, label, name }: RHFSwi
             render={({ field }) => (
                 <FormItem className={cn("flex flex-row items-center justify-between rounded-lg border p-4", className)}>
                     <div className="space-y-0.5">
-                        {label && <FormLabel className="text-base">{label}</FormLabel>}
+                        {label && (
+                            <FormLabel className="text-base" htmlFor={`switch-${name}`}>
+                                {label}
+                            </FormLabel>
+                        )}
                         {helperText && <div className="text-sm text-muted-foreground">{helperText}</div>}
                     </div>
                     <FormControl>
                         <Switch
                             aria-label={label || `Switch ${name}`}
                             checked={field.value}
+                            id={`switch-${name}`}
                             onCheckedChange={field.onChange}
                         />
                     </FormControl>
@@ -66,19 +71,22 @@ export function RHFMultiSwitch({ className, helperText, label, name, options }: 
             name={name}
             render={({ field }) => (
                 <FormItem className={cn("space-y-4", className)}>
-                    {label && <FormLabel>{label}</FormLabel>}
+                    {label && <FormLabel id={`multiswitch-group-${name}-label`}>{label}</FormLabel>}
 
-                    <div className="space-y-4">
+                    <div aria-labelledby={`multiswitch-group-${name}-label`} className="space-y-4" role="group">
                         {options.map((option) => (
                             <div
                                 className="flex flex-row items-center justify-between rounded-lg border p-4"
                                 key={option.value}
                             >
-                                <FormLabel className="text-base">{option.label}</FormLabel>
+                                <FormLabel className="text-base" htmlFor={`multiswitch-${name}-${option.value}`}>
+                                    {option.label}
+                                </FormLabel>
                                 <FormControl>
                                     <Switch
                                         aria-label={option.label}
                                         checked={field.value.includes(option.value)}
+                                        id={`multiswitch-${name}-${option.value}`}
                                         onCheckedChange={() => field.onChange(getSelected(field.value, option.value))}
                                     />
                                 </FormControl>

@@ -21,9 +21,9 @@ export default function RHFCode(props: RHFCodesProps) {
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel>One-Time Password</FormLabel>
+                    <FormLabel htmlFor={`code-${name}`}>One-Time Password</FormLabel>
                     <FormControl>
-                        <InputOTP maxLength={6} {...field}>
+                        <InputOTP maxLength={6} {...field} id={`code-${name}`}>
                             <InputOTPGroup className="flex h-12 w-full gap-2 sm:gap-4">
                                 <InputOTPSlot className="h-full flex-1 bg-accent" index={0} />
                                 <InputOTPSlot className="h-full flex-1 bg-accent" index={1} />
