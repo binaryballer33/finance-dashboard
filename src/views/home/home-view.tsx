@@ -9,7 +9,7 @@ import PageHeading from "@/components/base/page-heading"
 import TabbedIncomeExpenseCharts from "@/components/charts/tabbed-income-expense-charts"
 
 import TradeTable from "../investments/blocks/trade-table"
-import TransactionsTable from "../transactions/blocks/transactions/transactions-table"
+import TransactionsTable from "../transactions/blocks/table/transactions-table"
 
 export default function HomeView() {
     const user = useAuthUser()
