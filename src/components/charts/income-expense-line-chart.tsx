@@ -2,9 +2,10 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 
 type IncomeExpenseLineChartProps = {
     data: {
+        balance: number
         expenses: number
         income: number
-        month: string
+        name: string
     }[]
     showExpenses: boolean
     showIncome: boolean
@@ -24,7 +25,8 @@ export default function IncomeExpenseLineChart(props: IncomeExpenseLineChartProp
                     top: 5,
                 }}
             >
-                <XAxis axisLine={false} dataKey="month" fontSize={12} stroke="#888888" tickLine={false} />
+                <XAxis axisLine={false} dataKey="name" fontSize={12} stroke="#888888" tickLine={false} />
+
                 <YAxis
                     axisLine={false}
                     fontSize={12}
@@ -32,6 +34,7 @@ export default function IncomeExpenseLineChart(props: IncomeExpenseLineChartProp
                     tickFormatter={(value) => `$${value}`}
                     tickLine={false}
                 />
+
                 <Tooltip
                     content={({ active, payload }) => {
                         if (active && payload && payload.length) {
@@ -61,24 +64,28 @@ export default function IncomeExpenseLineChart(props: IncomeExpenseLineChartProp
                         return null
                     }}
                 />
+
                 {showIncome && (
                     <Line
                         activeDot={{
                             r: 6,
                             style: { fill: "#10b981", opacity: 0.25 },
                         }}
+                        animationDuration={300}
                         dataKey="income"
                         stroke="#10b981"
                         strokeWidth={2}
                         type="monotone"
                     />
                 )}
+
                 {showExpenses && (
                     <Line
                         activeDot={{
                             r: 6,
                             style: { fill: "#ef4444", opacity: 0.25 },
                         }}
+                        animationDuration={300}
                         dataKey="expenses"
                         stroke="#ef4444"
                         strokeWidth={2}

@@ -4,9 +4,10 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recha
 
 type IncomeExpenseBarChartProps = {
     data: {
+        balance: number
         expenses: number
         income: number
-        month: string
+        name: string
     }[]
     showExpenses: boolean
     showIncome: boolean
@@ -26,7 +27,8 @@ export default function IncomeExpenseBarChart(props: IncomeExpenseBarChartProps)
                     top: 5,
                 }}
             >
-                <XAxis axisLine={false} dataKey="month" fontSize={12} stroke="#888888" tickLine={false} />
+                <XAxis axisLine={false} dataKey="name" fontSize={12} stroke="#888888" tickLine={false} />
+
                 <YAxis
                     axisLine={false}
                     fontSize={12}
@@ -34,6 +36,7 @@ export default function IncomeExpenseBarChart(props: IncomeExpenseBarChartProps)
                     tickFormatter={(value) => `$${value}`}
                     tickLine={false}
                 />
+
                 <Tooltip
                     content={({ active, payload }) => {
                         if (active && payload && payload.length) {
@@ -63,7 +66,9 @@ export default function IncomeExpenseBarChart(props: IncomeExpenseBarChartProps)
                         return null
                     }}
                 />
+
                 {showIncome && <Bar dataKey="income" fill="#10b981" name="Income" radius={[4, 4, 0, 0]} />}
+
                 {showExpenses && <Bar dataKey="expenses" fill="#ef4444" name="Expenses" radius={[4, 4, 0, 0]} />}
             </BarChart>
         </ResponsiveContainer>

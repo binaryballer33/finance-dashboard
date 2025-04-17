@@ -4,11 +4,11 @@ import { COLORS } from "../utils/constants"
 
 type SpendingSummaryProps = {
     calculateTotalExpenses: () => number
-    categoryData: { category: string; total: number }[]
+    categoryTotals: { category: string; total: number }[]
 }
 
 export default function SpendingSummary(props: SpendingSummaryProps) {
-    const { calculateTotalExpenses, categoryData } = props
+    const { calculateTotalExpenses, categoryTotals } = props
 
     const width = (total: number) => ((total / calculateTotalExpenses()) * 100).toFixed(0)
 
@@ -20,7 +20,7 @@ export default function SpendingSummary(props: SpendingSummaryProps) {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {categoryData.map((category, index) => (
+                    {categoryTotals.map((category, index) => (
                         <div className="flex items-center" key={category.category}>
                             <div className="w-full">
                                 <div className="mb-1 flex justify-between">
@@ -30,21 +30,12 @@ export default function SpendingSummary(props: SpendingSummaryProps) {
                                     <span className="text-sm font-medium">${category.total.toFixed(2)}</span>
                                 </div>
                                 <div className="h-2.5 w-full rounded-full bg-muted">
-                                    {/* <div
+                                    <div
                                         aria-label={`${category.category}: ${width(category.total)}%`}
                                         className="h-2.5 rounded-full"
                                         style={{
                                             backgroundColor: COLORS[index % COLORS.length],
                                             width: `${width(category.total)}%`,
-                                        }}
-                                    /> */}
-
-                                    <div
-                                        aria-label={`${category.category}: ${((category.total / calculateTotalExpenses()) * 100).toFixed(0)}%`}
-                                        className="h-2.5 rounded-full"
-                                        style={{
-                                            backgroundColor: COLORS[index % COLORS.length],
-                                            width: `${((category.total / calculateTotalExpenses()) * 100).toFixed(0)}%`,
                                         }}
                                     />
                                 </div>

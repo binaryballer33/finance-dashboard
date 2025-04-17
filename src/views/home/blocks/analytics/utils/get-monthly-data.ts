@@ -47,11 +47,11 @@ export default function getMonthlyData(incomes: Income[], expenses: Expense[], d
         }
     })
 
-    // sort the data by date (most recent first)
+    // sort the data by date (oldest first)
     result.sort((a, b) => {
         const dateA = getDayJsDateWithPlugins(a.name, "MMM YYYY")
         const dateB = getDayJsDateWithPlugins(b.name, "MMM YYYY")
-        return dateB.diff(dateA)
+        return dateA.diff(dateB)
     })
 
     return result

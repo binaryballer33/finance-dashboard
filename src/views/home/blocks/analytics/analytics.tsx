@@ -6,6 +6,8 @@ import { useCallback, useState } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import TabbedIncomeExpenseCharts from "@/components/charts/tabbed-income-expense-charts"
+
 import type { DateRange } from "./utils/types"
 
 import BudgetHealth from "./budget/budget-health"
@@ -104,7 +106,14 @@ export default function Analytics(props: AnalyticsProps) {
                             <ExpenseBreakdownBarChart categoryTotals={getCategoryTotals()} />
                         </div>
 
-                        <SpendingSummary calculateTotalExpenses={getTotalExpenses} categoryData={getCategoryTotals()} />
+                        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+                            <SpendingSummary
+                                calculateTotalExpenses={getTotalExpenses}
+                                categoryTotals={getCategoryTotals()}
+                            />
+
+                            <TabbedIncomeExpenseCharts monthlyData={monthlyData()} />
+                        </div>
                     </TabsContent>
 
                     <TabsContent className="space-y-4" value="spending">

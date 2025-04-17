@@ -19,15 +19,21 @@ const data = [
     { expenses: 2180, income: 4325, month: "Jun" },
 ]
 
-export default function TabbedIncomeExpenseCharts() {
+type TabbedIncomeExpenseChartsProps = {
+    monthlyData: {
+        balance: number
+        expenses: number
+        income: number
+        name: string
+    }[]
+}
+
+export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChartsProps) {
+    const { monthlyData } = props
+
     const [showIncome, setShowIncome] = useState(true)
     const [showExpenses, setShowExpenses] = useState(true)
     const [mounted, setMounted] = useState(false)
-
-    // TODO: Add user and income/expense queries to get tbe actual real data
-    // const user = useAuthUser()
-    // const incomes = useGetIncomeByUserIdQuery(user?.id ?? "")
-    // const expenses = useGetExpensesByUserIdQuery(user?.id ?? "")
 
     // Only render the charts after component is mounted
     useEffect(() => {
@@ -38,7 +44,7 @@ export default function TabbedIncomeExpenseCharts() {
     if (!mounted) return <div className="h-[400px] w-full animate-pulse rounded-md bg-muted/20" />
 
     return (
-        <Card className="my-8">
+        <Card>
             <CardHeader>
                 <CardTitle>Financial Overview</CardTitle>
                 <CardDescription>View Your Income and Expenses in Different Chart Formats</CardDescription>
@@ -54,6 +60,7 @@ export default function TabbedIncomeExpenseCharts() {
                             Income
                         </Label>
                     </div>
+
                     <div className="flex items-center space-x-2">
                         <Checkbox
                             checked={showExpenses}
@@ -76,11 +83,15 @@ export default function TabbedIncomeExpenseCharts() {
                     </TabsList>
 
                     <TabsContent className="h-[300px]" value="area">
-                        <IncomeExpenseLineChart data={data} showExpenses={showExpenses} showIncome={showIncome} />
+                        <IncomeExpenseLineChart
+                            data={monthlyData}
+                            showExpenses={showExpenses}
+                            showIncome={showIncome}
+                        />
                     </TabsContent>
 
                     <TabsContent className="h-[300px]" value="bar">
-                        <IncomeExpenseBarChart data={data} showExpenses={showExpenses} showIncome={showIncome} />
+                        <IncomeExpenseBarChart data={monthlyData} showExpenses={showExpenses} showIncome={showIncome} />
                     </TabsContent>
                 </Tabs>
             </CardContent>
