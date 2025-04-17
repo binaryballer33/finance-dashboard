@@ -9,7 +9,6 @@ import CustomTable from "@/components/tables/table"
 import CreateTradeDialog from "./create-trade-dialog"
 import DeleteTradeDialog from "./delete-trade-dialog"
 import TradeRowDetail from "./trade-row-expand"
-import TradeStats from "./trade-stats"
 import UpdateTradeDialog from "./update-trade-dialog"
 import useCreateTradeTableColumns from "./use-create-trade-table-columns"
 
@@ -50,7 +49,6 @@ export default function TradeTable(props: TradeTableProps) {
                     setSelectedRecord,
                 }}
                 expandRowDetailComponent={TradeRowDetail}
-                tableStatsComponent={TradeStats}
                 updateRecordButton={{
                     setSelectedRecord,
                     setUpdateRecordDialogOpen,

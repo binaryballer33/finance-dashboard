@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 
+import ExpenseTable from "../expenses/blocks/expenses-table"
+import IncomeTable from "../income/blocks/income-table"
 import TradeTable from "../investments/blocks/trade-table"
 import TransactionsTable from "../transactions/blocks/table/transactions-table"
 import Analytics from "./blocks/analytics/analytics"
@@ -38,9 +40,11 @@ export default function HomeView(props: HomeViewProps) {
             <Analytics expenses={expenses} incomes={incomes} trades={trades} transactions={transactions} />
 
             <Tabs className="w-full" defaultValue="trades">
-                <TabsList className="grid w-full grid-cols-2 border">
+                <TabsList className="grid w-full grid-cols-4 border">
                     <TabsTrigger value="trades">Trades</TabsTrigger>
                     <TabsTrigger value="transactions">Transactions</TabsTrigger>
+                    <TabsTrigger value="expenses">Expenses</TabsTrigger>
+                    <TabsTrigger value="incomes">Incomes</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="trades">
@@ -49,6 +53,14 @@ export default function HomeView(props: HomeViewProps) {
 
                 <TabsContent value="transactions">
                     <TransactionsTable infiniteQuery={infiniteQuery} userId={user.id} />
+                </TabsContent>
+
+                <TabsContent value="expenses">
+                    <ExpenseTable expenses={expenses} userId={user.id} />
+                </TabsContent>
+
+                <TabsContent value="incomes">
+                    <IncomeTable incomes={incomes} userId={user.id} />
                 </TabsContent>
             </Tabs>
         </Container>
