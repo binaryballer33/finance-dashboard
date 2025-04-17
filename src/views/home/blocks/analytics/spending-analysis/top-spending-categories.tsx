@@ -2,7 +2,7 @@ import { useCallback } from "react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-import { COLORS } from "../utils/constants"
+import COLORS from "../utils/constants"
 
 type TopSpendingCategoriesProps = {
     categoryTotals: { category: string; total: number }[]

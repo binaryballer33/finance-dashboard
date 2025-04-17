@@ -117,7 +117,11 @@ export default function Analytics(props: AnalyticsProps) {
                     </TabsContent>
 
                     <TabsContent className="space-y-4" value="spending">
-                        <DailySpendingChart transactions={transactions} />
+                        <DailySpendingChart
+                            dateRange={dateRange}
+                            setDateRange={setDateRange}
+                            transactions={transactions}
+                        />
 
                         <div className="grid gap-4 md:grid-cols-2">
                             <TopSpendingCategories categoryTotals={getCategoryTotals()} />

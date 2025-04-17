@@ -1,6 +1,7 @@
 import type { Transaction } from "@prisma/client"
+import type { Dispatch, SetStateAction } from "react"
 
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip as ReTooltip, XAxis, YAxis } from "recharts"
 
@@ -15,13 +16,13 @@ import getChartTitle from "../utils/get-chart-title"
 import getDaysInRange from "../utils/get-days-in-range"
 
 type DailySpendingChartProps = {
+    dateRange: DateRange
+    setDateRange: Dispatch<SetStateAction<DateRange>>
     transactions: Pick<Transaction, "amount" | "category" | "date" | "description">[]
 }
 
 export default function DailySpendingChart(props: DailySpendingChartProps) {
-    const { transactions } = props
-
-    const [dateRange, setDateRange] = useState<DateRange>("14d")
+    const { dateRange, setDateRange, transactions } = props
 
     // prepare data for daily spending
     const getDailyTransactionTotals = useCallback(() => {
