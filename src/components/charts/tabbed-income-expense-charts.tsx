@@ -10,15 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import IncomeExpenseBarChart from "./income-expense-bar-chart"
 import IncomeExpenseLineChart from "./income-expense-line-chart"
 
-const data = [
-    { expenses: 1800, income: 2500, month: "Jan" },
-    { expenses: 2100, income: 3200, month: "Feb" },
-    { expenses: 2400, income: 3800, month: "Mar" },
-    { expenses: 2000, income: 4100, month: "Apr" },
-    { expenses: 2300, income: 4500, month: "May" },
-    { expenses: 2180, income: 4325, month: "Jun" },
-]
-
 type TabbedIncomeExpenseChartsProps = {
     monthlyData: {
         balance: number
