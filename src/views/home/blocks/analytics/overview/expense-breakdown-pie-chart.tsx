@@ -5,11 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { COLORS } from "../utils/constants"
 
 type ExpenseBreakdownBarChartProps = {
-    categoryData: { category: string; total: number }[]
+    categoryTotals: { category: string; total: number }[]
 }
 
-export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownBarChartProps) {
-    const { categoryData } = props
+export default function ExpenseBreakdownBarChart(props: ExpenseBreakdownBarChartProps) {
+    const { categoryTotals } = props
 
     return (
         <Card>
@@ -21,16 +21,17 @@ export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownBarChart
                 <ResponsiveContainer height="100%" width="100%">
                     <RePieChart>
                         <Pie
+                            animationDuration={300}
                             cx="50%"
                             cy="50%"
-                            data={categoryData}
+                            data={categoryTotals}
                             dataKey="total"
                             fill="#8884d8"
                             label={({ category, percent }) => `${category}: ${(percent * 100).toFixed(0)}%`}
                             labelLine={false}
                             outerRadius={80}
                         >
-                            {categoryData.map((_entry, index) => (
+                            {categoryTotals.map((_entry, index) => (
                                 <Cell fill={COLORS[index % COLORS.length]} key={`cell-${index}`} />
                             ))}
                         </Pie>
