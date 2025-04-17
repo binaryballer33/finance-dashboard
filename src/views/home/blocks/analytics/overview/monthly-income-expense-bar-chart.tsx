@@ -3,21 +3,26 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip as R
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 type MonthlyIncomeExpenseBarChartProps = {
-    prepareMonthlyData: () => any[]
+    monthlyData: {
+        balance: number
+        expenses: number
+        income: number
+        name: string
+    }[]
 }
 
 export default function MonthlyIncomeExpenseBarChart(props: MonthlyIncomeExpenseBarChartProps) {
-    const { prepareMonthlyData } = props
+    const { monthlyData } = props
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Monthly Overview</CardTitle>
-                <CardDescription>Income vs Expenses over the last 6 months</CardDescription>
+                <CardDescription>Income, Expenses And Savings Balance Monthly Totals</CardDescription>
             </CardHeader>
             <CardContent className="h-[300px]">
                 <ResponsiveContainer height="100%" width="100%">
-                    <BarChart data={prepareMonthlyData()}>
+                    <BarChart data={monthlyData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
@@ -25,6 +30,7 @@ export default function MonthlyIncomeExpenseBarChart(props: MonthlyIncomeExpense
                         <Legend />
                         <Bar dataKey="income" fill="#10b981" name="Income" />
                         <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
+                        <Bar dataKey="balance" fill="#3b82f6" name="Balance" />
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>

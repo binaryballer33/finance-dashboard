@@ -5,17 +5,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { COLORS } from "../utils/constants"
 
 type ExpenseBreakdownBarChartProps = {
-    prepareCategoryData: () => any[]
+    categoryData: { category: string; total: number }[]
 }
 
-export default function ExpenseBreakdownBarChart(props: ExpenseBreakdownBarChartProps) {
-    const { prepareCategoryData } = props
+export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownBarChartProps) {
+    const { categoryData } = props
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Expense Breakdown</CardTitle>
-                <CardDescription>Where your money is going</CardDescription>
+                <CardDescription>Where Your Money Is Going</CardDescription>
             </CardHeader>
             <CardContent className="h-[300px]">
                 <ResponsiveContainer height="100%" width="100%">
@@ -23,14 +23,14 @@ export default function ExpenseBreakdownBarChart(props: ExpenseBreakdownBarChart
                         <Pie
                             cx="50%"
                             cy="50%"
-                            data={prepareCategoryData()}
-                            dataKey="value"
+                            data={categoryData}
+                            dataKey="total"
                             fill="#8884d8"
-                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                            label={({ category, percent }) => `${category}: ${(percent * 100).toFixed(0)}%`}
                             labelLine={false}
                             outerRadius={80}
                         >
-                            {prepareCategoryData().map((_entry, index) => (
+                            {categoryData.map((_entry, index) => (
                                 <Cell fill={COLORS[index % COLORS.length]} key={`cell-${index}`} />
                             ))}
                         </Pie>

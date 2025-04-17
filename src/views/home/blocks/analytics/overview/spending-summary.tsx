@@ -4,38 +4,47 @@ import { COLORS } from "../utils/constants"
 
 type SpendingSummaryProps = {
     calculateTotalExpenses: () => number
-    getCategoryIcon: (name: string, type: "expense" | "income") => React.ReactNode
-    prepareCategoryData: () => { name: string; value: number }[]
+    categoryData: { category: string; total: number }[]
 }
 
 export default function SpendingSummary(props: SpendingSummaryProps) {
-    const { calculateTotalExpenses, getCategoryIcon, prepareCategoryData } = props
+    const { calculateTotalExpenses, categoryData } = props
+
+    const width = (total: number) => ((total / calculateTotalExpenses()) * 100).toFixed(0)
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Spending Summary</CardTitle>
-                <CardDescription>Breakdown of your expenses by category</CardDescription>
+                <CardDescription>Breakdown Of Your Expenses By Category</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {prepareCategoryData().map((category, index) => (
-                        <div className="flex items-center" key={category.name}>
+                    {categoryData.map((category, index) => (
+                        <div className="flex items-center" key={category.category}>
                             <div className="w-full">
                                 <div className="mb-1 flex justify-between">
                                     <span className="flex items-center gap-1 text-sm font-medium">
-                                        {getCategoryIcon(category.name, "expense")}
-                                        {category.name}
+                                        {category.category}
                                     </span>
-                                    <span className="text-sm font-medium">${category.value.toFixed(2)}</span>
+                                    <span className="text-sm font-medium">${category.total.toFixed(2)}</span>
                                 </div>
                                 <div className="h-2.5 w-full rounded-full bg-muted">
-                                    <div
-                                        aria-label={`${category.name}: ${((category.value / calculateTotalExpenses()) * 100).toFixed(0)}%`}
+                                    {/* <div
+                                        aria-label={`${category.category}: ${width(category.total)}%`}
                                         className="h-2.5 rounded-full"
                                         style={{
                                             backgroundColor: COLORS[index % COLORS.length],
-                                            width: `${((category.value / calculateTotalExpenses()) * 100).toFixed(0)}%`,
+                                            width: `${width(category.total)}%`,
+                                        }}
+                                    /> */}
+
+                                    <div
+                                        aria-label={`${category.category}: ${((category.total / calculateTotalExpenses()) * 100).toFixed(0)}%`}
+                                        className="h-2.5 rounded-full"
+                                        style={{
+                                            backgroundColor: COLORS[index % COLORS.length],
+                                            width: `${((category.total / calculateTotalExpenses()) * 100).toFixed(0)}%`,
                                         }}
                                     />
                                 </div>

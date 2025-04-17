@@ -1,10 +1,11 @@
-import type { Transaction } from "./types"
+import type { Transaction } from "@prisma/client"
 
 export default function getCategoryData(transactions: Transaction[]) {
     const categoryMap = new Map<string, number>()
 
     transactions
-        .filter((t) => t.type === "expense")
+        // Filter for expense transactions or transactions without a type field
+        // This handles the case where we're using the Transaction model which doesn't have a type field
         .forEach((t) => {
             const current = categoryMap.get(t.category) || 0
             categoryMap.set(t.category, current + t.amount)

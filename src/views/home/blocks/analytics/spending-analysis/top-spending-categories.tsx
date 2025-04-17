@@ -5,16 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { COLORS } from "../utils/constants"
 
 type TopSpendingCategoriesProps = {
-    prepareCategoryData: () => { name: string; value: number }[]
+    categoryTotals: { category: string; total: number }[]
 }
 
 export default function TopSpendingCategories(props: TopSpendingCategoriesProps) {
-    const { prepareCategoryData } = props
+    const { categoryTotals } = props
 
     // Get top spending categories
     const getTopCategories = useCallback(() => {
-        return prepareCategoryData().slice(0, 3)
-    }, [prepareCategoryData])
+        return categoryTotals.slice(0, 3)
+    }, [categoryTotals])
 
     return (
         <Card>
@@ -25,7 +25,7 @@ export default function TopSpendingCategories(props: TopSpendingCategoriesProps)
             <CardContent>
                 <div className="space-y-4">
                     {getTopCategories().map((category, index) => (
-                        <div className="flex items-center justify-between" key={category.name}>
+                        <div className="flex items-center justify-between" key={category.category}>
                             <div className="flex items-center gap-2">
                                 <div
                                     className="h-4 w-4 rounded-full"
@@ -33,9 +33,9 @@ export default function TopSpendingCategories(props: TopSpendingCategoriesProps)
                                         backgroundColor: COLORS[index % COLORS.length],
                                     }}
                                 />
-                                <span>{category.name}</span>
+                                <span>{category.category}</span>
                             </div>
-                            <span className="font-medium">${category.value.toFixed(2)}</span>
+                            <span className="font-medium">${category.total.toFixed(2)}</span>
                         </div>
                     ))}
                 </div>

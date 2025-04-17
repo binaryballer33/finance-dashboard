@@ -4,8 +4,6 @@ import type { Expense } from "@prisma/client"
 
 import { useState } from "react"
 
-import useGetExpensesByUserIdQuery from "@/api/expenses/queries/use-get-expenses-by-userId"
-
 import CustomTable from "@/components/tables/table"
 
 import CreateExpenseDialog from "./create-expense-dialog"
@@ -15,19 +13,18 @@ import UpdateExpenseDialog from "./update-expense-dialog"
 import useCreateExpensesTableColumns from "./use-create-expenses-table-columns"
 
 type ExpensesTableProps = {
+    expenses: Expense[]
     userId: string
 }
 
 export default function ExpensesTable(props: ExpensesTableProps) {
-    const { userId } = props
+    const { expenses, userId } = props
     const { columns } = useCreateExpensesTableColumns()
 
     const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
     const [selectedRecord, setSelectedRecord] = useState<Expense | null>(null)
     const [updateRecordDialogOpen, setUpdateRecordDialogOpen] = useState(false)
-
-    const { data: expenses = [] } = useGetExpensesByUserIdQuery(userId)
 
     return (
         <>

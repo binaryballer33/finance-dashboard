@@ -3,11 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 type SpendingInsightsProps = {
     calculateTotalExpenses: () => number
     calculateTotalIncome: () => number
-    prepareCategoryData: () => { name: string; value: number }[]
+    monthlyData: { balance: number; expenses: number; income: number; name: string }[]
 }
 
 export default function SpendingInsights(props: SpendingInsightsProps) {
-    const { calculateTotalExpenses, calculateTotalIncome, prepareCategoryData } = props
+    const { calculateTotalExpenses, calculateTotalIncome, monthlyData } = props
 
     return (
         <Card>
@@ -25,7 +25,7 @@ export default function SpendingInsights(props: SpendingInsightsProps) {
                             </div>
                             <div>
                                 <p className="text-sm text-muted-foreground">Biggest expense category:</p>
-                                <p className="text-lg font-medium">{prepareCategoryData()[0]?.name || "N/A"}</p>
+                                <p className="text-lg font-medium">{monthlyData[0]?.name || "N/A"}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-muted-foreground">Percentage of income spent:</p>

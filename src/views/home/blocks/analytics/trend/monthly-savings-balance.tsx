@@ -12,14 +12,14 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 type MonthlySavingsBalanceProps = {
-    prepareMonthlyData: () => { balance: number; name: string }[]
+    monthlyData: { balance: number; expenses: number; income: number; name: string }[]
 }
 
 /* key is case sensitive */
 const DATA_KEY = "balance"
 
 export default function MonthlySavingsBalance(props: MonthlySavingsBalanceProps) {
-    const { prepareMonthlyData } = props
+    const { monthlyData } = props
 
     return (
         <Card>
@@ -30,7 +30,7 @@ export default function MonthlySavingsBalance(props: MonthlySavingsBalanceProps)
 
             <CardContent className="h-[300px]">
                 <ResponsiveContainer height="100%" width="100%">
-                    <LineChart data={prepareMonthlyData()}>
+                    <LineChart data={monthlyData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />

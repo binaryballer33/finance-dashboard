@@ -4,8 +4,6 @@ import type { Trade } from "@prisma/client"
 
 import { useState } from "react"
 
-import useGetTradesByUserIdQuery from "@/api/trades/queries/use-get-trades-by-userId"
-
 import CustomTable from "@/components/tables/table"
 
 import CreateTradeDialog from "./create-trade-dialog"
@@ -16,11 +14,12 @@ import UpdateTradeDialog from "./update-trade-dialog"
 import useCreateTradeTableColumns from "./use-create-trade-table-columns"
 
 type TradeTableProps = {
+    trades: Trade[]
     userId: string
 }
 
 export default function TradeTable(props: TradeTableProps) {
-    const { userId } = props
+    const { trades, userId } = props
 
     const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
@@ -28,7 +27,6 @@ export default function TradeTable(props: TradeTableProps) {
     const [updateRecordDialogOpen, setUpdateRecordDialogOpen] = useState(false)
 
     const { columns } = useCreateTradeTableColumns()
-    const { data: trades = [] } = useGetTradesByUserIdQuery(userId)
 
     return (
         <>

@@ -1,12 +1,28 @@
+import type { Transaction } from "@prisma/client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-import type { Transaction } from "../utils/types"
+// Extended Transaction with optional type field
+type ExtendedTransaction = {
+    type?: "expense" | "income"
+} & Transaction
 
 type BudgetHealthProps = {
     calculateTotalExpenses: () => number
     calculateTotalIncome: () => number
-    filteredTransactions: Transaction[]
-    transactions: Transaction[]
+    filteredTransactions: ExtendedTransaction[]
+    transactions: ExtendedTransaction[]
+}
+
+// Helper function to determine expense ratio color
+// Moved outside component to prevent recreation on each render
+function getExpenseRatioColor(totalIncome: number, totalExpenses: number): string {
+    if (totalIncome <= 0) return "bg-red-500"
+
+    const ratio = totalExpenses / totalIncome
+    if (ratio <= 0.7) return "bg-green-500"
+    if (ratio <= 0.9) return "bg-yellow-500"
+    return "bg-red-500"
 }
 
 export default function BudgetHealth(props: BudgetHealthProps) {
@@ -16,8 +32,9 @@ export default function BudgetHealth(props: BudgetHealthProps) {
         <Card>
             <CardHeader>
                 <CardTitle>Budget Health</CardTitle>
-                <CardDescription>How well you're managing your finances</CardDescription>
+                <CardDescription>How Well You're Managing Your Finances</CardDescription>
             </CardHeader>
+
             <CardContent>
                 {transactions.length > 0 ? (
                     <div className="space-y-6">
@@ -47,12 +64,12 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                     }}
                                 />
                             </div>
-                            <p className="mt-1 text-xs text-muted-foreground">Aim for at least 20% savings rate</p>
+                            <p className="mt-1 text-xs text-muted-foreground">Aim For At Least 20% Savings Rate</p>
                         </div>
 
                         <div>
                             <div className="mb-1 flex justify-between">
-                                <span className="text-sm font-medium">Expense to Income Ratio</span>
+                                <span className="text-sm font-medium">Expense To Income Ratio</span>
                                 <span className="text-sm font-medium">
                                     {calculateTotalIncome() > 0
                                         ? `${((calculateTotalExpenses() / calculateTotalIncome()) * 100).toFixed(0)}%`
@@ -61,15 +78,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                             </div>
                             <div className="h-2.5 w-full rounded-full bg-muted">
                                 <div
-                                    className={`h-2.5 rounded-full ${
-                                        calculateTotalIncome() > 0 &&
-                                        calculateTotalExpenses() / calculateTotalIncome() <= 0.7
-                                            ? "bg-green-500"
-                                            : calculateTotalIncome() > 0 &&
-                                                calculateTotalExpenses() / calculateTotalIncome() <= 0.9
-                                              ? "bg-yellow-500"
-                                              : "bg-red-500"
-                                    }`}
+                                    className={`h-2.5 rounded-full ${getExpenseRatioColor(calculateTotalIncome(), calculateTotalExpenses())}`}
                                     style={{
                                         width: `${
                                             calculateTotalIncome() > 0
@@ -82,27 +91,26 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                     }}
                                 />
                             </div>
-                            <p className="mt-1 text-xs text-muted-foreground">Keep expenses below 70% of income</p>
+                            <p className="mt-1 text-xs text-muted-foreground">Keep Expenses Below 70% Of Income</p>
                         </div>
 
                         <div>
                             <div className="mb-1 flex justify-between">
-                                <span className="text-sm font-medium">Essential vs. Non-essential Spending</span>
+                                <span className="text-sm font-medium">Essential VS. Non-essential Spending</span>
                                 <span className="text-sm font-medium">
                                     {calculateTotalExpenses() > 0
                                         ? `${(
                                               (filteredTransactions
                                                   .filter(
                                                       (t) =>
-                                                          t.type === "expense" &&
-                                                          (t.category === "Food" ||
-                                                              t.category === "Housing" ||
-                                                              t.category === "Transportation" ||
-                                                              t.category === "Utilities" ||
-                                                              t.category === "Health" ||
-                                                              t.category === "Education" ||
-                                                              t.category === "Tuition" ||
-                                                              t.category === "Textbooks"),
+                                                          t.category === "Food" ||
+                                                          t.category === "Housing" ||
+                                                          t.category === "Transportation" ||
+                                                          t.category === "Utilities" ||
+                                                          t.category === "Health" ||
+                                                          t.category === "Education" ||
+                                                          t.category === "Tuition" ||
+                                                          t.category === "Textbooks",
                                                   )
                                                   .reduce((sum, t) => sum + t.amount, 0) /
                                                   calculateTotalExpenses()) *
@@ -120,15 +128,14 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                                 ? (filteredTransactions
                                                       .filter(
                                                           (t) =>
-                                                              t.type === "expense" &&
-                                                              (t.category === "Food" ||
-                                                                  t.category === "Housing" ||
-                                                                  t.category === "Transportation" ||
-                                                                  t.category === "Utilities" ||
-                                                                  t.category === "Health" ||
-                                                                  t.category === "Education" ||
-                                                                  t.category === "Tuition" ||
-                                                                  t.category === "Textbooks"),
+                                                              t.category === "Food" ||
+                                                              t.category === "Housing" ||
+                                                              t.category === "Transportation" ||
+                                                              t.category === "Utilities" ||
+                                                              t.category === "Health" ||
+                                                              t.category === "Education" ||
+                                                              t.category === "Tuition" ||
+                                                              t.category === "Textbooks",
                                                       )
                                                       .reduce((sum, t) => sum + t.amount, 0) /
                                                       calculateTotalExpenses()) *
@@ -146,15 +153,14 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                                   (filteredTransactions
                                                       .filter(
                                                           (t) =>
-                                                              t.type === "expense" &&
-                                                              (t.category === "Food" ||
-                                                                  t.category === "Housing" ||
-                                                                  t.category === "Transportation" ||
-                                                                  t.category === "Utilities" ||
-                                                                  t.category === "Health" ||
-                                                                  t.category === "Education" ||
-                                                                  t.category === "Tuition" ||
-                                                                  t.category === "Textbooks"),
+                                                              t.category === "Food" ||
+                                                              t.category === "Housing" ||
+                                                              t.category === "Transportation" ||
+                                                              t.category === "Utilities" ||
+                                                              t.category === "Health" ||
+                                                              t.category === "Education" ||
+                                                              t.category === "Tuition" ||
+                                                              t.category === "Textbooks",
                                                       )
                                                       .reduce((sum, t) => sum + t.amount, 0) /
                                                       calculateTotalExpenses()) *
@@ -165,12 +171,12 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                 />
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">
-                                Balance between essential (blue) and non-essential (purple) spending
+                                Balance Between Essential (Blue) and Non-essential (Purple) Spending
                             </p>
                         </div>
                     </div>
                 ) : (
-                    <p className="text-center text-muted-foreground">Add transactions to see your budget health</p>
+                    <p className="text-center text-muted-foreground">Add Transactions to See Your Budget Health</p>
                 )}
             </CardContent>
         </Card>

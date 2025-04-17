@@ -43,10 +43,10 @@ export default function RHFSelect(props: RHFSelectProps) {
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            {options.map((option) => (
+                            {options.map((option, index) => (
                                 <SelectItem
-                                    id={`select-item-${name}-${option.value}`}
-                                    key={option.value}
+                                    id={`select-item-${name}-${option.value}-${index}-${option.label}`}
+                                    key={`${option.value}-${index}-${option.label}`}
                                     value={option.value}
                                 >
                                     <div className="flex items-center gap-2">

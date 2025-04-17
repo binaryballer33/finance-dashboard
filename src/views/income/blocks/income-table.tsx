@@ -4,8 +4,6 @@ import type { Income } from "@prisma/client"
 
 import { useState } from "react"
 
-import useGetIncomeByUserIdQuery from "@/api/incomes/queries/use-get-income-by-userId"
-
 import CustomTable from "@/components/tables/table"
 
 import CreateIncomeDialog from "./create-income-dialog"
@@ -15,19 +13,18 @@ import UpdateIncomeDialog from "./update-income-dialog"
 import useCreateIncomeTableColumns from "./use-create-income-table-columns"
 
 type IncomeTableProps = {
+    incomes: Income[]
     userId: string
 }
 
 export default function IncomeTable(props: IncomeTableProps) {
-    const { userId } = props
+    const { incomes, userId } = props
     const { columns } = useCreateIncomeTableColumns()
 
     const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
     const [updateDialogOpen, setUpdateRecordDialogOpen] = useState(false)
     const [deleteRecordDialogOpen, setDeleteRecordDialogOpen] = useState(false)
     const [selectedIncome, setSelectedRecord] = useState<Income | null>(null)
-
-    const { data: income = [] } = useGetIncomeByUserIdQuery(userId)
 
     return (
         <>
@@ -45,7 +42,7 @@ export default function IncomeTable(props: IncomeTableProps) {
                     tooltipContent: "Create New Income",
                     userId,
                 }}
-                data={income}
+                data={incomes}
                 deleteRecordButton={{
                     setDeleteRecordDialogOpen,
                     setSelectedRecord,
