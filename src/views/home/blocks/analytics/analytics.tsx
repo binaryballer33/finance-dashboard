@@ -69,7 +69,7 @@ export default function Analytics(props: AnalyticsProps) {
 
     return (
         <div className="} min-h-screen bg-background">
-            <div className="container mx-auto px-4 py-6 md:px-6">
+            <div className="container mx-auto space-y-4 px-4 py-6 md:px-6">
                 <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
 
                 <div className="mb-6 grid gap-6 overflow-x-auto md:grid-cols-5">
