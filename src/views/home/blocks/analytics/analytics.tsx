@@ -13,7 +13,7 @@ import type { DateRange } from "./utils/types"
 import BudgetHealth from "./budget/budget-health"
 import FinanceCard from "./cards/finance-card"
 import DateRangeSelector from "./common/date-range-selector"
-import ExpenseBreakdownBarChart from "./overview/expense-breakdown-pie-chart"
+import ExpenseBreakdownPieChart from "./overview/expense-breakdown-pie-chart"
 import MonthlyIncomeExpenseBarChart from "./overview/monthly-income-expense-bar-chart"
 import SpendingSummary from "./overview/spending-summary"
 import DailySpendingChart from "./spending-analysis/daily-spending-chart"
@@ -101,7 +101,7 @@ export default function Analytics(props: AnalyticsProps) {
                     <TabsContent className="space-y-4" value="overview">
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                             <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
-                            <ExpenseBreakdownBarChart categoryTotals={getCategoryTotals()} />
+                            <ExpenseBreakdownPieChart categoryTotals={getCategoryTotals()} />
                         </div>
 
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">

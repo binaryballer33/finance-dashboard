@@ -4,11 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 import COLORS from "../utils/constants"
 
-type ExpenseBreakdownBarChartProps = {
+type ExpenseBreakdownPieChartProps = {
     categoryTotals: { category: string; total: number }[]
 }
 
-export default function ExpenseBreakdownBarChart(props: ExpenseBreakdownBarChartProps) {
+export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChartProps) {
     const { categoryTotals } = props
 
     return (
