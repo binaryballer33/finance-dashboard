@@ -1,26 +1,29 @@
-import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer } from "recharts"
-import { format } from "date-fns"
+import type { Expense, Transaction } from "@prisma/client"
+
 import { useState } from "react"
 
+import { format } from "date-fns"
+import { X } from "lucide-react"
+import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer } from "recharts"
+
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
-import { X } from "lucide-react"
+
+import type { DateRange } from "../utils/types"
 
 import COLORS from "../utils/constants"
-import { Expense, Transaction } from "@prisma/client"
-import { DateRange } from "../utils/types"
 import getFilteredArrayByDateRange from "../utils/get-filtered-array-by-date-range"
 
 type ExpenseBreakdownPieChartProps = {
     categoryTotals: { category: string; total: number }[]
+    dateRange: DateRange
     expenses: Expense[]
     transactions: Transaction[]
-    dateRange: DateRange
 }
 
 export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChartProps) {
-    const { categoryTotals, expenses, transactions, dateRange } = props
+    const { categoryTotals, dateRange, expenses, transactions } = props
 
     const [activeCategory, setActiveCategory] = useState<any | null>(null)
     const filteredExpenses = getFilteredArrayByDateRange(expenses, dateRange)
@@ -51,8 +54,8 @@ export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChart
                             fill="#8884d8"
                             label={({ category, percent }) => `${category}: ${(percent * 100).toFixed(0)}%`}
                             labelLine={false}
-                            outerRadius={80}
                             onClick={(data) => handleClick(data.payload)}
+                            outerRadius={80}
                         >
                             {categoryTotals.map((_entry, index) => (
                                 <Cell fill={COLORS[index % COLORS.length]} key={`cell-${index}`} />
@@ -66,7 +69,7 @@ export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChart
                     <div className="absolute right-0 top-0 z-50 w-64 rounded-lg bg-background p-2 shadow-lg">
                         <div className="mb-2 flex items-center justify-between">
                             <h3 className="text-lg font-semibold">{activeCategory.category}</h3>
-                            <Button size="icon" variant="ghost" onClick={handleCloseTooltip} className="h-6 w-6">
+                            <Button className="h-6 w-6" onClick={handleCloseTooltip} size="icon" variant="ghost">
                                 <X className="h-4 w-4" />
                             </Button>
                         </div>

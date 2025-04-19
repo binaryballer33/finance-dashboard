@@ -105,10 +105,10 @@ export default function Analytics(props: AnalyticsProps) {
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                             <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
                             <ExpenseBreakdownPieChart
+                                categoryTotals={getCategoryTotals()}
                                 dateRange={dateRange}
                                 expenses={expenses}
                                 transactions={transactions}
-                                categoryTotals={getCategoryTotals()}
                             />
                         </div>
 
