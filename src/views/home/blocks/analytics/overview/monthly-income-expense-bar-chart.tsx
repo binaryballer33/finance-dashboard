@@ -18,7 +18,7 @@ export default function MonthlyIncomeExpenseBarChart(props: MonthlyIncomeExpense
         <Card>
             <CardHeader>
                 <CardTitle>Monthly Overview</CardTitle>
-                <CardDescription>Income, Expenses And Savings Balance Monthly Totals</CardDescription>
+                <CardDescription>Income, Expenses, Transactions And Savings Balance Monthly Totals</CardDescription>
             </CardHeader>
             <CardContent className="h-[300px]">
                 <ResponsiveContainer height="100%" width="100%">
@@ -30,6 +30,7 @@ export default function MonthlyIncomeExpenseBarChart(props: MonthlyIncomeExpense
                         <Legend />
                         <Bar dataKey="income" fill="#10b981" name="Income" />
                         <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
+                        <Bar dataKey="transactions" fill="#f59e0b" name="Transactions" />
                         <Bar dataKey="balance" fill="#3b82f6" name="Balance" />
                     </BarChart>
                 </ResponsiveContainer>

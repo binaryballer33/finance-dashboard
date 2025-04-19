@@ -65,7 +65,10 @@ export default function Analytics(props: AnalyticsProps) {
         })
     }, [transactions, dateRange])
 
-    const monthlyData = useCallback(() => getMonthlyData(incomes, expenses, dateRange), [incomes, expenses, dateRange])
+    const monthlyData = useCallback(
+        () => getMonthlyData(incomes, expenses, transactions, dateRange),
+        [incomes, expenses, transactions, dateRange],
+    )
 
     return (
         <div className="} min-h-screen bg-background">
@@ -101,7 +104,12 @@ export default function Analytics(props: AnalyticsProps) {
                     <TabsContent className="space-y-4" value="overview">
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                             <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
-                            <ExpenseBreakdownPieChart categoryTotals={getCategoryTotals()} />
+                            <ExpenseBreakdownPieChart
+                                dateRange={dateRange}
+                                expenses={expenses}
+                                transactions={transactions}
+                                categoryTotals={getCategoryTotals()}
+                            />
                         </div>
 
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
