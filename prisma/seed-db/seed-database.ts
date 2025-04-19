@@ -1,15 +1,14 @@
-import type { Expense as PrismaExpense, Income as PrismaIncome, Transaction as PrismaTransaction } from "@prisma/client"
-
 import { randomUUID } from "crypto"
 
+import categories from "@/mocks/categories"
 import getLastSixMonthsArray from "@/mocks/utils/get-last-six-months"
+import { type Expense as PrismaExpense, type Income as PrismaIncome, TransactionType } from "@prisma/client"
 import { hash } from "bcryptjs"
 
 import prisma from "@/lib/database/prisma"
 
 import tradesWithUserId from "./trades"
 
-type Transaction = Omit<PrismaTransaction, "createdAt" | "id" | "updatedAt">
 type Expense = Omit<PrismaExpense, "createdAt" | "id" | "updatedAt">
 type Income = Omit<PrismaIncome, "createdAt" | "id" | "updatedAt">
 
@@ -25,26 +24,26 @@ async function dropTables() {
     await prisma.verificationToken.deleteMany({})
     await prisma.passwordResetToken.deleteMany({})
     await prisma.trade.deleteMany({})
-    await prisma.transaction.deleteMany({})
     await prisma.expense.deleteMany({})
     await prisma.income.deleteMany({})
 
     console.log("Dropped Tables Successfully\n")
 }
 
-async function createRealisticTransactions(userId: string) {
-    console.log("Attempting To Create Transactions")
+async function createRealisticOneTimeExpenses(userId: string) {
+    console.log("Attempting To Create One Time Expenses")
 
-    const transactionsArray: Transaction[] = []
+    const expensesArray: Expense[] = []
     const lastSixMonthsArray = getLastSixMonthsArray()
 
     lastSixMonthsArray.forEach((monthDate) => {
-        const transactions = [
+        const expenses = [
             {
                 amount: 100 + Math.floor(Math.random() * 200),
                 category: "Food",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Churrascaria Dinner",
+                type: TransactionType.ONE_TIME,
                 userId,
             },
             {
@@ -52,6 +51,7 @@ async function createRealisticTransactions(userId: string) {
                 category: "Gas",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Gasoline",
+                type: TransactionType.ONE_TIME,
                 userId,
             },
             {
@@ -59,6 +59,7 @@ async function createRealisticTransactions(userId: string) {
                 category: "Entertainment",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Movie Date",
+                type: TransactionType.ONE_TIME,
                 userId,
             },
             {
@@ -66,6 +67,7 @@ async function createRealisticTransactions(userId: string) {
                 category: "Fitness",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Fitness Activities",
+                type: TransactionType.ONE_TIME,
                 userId,
             },
             {
@@ -73,6 +75,7 @@ async function createRealisticTransactions(userId: string) {
                 category: "Transportation",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Plane Ticket To Other Brazilian Cities",
+                type: TransactionType.ONE_TIME,
                 userId,
             },
             {
@@ -80,99 +83,8 @@ async function createRealisticTransactions(userId: string) {
                 category: "Shopping",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Clothes Shopping",
+                type: TransactionType.ONE_TIME,
                 userId,
-            },
-        ]
-
-        for (let i = 0; i < transactions.length; i += 1) {
-            const { amount } = transactions[i]
-            const { category } = transactions[i]
-            const { description } = transactions[i]
-            const date = new Date(monthDate.set("date", 2).format("YYYY-MM-DD"))
-
-            const transaction = { amount, category, date, description, userId }
-            transactionsArray.push(transaction)
-        }
-    })
-
-    try {
-        const result = await prisma.transaction.createMany({
-            data: transactionsArray,
-        })
-        console.log(`Successfully Inserted ${result.count} Records To Transactions Table\n`)
-    } catch (error) {
-        console.error("Error Inserting Records To Transactions Table", error)
-    }
-}
-
-async function createFakeTransactions(userId: string, count: number = 100) {
-    const fakeTransactions: Transaction[] = []
-
-    Array.from({ length: count }).forEach(() => {
-        const amount = Number((Math.random() * 1000).toFixed(2)) // Random amount between 0 and 1000
-        const date = new Date()
-        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
-        const category = `Lorem ipsum ${Math.floor(Math.random() * 10)}`
-        const description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos."
-
-        fakeTransactions.push({
-            amount,
-            category,
-            date,
-            description,
-            userId,
-        })
-    })
-
-    try {
-        const result = await prisma.transaction.createMany({
-            data: fakeTransactions,
-        })
-        console.log(`Successfully created ${result.count} transactions`)
-        return result
-    } catch (error) {
-        console.error("Error generating transactions:", error)
-        throw error
-    }
-}
-
-async function createTrades(userId: string) {
-    console.log("Attempting To Create Trades")
-
-    const trades = tradesWithUserId.map((trade) => ({ ...trade, userId }))
-
-    try {
-        const result = await prisma.trade.createMany({
-            data: trades,
-            skipDuplicates: true,
-        })
-        console.log(`Successfully Inserted ${result.count} Records To Trades Table\n`)
-    } catch (error) {
-        console.error("Error Inserting Records To Trades Table", error)
-    }
-}
-
-async function createRealisticExpenses(userId: string) {
-    console.log("Attempting To Create Expenses")
-
-    const expensesArray: Expense[] = []
-    const lastSixMonthsArray = getLastSixMonthsArray()
-
-    lastSixMonthsArray.forEach((monthDate) => {
-        const expenses = [
-            { amount: 1000, category: "Housing", description: "Rent" },
-            { amount: 500 + Math.floor(Math.random() * 250), category: "Food", description: "Food Allowance" },
-            { amount: 500 + Math.floor(Math.random() * 250), category: "Entertainment", description: "Entertainment" },
-            { amount: 200 + Math.floor(Math.random() * 50), category: "Transportation", description: "Car Note" },
-            {
-                amount: 100 + Math.floor(Math.random() * 150),
-                category: "Utilities",
-                description: "Electricity & Water",
-            },
-            {
-                amount: 50 + Math.floor(Math.random() * 5),
-                category: "Streaming Services",
-                description: "Netflix, Hulu, Disney+, HBO Max",
             },
         ]
 
@@ -180,23 +92,125 @@ async function createRealisticExpenses(userId: string) {
             const { amount } = expenses[i]
             const { category } = expenses[i]
             const { description } = expenses[i]
+            const { type } = expenses[i]
             const date = new Date(monthDate.set("date", 2).format("YYYY-MM-DD"))
 
-            const expense = { amount, category, date, description, userId }
+            const expense = { amount, category, date, description, type, userId }
+            expensesArray.push(expense)
+        }
+    })
+
+    try {
+        const result = await prisma.expense.createMany({
+            data: expensesArray,
+        })
+        console.log(`Successfully Inserted ${result.count} Records To Expenses Table As One Time Expenses\n`)
+    } catch (error) {
+        console.error("Error Inserting Records To Expenses Table", error)
+    }
+}
+
+async function createFakeOneTimeExpenses(userId: string, count: number = 100) {
+    const fakeExpenses: Expense[] = []
+
+    Array.from({ length: count }).forEach(() => {
+        const amount = Number((Math.random() * 1000).toFixed(2)) // Random amount between 0 and 1000
+        const date = new Date()
+        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
+        const randomCategoryIndex = Math.floor(Math.random() * categories.length)
+        const category = categories[randomCategoryIndex].value
+        const description = `${categories[randomCategoryIndex].label} Expense For Me`
+
+        fakeExpenses.push({
+            amount,
+            category,
+            date,
+            description,
+            type: TransactionType.ONE_TIME,
+            userId,
+        })
+    })
+
+    try {
+        const result = await prisma.expense.createMany({
+            data: fakeExpenses,
+        })
+        console.log(`Successfully created ${result.count} expenses`)
+        return result
+    } catch (error) {
+        console.error("Error generating expenses:", error)
+        throw error
+    }
+}
+
+async function createRealisticRecurringExpenses(userId: string) {
+    console.log("Attempting To Create Recurring Realistic Expenses")
+
+    const expensesArray: Expense[] = []
+    const lastSixMonthsArray = getLastSixMonthsArray()
+
+    lastSixMonthsArray.forEach((monthDate) => {
+        const expenses: Omit<Expense, "createdAt" | "date" | "id" | "updatedAt">[] = [
+            { amount: 1000, category: "Housing", description: "Rent", type: TransactionType.RECURRING, userId },
+            {
+                amount: 500 + Math.floor(Math.random() * 250),
+                category: "Food",
+                description: "Food Allowance",
+                type: TransactionType.RECURRING,
+                userId,
+            },
+            {
+                amount: 500 + Math.floor(Math.random() * 250),
+                category: "Entertainment",
+                description: "Entertainment",
+                type: TransactionType.RECURRING,
+                userId,
+            },
+            {
+                amount: 200 + Math.floor(Math.random() * 50),
+                category: "Transportation",
+                description: "Car Note",
+                type: TransactionType.RECURRING,
+                userId,
+            },
+            {
+                amount: 100 + Math.floor(Math.random() * 150),
+                category: "Utilities",
+                description: "Electricity & Water",
+                type: TransactionType.RECURRING,
+                userId,
+            },
+            {
+                amount: 50 + Math.floor(Math.random() * 5),
+                category: "Streaming Services",
+                description: "Netflix, Hulu, Disney+, HBO Max",
+                type: TransactionType.RECURRING,
+                userId,
+            },
+        ]
+
+        for (let i = 0; i < expenses.length; i += 1) {
+            const { amount } = expenses[i]
+            const { category } = expenses[i]
+            const { description } = expenses[i]
+            const { type } = expenses[i]
+            const date = new Date(monthDate.set("date", 2).format("YYYY-MM-DD"))
+
+            const expense = { amount, category, date, description, type, userId }
             expensesArray.push(expense)
         }
     })
 
     try {
         const result = await prisma.expense.createMany({ data: expensesArray })
-        console.log(`Successfully Inserted ${result.count} Records To Expenses Table\n`)
+        console.log(`Successfully Inserted ${result.count} Recurring Realistic Expense Records To Expenses Table\n`)
     } catch (error) {
-        console.error("Error Inserting Records To Expenses Table", error)
+        console.error("Error Inserting Recurring Realistic Expense Records To Expenses Table", error)
     }
 }
 
-async function createFakeExpenses(userId: string, count: number = 5) {
-    console.log("Attempting To Create Expenses")
+async function createFakeRecurringExpenses(userId: string, count: number = 5) {
+    console.log("Attempting To Create Fake Recurring Expenses")
     const fakeExpenses: Expense[] = []
 
     Array.from({ length: count }).forEach((_, index) => {
@@ -213,6 +227,7 @@ async function createFakeExpenses(userId: string, count: number = 5) {
             category: `Lorem ipsum ${index}`,
             date,
             description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+            type: TransactionType.RECURRING,
             userId,
         })
     })
@@ -221,36 +236,49 @@ async function createFakeExpenses(userId: string, count: number = 5) {
         const result = await prisma.expense.createMany({
             data: fakeExpenses,
         })
-        console.log(`Successfully Inserted ${result.count} Records To Expenses Table\n`)
+        console.log(`Successfully Inserted ${result.count} Fake Recurring Expense Records To Expenses Table\n`)
     } catch (error) {
-        console.error("Error Inserting Records To Expenses Table", error)
+        console.error("Error Inserting Fake Recurring Expense Records To Expenses Table", error)
     }
 }
 
-async function createRealisticIncomes(userId: string) {
-    console.log("Attempting To Create Incomes")
+async function createRealisticRecurringIncomes(userId: string) {
+    console.log("Attempting To Create Recurring Realistic Incomes")
 
     const incomesArray: Income[] = []
     const lastSixMonthsArray = getLastSixMonthsArray()
 
     lastSixMonthsArray.forEach((monthDate) => {
-        const incomes = [
+        const incomes: Omit<Income, "createdAt" | "date" | "id" | "updatedAt" | "userId">[] = [
             {
                 amount: 1000 + Math.floor(Math.random() * 500),
                 category: "Content Creation",
                 description: "Youtube Money",
+                type: TransactionType.RECURRING,
             },
             {
                 amount: 5000 + Math.floor(Math.random() * 10000),
                 category: "Government Contracting",
                 description: "Government Contracting",
+                type: TransactionType.RECURRING,
             },
-            { amount: 3300, category: "Salary", description: "Monthly Salary From Job" },
-            { amount: 500, category: "Stock Dividends", description: "Dividends From Stock Holdings" },
+            {
+                amount: 3300,
+                category: "Salary",
+                description: "Monthly Salary From Job",
+                type: TransactionType.RECURRING,
+            },
+            {
+                amount: 500,
+                category: "Stock Dividends",
+                description: "Dividends From Stock Holdings",
+                type: TransactionType.RECURRING,
+            },
             {
                 amount: 1500 + Math.floor(Math.random() * 1000),
                 category: "Stock Trading",
                 description: "Covered Calls & Cash Secured Puts",
+                type: TransactionType.RECURRING,
             },
         ]
 
@@ -258,9 +286,10 @@ async function createRealisticIncomes(userId: string) {
             const { amount } = incomes[i]
             const { category } = incomes[i]
             const { description } = incomes[i]
+            const { type } = incomes[i]
             const date = new Date(monthDate.set("date", 2).format("YYYY-MM-DD"))
 
-            const income = { amount, category, date, description, userId }
+            const income = { amount, category, date, description, type, userId }
             incomesArray.push(income)
         }
     })
@@ -269,14 +298,14 @@ async function createRealisticIncomes(userId: string) {
         const result = await prisma.income.createMany({
             data: incomesArray,
         })
-        console.log(`Successfully Inserted ${result.count} Records To Income Table\n`)
+        console.log(`Successfully Inserted ${result.count} Recurring Realistic Income Records To Income Table\n`)
     } catch (error) {
-        console.error("Error Inserting Records To Income Table", error)
+        console.error("Error Inserting Recurring Realistic Income Records To Income Table", error)
     }
 }
 
-async function createFakeIncomes(userId: string, count: number = 5) {
-    console.log("Attempting To Create Income")
+async function createFakeRecurringIncomes(userId: string, count: number = 5) {
+    console.log("Attempting To Create Fake Recurring Incomes")
 
     const fakeIncomes: Income[] = []
 
@@ -294,6 +323,7 @@ async function createFakeIncomes(userId: string, count: number = 5) {
             category: `Lorem ipsum ${index}`,
             date,
             description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+            type: TransactionType.RECURRING,
             userId,
         })
     })
@@ -302,9 +332,25 @@ async function createFakeIncomes(userId: string, count: number = 5) {
         const result = await prisma.income.createMany({
             data: fakeIncomes,
         })
-        console.log(`Successfully Inserted ${result.count} Records To Income Table\n`)
+        console.log(`Successfully Inserted ${result.count} Fake Recurring Income Records To Income Table\n`)
     } catch (error) {
-        console.error("Error Inserting Records To Income Table", error)
+        console.error("Error Inserting Fake Recurring Income Records To Income Table", error)
+    }
+}
+
+async function createTrades(userId: string) {
+    console.log("Attempting To Create Trades")
+
+    const trades = tradesWithUserId.map((trade) => ({ ...trade, userId }))
+
+    try {
+        const result = await prisma.trade.createMany({
+            data: trades,
+            skipDuplicates: true,
+        })
+        console.log(`Successfully Inserted ${result.count} Records To Trades Table\n`)
+    } catch (error) {
+        console.error("Error Inserting Records To Trades Table", error)
     }
 }
 
@@ -356,14 +402,14 @@ async function seedDatabase() {
         await createUsers()
 
         await createTrades(gmailUserId)
-        await createRealisticTransactions(gmailUserId)
-        await createRealisticExpenses(gmailUserId)
-        await createRealisticIncomes(gmailUserId)
+        await createRealisticOneTimeExpenses(gmailUserId)
+        await createRealisticRecurringExpenses(gmailUserId)
+        await createRealisticRecurringIncomes(gmailUserId)
 
         await createTrades(outlookUserId)
-        await createFakeTransactions(outlookUserId, 10000)
-        await createFakeExpenses(outlookUserId, 10)
-        await createFakeIncomes(outlookUserId, 20)
+        await createFakeOneTimeExpenses(outlookUserId, 10000)
+        await createFakeRecurringExpenses(outlookUserId, 10)
+        await createFakeRecurringIncomes(outlookUserId, 20)
 
         // sometime the seed will not fully work because all the yugioh cards or users are not created yet
         // await new Promise((resolve) => setTimeout(resolve, 3000))

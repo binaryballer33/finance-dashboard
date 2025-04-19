@@ -9,7 +9,8 @@ import { toast } from "sonner"
 import deleteExpense from "@/actions/expenses/mutations/delete-expense"
 
 type Expense = Omit<PrismaExpense, "createdAt" | "updatedAt">
-type MutationContext = { cacheBeforeMutation?: PrismaExpense[]; loadingToastId: number | string }
+type InfiniteQueryData = { pageParams: number[]; pages: Expense[][] }
+type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
 
 /*
  * Id gets created after item is added to the database,
@@ -51,7 +52,7 @@ export default function useDeleteExpenseMutation() {
             })
 
             // get the previous state of the cache before modifying the cache, for rollback on error purposes
-            const cacheBeforeMutation = queryClient.getQueryData<PrismaExpense[]>(
+            const cacheBeforeMutation = queryClient.getQueryData<InfiniteQueryData>(
                 QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(expense.userId),
             )
 
@@ -72,10 +73,13 @@ export default function useDeleteExpenseMutation() {
             // update local cache with the updated expense
             queryClient.setQueryData(
                 QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(expense.userId),
-                (oldExpenses: PrismaExpense[]) => {
-                    if (!oldExpenses) return oldExpenses
+                (oldData: InfiniteQueryData | undefined) => {
+                    if (!oldData) return oldData
 
-                    return oldExpenses.filter((oldExpense) => oldExpense.id !== expense.id)
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page) => page.filter((oldExpense) => oldExpense.id !== expense.id)),
+                    }
                 },
             )
         },

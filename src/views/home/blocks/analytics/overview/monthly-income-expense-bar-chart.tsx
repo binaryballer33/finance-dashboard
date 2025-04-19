@@ -8,6 +8,8 @@ type MonthlyIncomeExpenseBarChartProps = {
         expenses: number
         income: number
         name: string
+        oneTimeExpensesTotal: number
+        recurringExpensesTotal: number
     }[]
 }
 
@@ -26,15 +28,55 @@ export default function MonthlyIncomeExpenseBarChart(props: MonthlyIncomeExpense
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
-                        <ReTooltip formatter={(value) => `$${Number(value).toFixed(2)}`} />
+                        <ReTooltip content={<CustomTooltip active label="test" payload={[]} />} />
                         <Legend />
                         <Bar dataKey="income" fill="#10b981" name="Income" />
                         <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
-                        <Bar dataKey="transactions" fill="#f59e0b" name="Transactions" />
-                        <Bar dataKey="balance" fill="#3b82f6" name="Balance" />
+                        <Bar dataKey="balance" fill="#f59e0b" name="Balance" />
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>
         </Card>
     )
+}
+
+type CustomTooltipProps = {
+    active: boolean
+    label: string
+    payload: any[]
+}
+
+const CustomTooltip = (props: CustomTooltipProps) => {
+    const { active, label, payload } = props
+
+    if (active && payload && payload.length) {
+        const expenseData = payload.find((p: any) => p.dataKey === "expenses")
+        const incomeData = payload.find((p: any) => p.dataKey === "income")
+        const balanceData = payload.find((p: any) => p.dataKey === "balance")
+        const entry = payload[0]?.payload || {}
+        const recurringExpenses = entry.recurringExpensesTotal || 0
+        const oneTimeExpenses = entry.oneTimeExpensesTotal || 0
+
+        return (
+            <div className="rounded border bg-white p-4 shadow-sm">
+                <p className="text-sm font-medium">{label}</p>
+
+                <div className="flex flex-col gap-2">
+                    <p className="text-sm text-green-500">Income: ${Number(incomeData.value).toFixed(2)}</p>
+
+                    <div className="border-y text-xs">
+                        <p className="text-sm text-red-500">Expenses: ${Number(expenseData.value).toFixed(2)}</p>
+                        <ul className="ml-2 list-disc pl-2">
+                            <li>Recurring: ${Number(recurringExpenses).toFixed(2)}</li>
+                            <li>One-Time: ${Number(oneTimeExpenses).toFixed(2)}</li>
+                        </ul>
+                    </div>
+
+                    <p className="text-sm text-blue-500">Balance: ${Number(balanceData.value).toFixed(2)}</p>
+                </div>
+            </div>
+        )
+    }
+
+    return null
 }

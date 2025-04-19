@@ -51,19 +51,27 @@ export default function DeleteIncomeDialog(props: DeleteIncomeDialogProps) {
                             <span className="text-lg">Amount: </span>
                             <span className="ml-2 text-lg font-medium">{income.amount} USD</span>
                         </div>
+
                         <div
                             className={`flex items-center ${income.description?.length && income.description.length > 15 ? "flex-col !items-start gap-1" : ""}`}
                         >
                             <span className="text-lg">Description: </span>
                             <span className="ml-2 text-lg font-medium">{income.description}</span>
                         </div>
+
                         <div className="flex items-center">
                             <span className="text-lg">Category: </span>
                             <span className="ml-2 text-lg font-medium">{income.category}</span>
                         </div>
+
                         <div className="flex items-center">
                             <span className="text-lg">Date Of Income: </span>
                             <span className="ml-2 text-lg font-medium">{income.date.toLocaleDateString()}</span>
+                        </div>
+
+                        <div className="flex items-center">
+                            <span className="text-lg">Type: </span>
+                            <span className="ml-2 text-lg font-medium">{income.type}</span>
                         </div>
                     </div>
                 </Card>

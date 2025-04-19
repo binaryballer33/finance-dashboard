@@ -69,6 +69,11 @@ enum Role {
   ADMIN
 }
 
+enum TransactionType {
+  ONE_TIME
+  RECURRING
+}
+
 model User {
   id                      String                 @id @default(uuid())
   email                   String                 @unique
@@ -85,7 +90,6 @@ model User {
   accounts                Account[]
   incomes                 Income[]
   expenses                Expense[]
-  transactions            Transaction[]
   trades                  Trade[]
   isTwoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation   TwoFactorConfirmation? // 1:1 relation to TwoFactorConfirmation
@@ -125,37 +129,27 @@ model Trade {
 }
 
 model Income {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   amount      Float
   date        DateTime
   description String?
   category    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  User        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  type        TransactionType
 }
 
 model Expense {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   amount      Float
   date        DateTime
   description String?
   category    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  User        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-}
-
-model Transaction {
-  id          String   @id @default(cuid())
-  amount      Float
-  date        DateTime
-  description String?
-  category    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
+  type        TransactionType
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import type { Expense } from "@prisma/client"
+import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query"
 
 import { useState } from "react"
 
@@ -13,12 +14,14 @@ import UpdateExpenseDialog from "./update-expense-dialog"
 import useCreateExpensesTableColumns from "./use-create-expenses-table-columns"
 
 type ExpensesTableProps = {
-    expenses: Expense[]
+    infiniteQuery: UseInfiniteQueryResult<InfiniteData<Expense[], unknown>, Error>
     userId: string
 }
 
 export default function ExpensesTable(props: ExpensesTableProps) {
-    const { expenses, userId } = props
+    const { infiniteQuery, userId } = props
+    const expenses = infiniteQuery.data?.pages.flatMap((page) => page) ?? []
+
     const { columns } = useCreateExpensesTableColumns()
 
     const [createRecordDialogOpen, setCreateRecordDialogOpen] = useState(false)
@@ -48,6 +51,12 @@ export default function ExpensesTable(props: ExpensesTableProps) {
                     setSelectedRecord,
                 }}
                 expandRowDetailComponent={ExpenseRowDetail}
+                infiniteQueryHandlers={{
+                    fetchNextPage: infiniteQuery.fetchNextPage,
+                    hasNextPage: infiniteQuery.hasNextPage,
+                    infiniteQueryButtonTooltipContent: "Load More Transactions",
+                    isFetching: infiniteQuery.isFetching,
+                }}
                 updateRecordButton={{
                     setSelectedRecord,
                     setUpdateRecordDialogOpen,

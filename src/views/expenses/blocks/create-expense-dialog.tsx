@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form"
 import useCreateExpenseMutation from "@/api/expenses/mutations/use-create-expense"
 import categories from "@/mocks/categories"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { TransactionType } from "@prisma/client"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -44,6 +45,7 @@ export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
             category: data.category,
             date: new Date(data.date),
             description: data.description,
+            type: data.type,
             userId,
         })
 
@@ -64,7 +66,14 @@ export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
                         <RHFSelect label="Category" name="category" options={categories} />
                         <CreateExpenseInput<Expense> label="Description" name="description" type="text" />
                         <RHFCalendar label="Date" name="date" />
-
+                        <RHFSelect
+                            label="Type"
+                            name="type"
+                            options={[
+                                { label: "One Time", value: TransactionType.ONE_TIME },
+                                { label: "Recurring", value: TransactionType.RECURRING },
+                            ]}
+                        />
                         <DialogFooter>
                             <Button onClick={() => setCreateRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel

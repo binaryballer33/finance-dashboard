@@ -9,8 +9,8 @@ import { toast } from "sonner"
 import updateExpense from "@/actions/expenses/mutations/update-expense"
 
 type Expense = Omit<PrismaExpense, "createdAt" | "updatedAt">
-type MutationContext = { cacheBeforeMutation?: PrismaExpense[]; loadingToastId: number | string }
-
+type InfiniteQueryData = { pageParams: number[]; pages: Expense[][] }
+type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
 /*
  * Id gets created after item is added to the database,
  * need to invalidate the cache when creating the card because the id is not known until the card is created
@@ -50,7 +50,7 @@ export default function useUpdateExpenseMutation() {
             })
 
             // get the previous state of the cache before modifying the cache, for rollback on error purposes
-            const cacheBeforeMutation = queryClient.getQueryData<PrismaExpense[]>(
+            const cacheBeforeMutation = queryClient.getQueryData<InfiniteQueryData>(
                 QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(expense.userId),
             )
 
@@ -69,8 +69,16 @@ export default function useUpdateExpenseMutation() {
             // optimistically update the cache to what it should be if there are no errors
             queryClient.setQueryData(
                 QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(expense.userId),
-                (oldExpenses: PrismaExpense[]) =>
-                    oldExpenses?.map((oldExpense) => (oldExpense.id === expense.id ? expense : oldExpense)),
+                (oldData: InfiniteQueryData | undefined) => {
+                    if (!oldData) return oldData
+
+                    return {
+                        ...oldData,
+                        pages: oldData.pages.map((page) =>
+                            page.map((oldExpense) => (oldExpense.id === expense.id ? expense : oldExpense)),
+                        ),
+                    }
+                },
             )
         },
 

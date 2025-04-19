@@ -1,3 +1,4 @@
+import { TransactionType } from "@prisma/client"
 import { z } from "zod"
 
 export const ExpenseSchema = z.object({
@@ -7,13 +8,15 @@ export const ExpenseSchema = z.object({
         required_error: "Please Select A Date",
     }),
     description: z.string().min(1, "Description Is Required"),
+    type: z.nativeEnum(TransactionType),
 })
 
 export type Expense = z.infer<typeof ExpenseSchema>
 
 export const defaultValuesExpense = {
     amount: 1000,
-    category: "Job",
+    category: "Food",
     date: new Date(),
     description: "",
+    type: TransactionType.ONE_TIME,
 } satisfies Expense

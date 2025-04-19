@@ -49,6 +49,16 @@ export default function useCreateExpensesTableColumns() {
             id: "Date",
             minSize: 120,
         }),
+
+        columnHelper.accessor("type", {
+            cell: ({ row }) => {
+                const { type } = row.original
+                return <span>{type}</span>
+            },
+            header: () => <span>Type</span>,
+            id: "Type",
+            minSize: 80,
+        }),
     ] as ColumnDef<Expense>[]
 
     return { columns }

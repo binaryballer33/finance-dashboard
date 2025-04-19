@@ -1,6 +1,5 @@
 "use client"
 
-import type { Expense } from "@prisma/client"
 import type { Dispatch, SetStateAction } from "react"
 
 import { ExpenseSchema } from "@/types/forms/expense"
@@ -10,6 +9,7 @@ import { useForm } from "react-hook-form"
 import useUpdateExpenseMutation from "@/api/expenses/mutations/use-update-expense"
 import categories from "@/mocks/categories"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { type Expense, TransactionType } from "@prisma/client"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -34,7 +34,7 @@ type UpdateExpenseDialogProps = {
     userId: string
 }
 
-type FormValues = Pick<Expense, "amount" | "category" | "date" | "description">
+type FormValues = Pick<Expense, "amount" | "category" | "date" | "description" | "type">
 
 export default function UpdateExpenseDialog(props: UpdateExpenseDialogProps) {
     const { expense, setUpdateRecordDialogOpen, updateRecordDialogOpen, userId } = props
@@ -75,7 +75,14 @@ export default function UpdateExpenseDialog(props: UpdateExpenseDialogProps) {
                         <RHFSelect label="Category" name="category" options={categories} />
                         <CreateExpenseInput<Expense> label="Description" name="description" type="text" />
                         <RHFCalendar label="Date" name="date" />
-
+                        <RHFSelect
+                            label="Type"
+                            name="type"
+                            options={[
+                                { label: "One Time", value: TransactionType.ONE_TIME },
+                                { label: "Recurring", value: TransactionType.RECURRING },
+                            ]}
+                        />
                         <DialogFooter>
                             <Button onClick={() => setUpdateRecordDialogOpen(false)} type="button" variant="outline">
                                 Cancel

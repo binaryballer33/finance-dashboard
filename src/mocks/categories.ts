@@ -1,4 +1,4 @@
-import type { Category } from "@/types/forms/transaction-categories"
+import type { Category } from "@/types/forms/expense-categories"
 
 import { BookOpen, Car, CircleHelp, Clapperboard, House, ShoppingCart, SubscriptIcon, Zap } from "lucide-react"
 import { GiFruitBowl, GiGymBag } from "react-icons/gi"

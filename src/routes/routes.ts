@@ -1,17 +1,5 @@
 import { BACKEND_BASE_URL } from "@/lib/secrets" // API URLs
 
-// API URLs
-const TRANSACTION_API_BASE_URL = `${BACKEND_BASE_URL}/api/transaction`
-
-const transactionApi = {
-    create: `${TRANSACTION_API_BASE_URL}/post`,
-    delete: (transactionId: number) => `${TRANSACTION_API_BASE_URL}/delete/${transactionId}`,
-    details: (transactionId: number) => `${TRANSACTION_API_BASE_URL}/get/${transactionId}`, // get specific card
-    read: `${TRANSACTION_API_BASE_URL}/get`, // get all cards
-    root: TRANSACTION_API_BASE_URL,
-    update: (transactionId: number) => `${TRANSACTION_API_BASE_URL}/patch/${transactionId}`,
-}
-
 const user = {
     expenses: "/expenses",
     home: "/",
@@ -20,7 +8,6 @@ const user = {
     profile: `/user/profile`,
     savings: "/savings",
     settings: `/user/settings`,
-    transactions: "/transactions",
 }
 
 const nextAuth = {
@@ -56,7 +43,7 @@ const routes = {
 
     // used for making api calls
     api: {
-        transaction: { ...transactionApi },
+        test: { "example ..transactionsApi": "" },
     },
 
     // routes used for user authentication

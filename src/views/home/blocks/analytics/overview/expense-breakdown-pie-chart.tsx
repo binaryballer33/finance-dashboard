@@ -1,4 +1,4 @@
-import type { Expense, Transaction } from "@prisma/client"
+import type { Expense } from "@prisma/client"
 
 import { useState } from "react"
 
@@ -19,15 +19,13 @@ type ExpenseBreakdownPieChartProps = {
     categoryTotals: { category: string; total: number }[]
     dateRange: DateRange
     expenses: Expense[]
-    transactions: Transaction[]
 }
 
 export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChartProps) {
-    const { categoryTotals, dateRange, expenses, transactions } = props
+    const { categoryTotals, dateRange, expenses } = props
 
     const [activeCategory, setActiveCategory] = useState<any | null>(null)
     const filteredExpenses = getFilteredArrayByDateRange(expenses, dateRange)
-    const filteredTransactions = getFilteredArrayByDateRange(transactions, dateRange)
 
     // Handle pie slice click
     const handleClick = (data: any) => {
@@ -93,32 +91,13 @@ export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChart
                                 </>
                             )}
 
-                            {/* Transactions */}
-                            {filteredTransactions.filter((trx) => trx.category === activeCategory.category).length >
-                                0 && (
-                                <>
-                                    <h4 className="mb-1 mt-2 text-sm font-semibold">Transactions:</h4>
-                                    <ul className="list-disc space-y-1 pl-4 text-xs">
-                                        {filteredTransactions
-                                            .filter((trx) => trx.category === activeCategory.category)
-                                            .map((trx) => (
-                                                <li key={`trx-${trx.id}`}>
-                                                    {trx.description || "N/A"} - ${trx.amount.toFixed(2)} on{" "}
-                                                    {format(new Date(trx.date), "PP")}
-                                                </li>
-                                            ))}
-                                    </ul>
-                                </>
-                            )}
-
                             {/* No items message */}
-                            {filteredExpenses.filter((exp) => exp.category === activeCategory.category).length === 0 &&
-                                filteredTransactions.filter((trx) => trx.category === activeCategory.category)
-                                    .length === 0 && (
-                                    <p className="mt-2 text-xs text-muted-foreground">
-                                        No individual items found for this category.
-                                    </p>
-                                )}
+                            {filteredExpenses.filter((exp) => exp.category === activeCategory.category).length ===
+                                0 && (
+                                <p className="mt-2 text-xs text-muted-foreground">
+                                    No individual items found for this category.
+                                </p>
+                            )}
                         </ScrollArea>
                     </div>
                 )}

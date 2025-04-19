@@ -1,6 +1,6 @@
 "use server"
 
-import type { Expense, Income, Trade, Transaction } from "@prisma/client"
+import type { Expense, Income, Trade } from "@prisma/client"
 import type { DehydratedState } from "@tanstack/react-query"
 
 import createQueryClient from "@/api/query-client-server-component"
@@ -10,7 +10,6 @@ import { dehydrate } from "@tanstack/react-query"
 import getExpensesByUserId from "@/actions/expenses/queries/get-expenses-by-userId"
 import getIncomeByUserId from "@/actions/income/queries/get-income-by-userId"
 import getTradesByUserId from "@/actions/trades/queries/get-trades-by-userId"
-import getTransactionsByUserId from "@/actions/transactions/queries/get-transactions-by-userId"
 import getCurrentUser from "@/actions/user/get-current-user"
 
 type InfiniteQueryData<T> = {
@@ -23,7 +22,6 @@ type PrefetchHomePageDataDehydrateStateResponse = {
     expenses: Expense[]
     incomes: Income[]
     trades: Trade[]
-    transactions: Transaction[]
 }
 
 /*
@@ -39,41 +37,22 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
     const user = await getCurrentUser()
     if (!user) return null
 
-    // prefetch all transactions using infinite query since there are alot of transactions and store the data in the cache
+    // prefetch all expenses using infinite query since there are alot of expenses and store the data in the cache
     await queryClient.prefetchInfiniteQuery({
         initialPageParam: 0,
 
         queryFn: async ({ pageParam = 0 }) => {
-            const transactions = await getTransactionsByUserId(user.id, pageParam, 100)
-            if (!transactions) throw new Error("Failed To Fetch Transactions")
-            return transactions
+            const expenses = (await getExpensesByUserId(user.id, pageParam, 100)) ?? []
+            return expenses
         },
 
-        queryKey: QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(user.id),
-    })
-
-    // get the transactions from the cache and return them in case a component needs them
-    const transactions = queryClient
-        .getQueryData<InfiniteQueryData<Transaction>>(QUERY_KEYS.GET_ALL_TRANSACTIONS_BY_USER_ID(user.id))
-        ?.pages.flatMap((page) => page)!
-
-    // prefetch all trades by user id and store the data in the cache
-    await queryClient.prefetchQuery({
-        queryFn: async () => (await getTradesByUserId(user.id)) ?? [],
-        queryKey: QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(user.id),
-    })
-
-    // get the trades from the cache and return them in case a component needs them
-    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(user.id))!
-
-    // prefetch all expenses by user id and store the data in the cache
-    await queryClient.prefetchQuery({
-        queryFn: async () => (await getExpensesByUserId(user.id)) ?? [],
         queryKey: QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(user.id),
     })
 
     // get the expenses from the cache and return them in case a component needs them
-    const expenses = queryClient.getQueryData<Expense[]>(QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(user.id))!
+    const expenses = queryClient
+        .getQueryData<InfiniteQueryData<Expense>>(QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(user.id))
+        ?.pages.flatMap((page) => page)!
 
     // prefetch all incomes by user id and store the data in the cache
     await queryClient.prefetchQuery({
@@ -84,6 +63,15 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
     // get the incomes from the cache and return them in case a component needs them
     const incomes = queryClient.getQueryData<Income[]>(QUERY_KEYS.GET_ALL_INCOMES_BY_USER_ID(user.id))!
 
+    // prefetch all trades by user id and store the data in the cache
+    await queryClient.prefetchQuery({
+        queryFn: async () => (await getTradesByUserId(user.id)) ?? [],
+        queryKey: QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(user.id),
+    })
+
+    // get the trades from the cache and return them in case a component needs them
+    const trades = queryClient.getQueryData<Trade[]>(QUERY_KEYS.GET_ALL_TRADES_BY_USER_ID(user.id))!
+
     // Important: Dehydrate the client AFTER prefetching so that the data is available immediately
     const dehydratedState = dehydrate(queryClient)
 
@@ -93,6 +81,5 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
         expenses,
         incomes,
         trades,
-        transactions,
     }
 }

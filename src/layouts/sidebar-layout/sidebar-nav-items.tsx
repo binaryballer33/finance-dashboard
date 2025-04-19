@@ -1,4 +1,4 @@
-import { BarChart3, LayoutDashboard, PiggyBank, ReceiptText, User } from "lucide-react"
+import { BarChart3, LayoutDashboard, PiggyBank, User } from "lucide-react"
 import { GiPayMoney } from "react-icons/gi"
 import { TbMoneybag } from "react-icons/tb"
 
@@ -9,11 +9,6 @@ const navItems = [
         href: routes.user.home,
         icon: LayoutDashboard,
         title: "Dashboard",
-    },
-    {
-        href: routes.user.transactions,
-        icon: ReceiptText,
-        title: "Transactions",
     },
     {
         href: routes.user.investments,

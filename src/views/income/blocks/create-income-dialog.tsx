@@ -44,6 +44,7 @@ export default function CreateIncomeDialog(props: CreateIncomeDialogProps) {
             category: data.category,
             date: new Date(data.date),
             description: data.description,
+            type: data.type,
             userId,
         })
 

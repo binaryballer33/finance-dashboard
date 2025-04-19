@@ -1,3 +1,4 @@
+import { TransactionType } from "@prisma/client"
 import { z } from "zod"
 
 export const IncomeSchema = z.object({
@@ -7,6 +8,7 @@ export const IncomeSchema = z.object({
         required_error: "Please Select A Date",
     }),
     description: z.string().min(1, "Description Is Required"),
+    type: z.nativeEnum(TransactionType),
 })
 
 export type Income = z.infer<typeof IncomeSchema>
@@ -16,4 +18,5 @@ export const defaultValuesIncome = {
     category: "Job",
     date: new Date(),
     description: "",
+    type: TransactionType.ONE_TIME,
 } satisfies Income

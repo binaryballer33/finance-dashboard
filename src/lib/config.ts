@@ -13,7 +13,6 @@ type AppMetadata = {
     resetPassword: Metadata
     savings: Metadata
     signOut: Metadata
-    transactions: Metadata
     userProfile: Metadata
     verifyEmail: Metadata
 }
@@ -26,7 +25,6 @@ const icons = {
     income: "/icons/income.png",
     investments: "/icons/investments.png",
     savings: "/icons/savings.png",
-    transactions: "/icons/transactions.png",
     userProfile: "/icons/profile.png",
     userSettings: "/icons/settings.png",
 }
@@ -102,13 +100,6 @@ export const appMetadata: AppMetadata = {
             icon: icons.auth,
         },
         title: `Sign Out | ${APP_NAME}`,
-    },
-    transactions: {
-        description: "Transactions Page For The App",
-        icons: {
-            icon: icons.transactions,
-        },
-        title: `Transactions | ${APP_NAME}`,
     },
     userProfile: {
         description: "User Profile Page For The App",

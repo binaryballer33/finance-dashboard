@@ -1,17 +1,12 @@
-import type { Transaction } from "@prisma/client"
+import type { Expense } from "@prisma/client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
-// Extended Transaction with optional type field
-type ExtendedTransaction = {
-    type?: "expense" | "income"
-} & Transaction
 
 type BudgetHealthProps = {
     calculateTotalExpenses: () => number
     calculateTotalIncome: () => number
-    filteredTransactions: ExtendedTransaction[]
-    transactions: ExtendedTransaction[]
+    expenses: Expense[]
+    filteredExpenses: Expense[]
 }
 
 // Helper function to determine expense ratio color
@@ -26,7 +21,7 @@ function getExpenseRatioColor(totalIncome: number, totalExpenses: number): strin
 }
 
 export default function BudgetHealth(props: BudgetHealthProps) {
-    const { calculateTotalExpenses, calculateTotalIncome, filteredTransactions, transactions } = props
+    const { calculateTotalExpenses, calculateTotalIncome, expenses, filteredExpenses } = props
 
     return (
         <Card>
@@ -36,7 +31,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
             </CardHeader>
 
             <CardContent>
-                {transactions.length > 0 ? (
+                {expenses.length > 0 ? (
                     <div className="space-y-6">
                         <div>
                             <div className="mb-1 flex justify-between">
@@ -100,7 +95,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                 <span className="text-sm font-medium">
                                     {calculateTotalExpenses() > 0
                                         ? `${(
-                                              (filteredTransactions
+                                              (filteredExpenses
                                                   .filter(
                                                       (t) =>
                                                           t.category === "Food" ||
@@ -115,7 +110,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                                   .reduce((sum, t) => sum + t.amount, 0) /
                                                   calculateTotalExpenses()) *
                                               100
-                                          ).toFixed(0)}% essential`
+                                          ).toFixed(0)}% Essential`
                                         : "N/A"}
                                 </span>
                             </div>
@@ -125,7 +120,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                     style={{
                                         width: `${
                                             calculateTotalExpenses() > 0
-                                                ? (filteredTransactions
+                                                ? (filteredExpenses
                                                       .filter(
                                                           (t) =>
                                                               t.category === "Food" ||
@@ -150,7 +145,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                         width: `${
                                             calculateTotalExpenses() > 0
                                                 ? 100 -
-                                                  (filteredTransactions
+                                                  (filteredExpenses
                                                       .filter(
                                                           (t) =>
                                                               t.category === "Food" ||

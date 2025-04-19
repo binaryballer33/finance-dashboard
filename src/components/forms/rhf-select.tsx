@@ -1,4 +1,4 @@
-import type { Category } from "@/types/forms/transaction-categories"
+import type { Category } from "@/types/forms/expense-categories"
 
 import { type ReactNode, useState } from "react"
 

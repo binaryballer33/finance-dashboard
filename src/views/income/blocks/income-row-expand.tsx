@@ -28,6 +28,7 @@ export default function IncomeRowDetail(props: IncomeRowDetailProps) {
                 <div className="flex flex-col gap-2">
                     <p>Income Description: {row.original.description}</p>
                     <p>Income User: {row.original.userId}</p>
+                    <p>Income Type: {row.original.type}</p>
                 </div>
             </CardContent>
         </Card>

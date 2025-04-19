@@ -9,12 +9,13 @@ import { toast } from "sonner"
 import createExpense from "@/actions/expenses/mutations/create-expense"
 
 type Expense = Omit<PrismaExpense, "createdAt" | "id" | "updatedAt">
-type MutationContext = { cacheBeforeMutation?: PrismaExpense[]; loadingToastId: number | string }
+type InfiniteQueryData = { pageParams: number[]; pages: Expense[][] }
+type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
 
 /*
  * Id gets created after item is added to the database,
- * need to invalidate the cache when creating the card because the id is not known until the card is created
- * and if the cache is not invalidated, if you try to edit or delete that card with its id,
+ * need to invalidate the cache when creating the expense because the id is not known until the expense is created
+ * and if the cache is not invalidated, if you try to edit or delete that expense with its id,
  * you will get an error because the cache doesn't have the id because you didn't re-fetch the data from the database
  */
 export default function useCreateExpenseMutation() {
@@ -50,7 +51,7 @@ export default function useCreateExpenseMutation() {
             })
 
             // get the previous state of the cache before modifying the cache, for rollback on error purposes
-            const cacheBeforeMutation = queryClient.getQueryData<PrismaExpense[]>(
+            const cacheBeforeMutation = queryClient.getQueryData<InfiniteQueryData>(
                 QUERY_KEYS.GET_ALL_EXPENSES_BY_USER_ID(expense.userId),
             )
 

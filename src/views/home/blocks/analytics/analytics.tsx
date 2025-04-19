@@ -1,6 +1,6 @@
 "use client"
 
-import type { Expense, Income, Trade, Transaction } from "@prisma/client"
+import type { Expense, Income, Trade } from "@prisma/client"
 
 import { useCallback, useState } from "react"
 
@@ -29,17 +29,12 @@ type AnalyticsProps = {
     expenses: Expense[]
     incomes: Income[]
     trades: Trade[]
-    transactions: Transaction[]
 }
 
 export default function Analytics(props: AnalyticsProps) {
-    const { expenses, incomes, trades, transactions } = props
+    const { expenses, incomes, trades } = props
 
     const [dateRange, setDateRange] = useState<DateRange>("1m")
-
-    const getTotalTransactions = useCallback(() => {
-        return getTotal({ usingArray: transactions, usingDateRange: dateRange, usingField: "amount" })
-    }, [transactions, dateRange])
 
     const getTotalExpenses = useCallback(() => {
         return getTotal({ usingArray: expenses, usingDateRange: dateRange, usingField: "amount" })
@@ -54,21 +49,33 @@ export default function Analytics(props: AnalyticsProps) {
     }, [trades, dateRange])
 
     const getCategoryTotals = useCallback(() => {
-        const filteredTransactions =
-            dateRange && dateRange !== "all" ? getFilteredArray(transactions, dateRange) : transactions
+        const filteredExpenses = dateRange && dateRange !== "all" ? getFilteredArray(expenses, dateRange) : expenses
 
-        return groupArrayOfObjectsByField({ array: filteredTransactions, field: "category" }).map((category) => {
+        return groupArrayOfObjectsByField({ array: filteredExpenses, field: "category" }).map((category) => {
             return {
                 category: category.group,
                 total: category.data.reduce((acc, item) => acc + item.amount, 0),
             }
         })
-    }, [transactions, dateRange])
+    }, [expenses, dateRange])
 
-    const monthlyData = useCallback(
-        () => getMonthlyData(incomes, expenses, transactions, dateRange),
-        [incomes, expenses, transactions, dateRange],
-    )
+    const recurringExpenses = useCallback(() => {
+        return getTotal({
+            usingArray: expenses.filter((e) => e.type === "RECURRING"),
+            usingDateRange: dateRange,
+            usingField: "amount",
+        })
+    }, [expenses, dateRange])
+
+    const oneTimeExpenses = useCallback(() => {
+        return getTotal({
+            usingArray: expenses.filter((e) => e.type === "ONE_TIME"),
+            usingDateRange: dateRange,
+            usingField: "amount",
+        })
+    }, [expenses, dateRange])
+
+    const monthlyData = useCallback(() => getMonthlyData(incomes, expenses, dateRange), [incomes, expenses, dateRange])
 
     return (
         <div className="} min-h-screen bg-background">
@@ -81,20 +88,20 @@ export default function Analytics(props: AnalyticsProps) {
                     <FinanceCard amount={getTotalTrades()} subTitle="Total Trades Outcome" title="Total Trades" />
 
                     <FinanceCard
-                        amount={-(getTotalExpenses() + getTotalTransactions())}
+                        amount={-getTotalExpenses()}
                         subTitle="Total Recurring Expenses And Transactions"
                         title="Total Expenses"
                     />
 
                     <FinanceCard
-                        amount={getTotalIncome() - getTotalExpenses() - getTotalTransactions()}
+                        amount={getTotalIncome() - getTotalExpenses()}
                         subTitle="Current Financial Savings Balance"
                         title="Total Savings"
                     />
                 </div>
 
                 <Tabs className="space-y-4" defaultValue="overview">
-                    <TabsList className="grid grid-cols-3 md:inline-flex md:w-auto">
+                    <TabsList className="grid grid-cols-4 overflow-x-auto md:flex md:w-auto md:justify-start">
                         <TabsTrigger value="overview">Overview</TabsTrigger>
                         <TabsTrigger value="spending">Spending</TabsTrigger>
                         <TabsTrigger value="budget">Budget</TabsTrigger>
@@ -103,12 +110,15 @@ export default function Analytics(props: AnalyticsProps) {
 
                     <TabsContent className="space-y-4" value="overview">
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                            <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
+                            <MonthlyIncomeExpenseBarChart
+                                monthlyData={monthlyData()}
+                                oneTimeExpenses={oneTimeExpenses()}
+                                recurringExpenses={recurringExpenses()}
+                            />
                             <ExpenseBreakdownPieChart
                                 categoryTotals={getCategoryTotals()}
                                 dateRange={dateRange}
                                 expenses={expenses}
-                                transactions={transactions}
                             />
                         </div>
 
@@ -123,11 +133,7 @@ export default function Analytics(props: AnalyticsProps) {
                     </TabsContent>
 
                     <TabsContent className="space-y-4" value="spending">
-                        <DailySpendingChart
-                            dateRange={dateRange}
-                            setDateRange={setDateRange}
-                            transactions={transactions}
-                        />
+                        <DailySpendingChart dateRange={dateRange} expenses={expenses} setDateRange={setDateRange} />
 
                         <div className="grid gap-4 md:grid-cols-2">
                             <TopSpendingCategories categoryTotals={getCategoryTotals()} />
@@ -148,8 +154,8 @@ export default function Analytics(props: AnalyticsProps) {
                         <BudgetHealth
                             calculateTotalExpenses={getTotalExpenses}
                             calculateTotalIncome={getTotalIncome}
-                            filteredTransactions={transactions as any}
-                            transactions={transactions as any}
+                            expenses={expenses}
+                            filteredExpenses={expenses}
                         />
                     </TabsContent>
                 </Tabs>

@@ -1,4 +1,4 @@
-import type { Transaction } from "@prisma/client"
+import type { Expense } from "@prisma/client"
 import type { Dispatch, SetStateAction } from "react"
 
 import { useCallback } from "react"
@@ -11,18 +11,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 import type { DateRange } from "../utils/types"
 
-import DateRangeSelector from "../common/date-range-selector"
 import getChartTitle from "../utils/get-chart-title"
 import getDaysInRange from "../utils/get-days-in-range"
 
 type DailySpendingChartProps = {
     dateRange: DateRange
+    expenses: Pick<Expense, "amount" | "category" | "date" | "description">[]
     setDateRange: Dispatch<SetStateAction<DateRange>>
-    transactions: Pick<Transaction, "amount" | "category" | "date" | "description">[]
 }
 
 export default function DailySpendingChart(props: DailySpendingChartProps) {
-    const { dateRange, setDateRange, transactions } = props
+    const { dateRange, expenses, setDateRange } = props
 
     // prepare data for daily spending
     const getDailyTransactionTotals = useCallback(() => {
@@ -37,7 +36,7 @@ export default function DailySpendingChart(props: DailySpendingChartProps) {
         }
 
         // get the total amount spent for each day
-        transactions.forEach((tx) => {
+        expenses.forEach((tx) => {
             const txDate = getDayJsDateWithPlugins(tx.date).format("YYYY-MM-DD")
             if (dailySpending.has(txDate)) dailySpending.set(txDate, (dailySpending.get(txDate) || 0) + tx.amount)
         })
@@ -47,18 +46,14 @@ export default function DailySpendingChart(props: DailySpendingChartProps) {
             amount,
             date: getDayJsDateWithPlugins(date).format("MM-DD"),
         }))
-    }, [transactions, dateRange])
+    }, [expenses, dateRange])
 
     return (
         <Card>
             <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <CardTitle>Daily Spending</CardTitle>
-                        <CardDescription className="mt-2">Your Expenses {getChartTitle(dateRange)}</CardDescription>
-                    </div>
-
-                    <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
+                <div>
+                    <CardTitle>Daily Spending</CardTitle>
+                    <CardDescription className="mt-2">Your Expenses {getChartTitle(dateRange)}</CardDescription>
                 </div>
             </CardHeader>
             <CardContent className="h-[300px]">

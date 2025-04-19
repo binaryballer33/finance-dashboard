@@ -51,19 +51,27 @@ export default function DeleteExpenseDialog(props: DeleteExpenseDialogProps) {
                             <span className="text-lg">Amount: </span>
                             <span className="ml-2 text-lg font-medium">{expense.amount} USD</span>
                         </div>
+
                         <div
                             className={`flex items-center ${expense.description?.length && expense.description.length > 15 ? "flex-col !items-start gap-1" : ""}`}
                         >
                             <span className="text-lg">Description: </span>
                             <span className="ml-2 text-lg font-medium">{expense.description}</span>
                         </div>
+
                         <div className="flex items-center">
                             <span className="text-lg">Category: </span>
                             <span className="ml-2 text-lg font-medium">{expense.category}</span>
                         </div>
+
                         <div className="flex items-center">
                             <span className="text-lg">Date Of Income: </span>
                             <span className="ml-2 text-lg font-medium">{expense.date.toLocaleDateString()}</span>
+                        </div>
+
+                        <div className="flex items-center">
+                            <span className="text-lg">Type: </span>
+                            <span className="ml-2 text-lg font-medium">{expense.type}</span>
                         </div>
                     </div>
                 </Card>
