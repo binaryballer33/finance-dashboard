@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import type { DateRange } from "../utils/types"
 
 import COLORS from "../utils/constants"
+import formatAmount from "../utils/format-amount"
 import getFilteredArrayByDateRange from "../utils/get-filtered-array-by-date-range"
 
 type ExpenseBreakdownPieChartProps = {
@@ -71,7 +72,7 @@ export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChart
                                 <X className="h-4 w-4" />
                             </Button>
                         </div>
-                        <p className="mb-2 text-sm">Total: ${Number(activeCategory.total).toFixed(2)}</p>
+                        <p className="mb-2 text-sm">Total: ${formatAmount(Number(activeCategory.total))}</p>
 
                         <ScrollArea className="h-[300px] space-y-4 overflow-y-auto pr-4">
                             {/* Expenses */}
@@ -83,7 +84,7 @@ export default function ExpenseBreakdownPieChart(props: ExpenseBreakdownPieChart
                                             .filter((exp) => exp.category === activeCategory.category)
                                             .map((exp) => (
                                                 <li key={`exp-${exp.id}`}>
-                                                    {exp.description || "N/A"} - ${exp.amount.toFixed(2)} on{" "}
+                                                    {exp.description || "N/A"} - ${formatAmount(exp.amount)} on{" "}
                                                     {format(new Date(exp.date), "PP")}
                                                 </li>
                                             ))}

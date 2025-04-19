@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 import COLORS from "../utils/constants"
+import formatAmount from "../utils/format-amount"
 
 type SpendingSummaryProps = {
     calculateTotalExpenses: () => number
@@ -27,7 +28,7 @@ export default function SpendingSummary(props: SpendingSummaryProps) {
                                     <span className="flex items-center gap-1 text-sm font-medium">
                                         {category.category}
                                     </span>
-                                    <span className="text-sm font-medium">${category.total.toFixed(2)}</span>
+                                    <span className="text-sm font-medium">${formatAmount(category.total)}</span>
                                 </div>
                                 <div className="h-2.5 w-full rounded-full bg-muted">
                                     <div

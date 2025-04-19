@@ -2,6 +2,8 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip as R
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
+import formatAmount from "../utils/format-amount"
+
 type MonthlyIncomeExpenseBarChartProps = {
     monthlyData: {
         balance: number
@@ -62,17 +64,17 @@ const CustomTooltip = (props: CustomTooltipProps) => {
                 <p className="text-sm font-medium">{label}</p>
 
                 <div className="flex flex-col gap-2">
-                    <p className="text-sm text-green-500">Income: ${Number(incomeData.value).toFixed(2)}</p>
+                    <p className="text-sm text-green-500">Income: ${formatAmount(Number(incomeData.value))}</p>
 
                     <div className="border-y text-xs">
-                        <p className="text-sm text-red-500">Expenses: ${Number(expenseData.value).toFixed(2)}</p>
+                        <p className="text-sm text-red-500">Expenses: ${formatAmount(Number(expenseData.value))}</p>
                         <ul className="ml-2 list-disc pl-2">
-                            <li>Recurring: ${Number(recurringExpenses).toFixed(2)}</li>
-                            <li>One-Time: ${Number(oneTimeExpenses).toFixed(2)}</li>
+                            <li>Recurring: ${formatAmount(Number(recurringExpenses))}</li>
+                            <li>One-Time: ${formatAmount(Number(oneTimeExpenses))}</li>
                         </ul>
                     </div>
 
-                    <p className="text-sm text-blue-500">Balance: ${Number(balanceData.value).toFixed(2)}</p>
+                    <p className="text-sm text-blue-500">Balance: ${formatAmount(Number(balanceData.value))}</p>
                 </div>
             </div>
         )

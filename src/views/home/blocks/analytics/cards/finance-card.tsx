@@ -2,6 +2,8 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
+import formatAmount from "../utils/format-amount"
+
 type TotalIncomeProps = {
     amount: number
     subTitle?: string
@@ -21,7 +23,7 @@ export default function FinanceCard(props: TotalIncomeProps) {
             </CardHeader>
 
             <CardContent>
-                <div className={`text-2xl font-bold ${getColor(amount)}`}>${amount.toFixed(2)}</div>
+                <div className={`text-2xl font-bold ${getColor(amount)}`}>${formatAmount(amount)}</div>
 
                 {subTitle && <p className="text-xs text-muted-foreground">{subTitle}</p>}
             </CardContent>

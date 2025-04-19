@@ -59,22 +59,6 @@ export default function Analytics(props: AnalyticsProps) {
         })
     }, [expenses, dateRange])
 
-    const recurringExpenses = useCallback(() => {
-        return getTotal({
-            usingArray: expenses.filter((e) => e.type === "RECURRING"),
-            usingDateRange: dateRange,
-            usingField: "amount",
-        })
-    }, [expenses, dateRange])
-
-    const oneTimeExpenses = useCallback(() => {
-        return getTotal({
-            usingArray: expenses.filter((e) => e.type === "ONE_TIME"),
-            usingDateRange: dateRange,
-            usingField: "amount",
-        })
-    }, [expenses, dateRange])
-
     const monthlyData = useCallback(() => getMonthlyData(incomes, expenses, dateRange), [incomes, expenses, dateRange])
 
     return (
@@ -110,11 +94,7 @@ export default function Analytics(props: AnalyticsProps) {
 
                     <TabsContent className="space-y-4" value="overview">
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                            <MonthlyIncomeExpenseBarChart
-                                monthlyData={monthlyData()}
-                                oneTimeExpenses={oneTimeExpenses()}
-                                recurringExpenses={recurringExpenses()}
-                            />
+                            <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
                             <ExpenseBreakdownPieChart
                                 categoryTotals={getCategoryTotals()}
                                 dateRange={dateRange}
@@ -133,7 +113,7 @@ export default function Analytics(props: AnalyticsProps) {
                     </TabsContent>
 
                     <TabsContent className="space-y-4" value="spending">
-                        <DailySpendingChart dateRange={dateRange} expenses={expenses} setDateRange={setDateRange} />
+                        <DailySpendingChart dateRange={dateRange} expenses={expenses} />
 
                         <div className="grid gap-4 md:grid-cols-2">
                             <TopSpendingCategories categoryTotals={getCategoryTotals()} />

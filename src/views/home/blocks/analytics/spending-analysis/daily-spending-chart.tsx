@@ -1,5 +1,4 @@
 import type { Expense } from "@prisma/client"
-import type { Dispatch, SetStateAction } from "react"
 
 import { useCallback } from "react"
 
@@ -11,17 +10,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 import type { DateRange } from "../utils/types"
 
+import formatAmount from "../utils/format-amount"
 import getChartTitle from "../utils/get-chart-title"
 import getDaysInRange from "../utils/get-days-in-range"
 
 type DailySpendingChartProps = {
     dateRange: DateRange
     expenses: Pick<Expense, "amount" | "category" | "date" | "description">[]
-    setDateRange: Dispatch<SetStateAction<DateRange>>
 }
 
 export default function DailySpendingChart(props: DailySpendingChartProps) {
-    const { dateRange, expenses, setDateRange } = props
+    const { dateRange, expenses } = props
 
     // prepare data for daily spending
     const getDailyTransactionTotals = useCallback(() => {
@@ -71,7 +70,7 @@ export default function DailySpendingChart(props: DailySpendingChartProps) {
                             }}
                         />
                         <YAxis />
-                        <ReTooltip formatter={(value) => `$${Number(value).toFixed(2)}`} />
+                        <ReTooltip formatter={(value) => `$${formatAmount(Number(value))}`} />
                         <Area dataKey="amount" fill="#ef4444" fillOpacity={0.2} stroke="#ef4444" type="monotone" />
                     </AreaChart>
                 </ResponsiveContainer>
