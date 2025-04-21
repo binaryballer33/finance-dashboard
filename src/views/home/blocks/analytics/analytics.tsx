@@ -2,7 +2,7 @@
 
 import type { Expense, Income, Trade } from "@prisma/client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -32,37 +32,49 @@ type AnalyticsProps = {
 }
 
 export default function Analytics(props: AnalyticsProps) {
-    const { expenses, incomes, trades } = props
+    const { expenses: initialExpenses, incomes: initialIncomes, trades: initialTrades } = props
 
     const [dateRange, setDateRange] = useState<DateRange>("1m")
 
+    // memoize the filtered expenses and incomes values based on the date range to prevent unnecessary recalculations
+    const expenses = useMemo(() => {
+        return dateRange !== "all" ? getFilteredArray(initialExpenses, dateRange) : initialExpenses
+    }, [initialExpenses, dateRange])
+
+    const incomes = useMemo(() => {
+        return dateRange !== "all" ? getFilteredArray(initialIncomes, dateRange) : initialIncomes
+    }, [initialIncomes, dateRange])
+
+    const trades = useMemo(() => {
+        return dateRange !== "all" ? getFilteredArray(initialTrades, dateRange) : initialTrades
+    }, [initialTrades, dateRange])
+
+    // memoize the total expenses, income, and trades functions to prevent unnecessary recalculations
     const getTotalExpenses = useCallback(() => {
-        return getTotal({ usingArray: expenses, usingDateRange: dateRange, usingField: "amount" })
-    }, [expenses, dateRange])
+        return getTotal({ usingArray: expenses, usingField: "amount" })
+    }, [expenses])
 
     const getTotalIncome = useCallback(() => {
-        return getTotal({ usingArray: incomes, usingDateRange: dateRange, usingField: "amount" })
-    }, [incomes, dateRange])
+        return getTotal({ usingArray: incomes, usingField: "amount" })
+    }, [incomes])
 
     const getTotalTrades = useCallback(() => {
-        return getTotal({ usingArray: trades, usingDateRange: dateRange, usingField: "profitLoss" })
-    }, [trades, dateRange])
+        return getTotal({ usingArray: trades, usingField: "profitLoss" })
+    }, [trades])
 
     const getCategoryTotals = useCallback(() => {
-        const filteredExpenses = dateRange && dateRange !== "all" ? getFilteredArray(expenses, dateRange) : expenses
-
-        return groupArrayOfObjectsByField({ array: filteredExpenses, field: "category" }).map((category) => {
+        return groupArrayOfObjectsByField({ array: expenses, field: "category" }).map((category) => {
             return {
                 category: category.group,
                 total: category.data.reduce((acc, item) => acc + item.amount, 0),
             }
         })
-    }, [expenses, dateRange])
+    }, [expenses])
 
-    const monthlyData = useCallback(() => getMonthlyData(incomes, expenses, dateRange), [incomes, expenses, dateRange])
+    const monthlyData = useCallback(() => getMonthlyData(incomes, expenses), [incomes, expenses])
 
     return (
-        <div className="} min-h-screen bg-background">
+        <div className="min-h-screen bg-background">
             <div className="container mx-auto space-y-4 px-4 py-6 md:px-6">
                 <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
 
@@ -134,7 +146,7 @@ export default function Analytics(props: AnalyticsProps) {
                         <BudgetHealth
                             calculateTotalExpenses={getTotalExpenses}
                             calculateTotalIncome={getTotalIncome}
-                            expenses={expenses}
+                            expenses={initialExpenses}
                             filteredExpenses={expenses}
                         />
                     </TabsContent>
