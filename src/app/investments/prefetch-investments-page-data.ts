@@ -1,5 +1,6 @@
 "use server"
 
+import type { ExtendedUser } from "@/types/types.d/next-auth-types"
 import type { Trade } from "@prisma/client"
 
 import createQueryClient from "@/api/query-client-server-component"
@@ -13,6 +14,7 @@ import getCurrentUser from "@/actions/user/get-current-user"
 type PrefetchInvestmentsPageDataDehydrateStateResponse = {
     dehydratedState: DehydratedState
     trades: Trade[]
+    user: ExtendedUser
 }
 
 /*
@@ -43,5 +45,6 @@ export default async function prefetchInvestmentsPageDataDehydrateState(): Promi
     return {
         dehydratedState,
         trades,
+        user,
     }
 }

@@ -1,5 +1,6 @@
 "use server"
 
+import type { ExtendedUser } from "@/types/types.d/next-auth-types"
 import type { Expense } from "@prisma/client"
 
 import createQueryClient from "@/api/query-client-server-component"
@@ -13,6 +14,7 @@ import getCurrentUser from "@/actions/user/get-current-user"
 type PrefetchExpensesPageDataDehydrateStateResponse = {
     dehydratedState: DehydratedState
     expenses: Expense[]
+    user: ExtendedUser
 }
 
 type InfiniteQueryData<T> = {
@@ -55,5 +57,6 @@ export default async function prefetchExpensesPageDataDehydrateState(): Promise<
     return {
         dehydratedState,
         expenses,
+        user,
     }
 }
