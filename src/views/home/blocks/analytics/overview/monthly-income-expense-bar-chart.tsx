@@ -61,7 +61,7 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 
         return (
             <div className="rounded border bg-white p-4 shadow-sm">
-                <p className="text-sm font-medium">{label}</p>
+                <p className="text-sm font-medium text-black">{label}</p>
 
                 <div className="flex flex-col gap-2">
                     <p className="text-sm text-green-500">Income: ${formatAmount(Number(incomeData.value))}</p>
@@ -69,8 +69,8 @@ const CustomTooltip = (props: CustomTooltipProps) => {
                     <div className="border-y text-xs">
                         <p className="text-sm text-red-500">Expenses: ${formatAmount(Number(expenseData.value))}</p>
                         <ul className="ml-2 list-disc pl-2">
-                            <li>Recurring: ${formatAmount(Number(recurringExpenses))}</li>
-                            <li>One-Time: ${formatAmount(Number(oneTimeExpenses))}</li>
+                            <li className="text-black">Recurring: ${formatAmount(Number(recurringExpenses))}</li>
+                            <li className="text-black">One-Time: ${formatAmount(Number(oneTimeExpenses))}</li>
                         </ul>
                     </div>
 

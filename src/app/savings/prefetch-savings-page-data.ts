@@ -1,5 +1,6 @@
 "use server"
 
+import type { ExtendedUser } from "@/types/types.d/next-auth-types"
 import type { Expense, Income } from "@prisma/client"
 
 import createQueryClient from "@/api/query-client-server-component"
@@ -10,7 +11,6 @@ import { dehydrate } from "@tanstack/react-query"
 import getExpensesByUserId from "@/actions/expenses/queries/get-expenses-by-userId"
 import getIncomeByUserId from "@/actions/income/queries/get-income-by-userId"
 import getCurrentUser from "@/actions/user/get-current-user"
-import { ExtendedUser } from "@/types/types.d/next-auth-types"
 
 type PrefetchExpensesPageDataDehydrateStateResponse = {
     dehydratedState: DehydratedState
