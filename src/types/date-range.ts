@@ -1,0 +1,1 @@
+export type DateRange = "14d" | "1m" | "1y" | "3m" | "6m" | "7d" | "all"

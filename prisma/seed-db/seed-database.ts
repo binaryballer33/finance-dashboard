@@ -48,7 +48,7 @@ async function createRealisticOneTimeExpenses(userId: string) {
             },
             {
                 amount: 50 + Math.floor(Math.random() * 50),
-                category: "Gas",
+                category: "Transportation",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Gasoline",
                 type: TransactionType.ONE_TIME,
@@ -64,7 +64,7 @@ async function createRealisticOneTimeExpenses(userId: string) {
             },
             {
                 amount: 50 + Math.floor(Math.random() * 50),
-                category: "Fitness",
+                category: "Health",
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Fitness Activities",
                 type: TransactionType.ONE_TIME,

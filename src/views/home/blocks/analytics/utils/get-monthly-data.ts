@@ -1,17 +1,10 @@
+import type { MonthlyData } from "@/types/monthly-data"
+
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
 import type { Expense, Income } from "./types"
 
 import getTotal from "./get-total"
-
-type MonthlyData = {
-    balance: number
-    expenses: number
-    income: number
-    name: string
-    oneTimeExpensesTotal: number
-    recurringExpensesTotal: number
-}
 
 export default function getMonthlyData(incomes: Income[], expenses: Expense[]): MonthlyData[] {
     const monthlyDataMap: Record<string, { expenses: Expense[]; incomes: Income[] }> = {}

@@ -1,5 +1,6 @@
 "use client"
 
+import type { DateRange } from "@/types/date-range"
 import type { Expense, Income, Trade } from "@prisma/client"
 
 import { useCallback, useMemo, useState } from "react"
@@ -8,22 +9,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import TabbedIncomeExpenseCharts from "@/components/charts/tabbed-income-expense-charts"
 
-import type { DateRange } from "./utils/types"
-
 import BudgetHealth from "./budget/budget-health"
 import FinanceCard from "./cards/finance-card"
 import DateRangeSelector from "./common/date-range-selector"
-import ExpenseBreakdownPieChart from "./overview/expense-breakdown-pie-chart"
+import ExpenseCategoryPieChart from "./overview/expense-category-pie-chart"
 import MonthlyIncomeExpenseBarChart from "./overview/monthly-income-expense-bar-chart"
-import SpendingSummary from "./overview/spending-summary"
 import DailySpendingChart from "./spending-analysis/daily-spending-chart"
 import SpendingInsights from "./spending-analysis/spending-insights"
 import TopSpendingCategories from "./spending-analysis/top-spending-categories"
 import MonthlySavingsBalance from "./trend/monthly-savings-balance"
+import getCategoryData from "./utils/get-category-data"
 import getFilteredArray from "./utils/get-filtered-array-by-date-range"
 import getMonthlyData from "./utils/get-monthly-data"
 import getTotal from "./utils/get-total"
-import groupArrayOfObjectsByField from "./utils/group-array-of-objects-by-field"
 
 type AnalyticsProps = {
     expenses: Expense[]
@@ -62,14 +60,7 @@ export default function Analytics(props: AnalyticsProps) {
         return getTotal({ usingArray: trades, usingField: "profitLoss" })
     }, [trades])
 
-    const getCategoryTotals = useCallback(() => {
-        return groupArrayOfObjectsByField({ array: expenses, field: "category" }).map((category) => {
-            return {
-                category: category.group,
-                total: category.data.reduce((acc, item) => acc + item.amount, 0),
-            }
-        })
-    }, [expenses])
+    const categoryData = useCallback(() => getCategoryData(expenses), [expenses])
 
     const monthlyData = useCallback(() => getMonthlyData(incomes, expenses), [incomes, expenses])
 
@@ -109,21 +100,21 @@ export default function Analytics(props: AnalyticsProps) {
 
                     <TabsContent className="space-y-4" value="overview">
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                            <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
-                            <ExpenseBreakdownPieChart
-                                categoryTotals={getCategoryTotals()}
-                                dateRange={dateRange}
-                                expenses={expenses}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                            <SpendingSummary
-                                calculateTotalExpenses={getTotalExpenses}
-                                categoryTotals={getCategoryTotals()}
-                            />
-
-                            <TabbedIncomeExpenseCharts monthlyData={monthlyData()} />
+                            <div className="flex flex-col gap-4">
+                                <div>
+                                    <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
+                                </div>
+                                <div>
+                                    <TabbedIncomeExpenseCharts monthlyData={monthlyData()} />
+                                </div>
+                            </div>
+                            <div className="h-full">
+                                <ExpenseCategoryPieChart
+                                    categoryData={categoryData()}
+                                    dateRange={dateRange}
+                                    expenses={expenses}
+                                />
+                            </div>
                         </div>
                     </TabsContent>
 
@@ -131,7 +122,7 @@ export default function Analytics(props: AnalyticsProps) {
                         <DailySpendingChart dateRange={dateRange} expenses={expenses} />
 
                         <div className="grid gap-4 md:grid-cols-2">
-                            <TopSpendingCategories categoryTotals={getCategoryTotals()} />
+                            <TopSpendingCategories categoryData={categoryData()} />
 
                             <SpendingInsights
                                 calculateTotalExpenses={getTotalExpenses}

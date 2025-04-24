@@ -1,4 +1,4 @@
-import type { DateRange } from "./types"
+import type { DateRange } from "@/types/date-range"
 
 export default function getDaysInRange(range: DateRange) {
     switch (range) {

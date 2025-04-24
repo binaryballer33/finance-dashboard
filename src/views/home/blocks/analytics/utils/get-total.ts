@@ -1,4 +1,4 @@
-import type { DateRange } from "./types"
+import type { DateRange } from "@/types/date-range"
 
 import getFilteredArrayByDateRange from "./get-filtered-array-by-date-range"
 

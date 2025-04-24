@@ -1,6 +1,6 @@
-import type { DateRange } from "./types"
+import type { DateRange } from "@/types/date-range"
 
-export default function getChartTitle(dateRange: DateRange) {
+export default function getTimeframeString(dateRange: DateRange) {
     switch (dateRange) {
         case "7d":
             return "Last Week"
@@ -14,6 +14,8 @@ export default function getChartTitle(dateRange: DateRange) {
             return "Last 6 Months"
         case "1y":
             return "Last Year"
+        case "all":
+            return "All Time"
         default:
             return "Last 2 Weeks"
     }

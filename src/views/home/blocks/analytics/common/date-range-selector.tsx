@@ -1,6 +1,6 @@
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import type { DateRange } from "@/types/date-range"
 
-import type { DateRange } from "../utils/types"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 type DateRangeSelectorProps = {
     dateRange: DateRange

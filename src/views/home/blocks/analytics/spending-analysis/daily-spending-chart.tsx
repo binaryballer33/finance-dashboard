@@ -1,3 +1,4 @@
+import type { DateRange } from "@/types/date-range"
 import type { Expense } from "@prisma/client"
 
 import { useCallback } from "react"
@@ -8,11 +9,9 @@ import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-dat
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-import type { DateRange } from "../utils/types"
-
 import formatAmount from "../utils/format-amount"
-import getChartTitle from "../utils/get-chart-title"
 import getDaysInRange from "../utils/get-days-in-range"
+import getTimeframeString from "../utils/get-timeframe-string"
 
 type DailySpendingChartProps = {
     dateRange: DateRange
@@ -52,7 +51,7 @@ export default function DailySpendingChart(props: DailySpendingChartProps) {
             <CardHeader className="pb-2">
                 <div>
                     <CardTitle>Daily Spending</CardTitle>
-                    <CardDescription className="mt-2">Your Expenses {getChartTitle(dateRange)}</CardDescription>
+                    <CardDescription className="mt-2">Your Expenses {getTimeframeString(dateRange)}</CardDescription>
                 </div>
             </CardHeader>
             <CardContent className="h-[300px]">

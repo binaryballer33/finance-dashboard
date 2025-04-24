@@ -1,26 +1,29 @@
+import type { CategoryData } from "@/types/category-data"
+
 import { useCallback } from "react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 import COLORS from "../utils/constants"
+import formatAmount from "../utils/format-amount"
 
 type TopSpendingCategoriesProps = {
-    categoryTotals: { category: string; total: number }[]
+    categoryData: CategoryData[]
 }
 
 export default function TopSpendingCategories(props: TopSpendingCategoriesProps) {
-    const { categoryTotals } = props
+    const { categoryData } = props
 
     // Get top spending categories
     const getTopCategories = useCallback(() => {
-        return categoryTotals.slice(0, 3)
-    }, [categoryTotals])
+        return categoryData.slice(0, 3)
+    }, [categoryData])
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Top Spending Categories</CardTitle>
-                <CardDescription>Where most of your money goes</CardDescription>
+                <CardDescription>Where Most Of Your Money Goes</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
@@ -35,7 +38,7 @@ export default function TopSpendingCategories(props: TopSpendingCategoriesProps)
                                 />
                                 <span>{category.category}</span>
                             </div>
-                            <span className="font-medium">${category.total.toFixed(2)}</span>
+                            <span className="font-medium">${formatAmount(category.total)}</span>
                         </div>
                     ))}
                 </div>

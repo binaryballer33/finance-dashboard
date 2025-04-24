@@ -38,7 +38,7 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
         <Card>
             <CardHeader>
                 <CardTitle>Financial Overview</CardTitle>
-                <CardDescription>View Your Income and Expenses in Different Chart Formats</CardDescription>
+                <CardDescription>View Your Income and Expenses In Different Chart Formats</CardDescription>
                 <div className="flex items-center space-x-4 pt-2">
                     <div className="flex items-center space-x-2">
                         <Checkbox

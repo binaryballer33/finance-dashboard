@@ -1,6 +1,6 @@
-import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
+import type { DateRange } from "@/types/date-range"
 
-import type { DateRange } from "./types"
+import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
 import getDateRangeStartDate from "./get-date-range-start-date"
 

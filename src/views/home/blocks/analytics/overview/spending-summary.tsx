@@ -1,3 +1,5 @@
+import type { CategoryData } from "@/types/category-data"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 import COLORS from "../utils/constants"
@@ -5,11 +7,11 @@ import formatAmount from "../utils/format-amount"
 
 type SpendingSummaryProps = {
     calculateTotalExpenses: () => number
-    categoryTotals: { category: string; total: number }[]
+    categoryData: CategoryData[]
 }
 
 export default function SpendingSummary(props: SpendingSummaryProps) {
-    const { calculateTotalExpenses, categoryTotals } = props
+    const { calculateTotalExpenses, categoryData } = props
 
     const width = (total: number) => ((total / calculateTotalExpenses()) * 100).toFixed(0)
 
@@ -21,7 +23,7 @@ export default function SpendingSummary(props: SpendingSummaryProps) {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {categoryTotals.map((category, index) => (
+                    {categoryData.map((category, index) => (
                         <div className="flex items-center" key={category.category}>
                             <div className="w-full">
                                 <div className="mb-1 flex justify-between">

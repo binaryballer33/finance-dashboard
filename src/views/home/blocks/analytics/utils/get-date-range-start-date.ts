@@ -1,6 +1,5 @@
+import type { DateRange } from "@/types/date-range"
 import type { Dayjs } from "dayjs"
-
-import type { DateRange } from "./types"
 
 // get the start date based on date range string
 export default function getDateRangeStartDate(dateRange: DateRange, today: Dayjs): Dayjs {
