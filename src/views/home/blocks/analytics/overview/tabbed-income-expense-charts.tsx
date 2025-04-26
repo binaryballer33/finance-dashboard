@@ -32,7 +32,7 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
     if (!mounted) return <div className="h-[400px] w-full animate-pulse rounded-md bg-muted/20" />
 
     return (
-        <Card>
+        <Card className="flex-1">
             <CardHeader>
                 <CardTitle>Financial Overview</CardTitle>
 
@@ -41,7 +41,7 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
                         <Checkbox
                             checked={visibility.income}
                             id="show-income"
-                            onCheckedChange={(checked) => setVisibility({ ...visibility, income: checked as boolean })}
+                            onCheckedChange={(checked) => setVisibility({ ...visibility, income: !!checked })}
                         />
                         <Label className="flex items-center" htmlFor="show-income">
                             <div className="mr-1.5 h-3 w-3 rounded-full bg-emerald-500" />
@@ -53,9 +53,7 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
                         <Checkbox
                             checked={visibility.expenses}
                             id="show-expenses"
-                            onCheckedChange={(checked) =>
-                                setVisibility({ ...visibility, expenses: checked as boolean })
-                            }
+                            onCheckedChange={(checked) => setVisibility({ ...visibility, expenses: !!checked })}
                         />
                         <Label className="flex items-center" htmlFor="show-expenses">
                             <div className="mr-1.5 h-3 w-3 rounded-full bg-rose-500" />
@@ -67,7 +65,7 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
                         <Checkbox
                             checked={visibility.balance}
                             id="show-balance"
-                            onCheckedChange={(checked) => setVisibility({ ...visibility, balance: checked as boolean })}
+                            onCheckedChange={(checked) => setVisibility({ ...visibility, balance: !!checked })}
                         />
                         <Label className="flex items-center" htmlFor="show-balance">
                             <div className="mr-1.5 h-3 w-3 rounded-full bg-yellow-500" />

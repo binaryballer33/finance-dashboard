@@ -3,19 +3,16 @@ import { HydrationBoundary } from "@tanstack/react-query"
 
 import { appMetadata } from "@/lib/config"
 
-import getCurrentUser from "@/actions/user/get-current-user"
-
 import HomeView from "@/views/home/home-view"
 
 export const metadata = appMetadata.homePage
 
 export default async function HomePage() {
     const prefetchResult = await prefetchHomePageDataDehydrateState()
-    const user = await getCurrentUser()
 
-    if (!prefetchResult || !user) return null
+    if (!prefetchResult) return null
 
-    const { dehydratedState } = prefetchResult
+    const { dehydratedState, user } = prefetchResult
 
     return (
         <HydrationBoundary state={dehydratedState}>

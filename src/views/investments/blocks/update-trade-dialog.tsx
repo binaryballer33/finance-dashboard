@@ -54,13 +54,13 @@ export default function UpdateTradeDialog(props: UpdateTradeDialogProps) {
     }
 
     const realizedOptions = [
-        { label: "GAIN", value: "GAIN" },
-        { label: "LOSS", value: "LOSS" },
+        { color: "#10b981", label: "GAIN", value: "GAIN" },
+        { color: "#ef4444", label: "LOSS", value: "LOSS" },
     ]
 
     const typeOptions = [
-        { label: "SELL_CALL", value: "SELL_CALL" },
-        { label: "SELL_PUT", value: "SELL_PUT" },
+        { color: "#10b981", label: "SELL_CALL", value: "SELL_CALL" },
+        { color: "#ef4444", label: "SELL_PUT", value: "SELL_PUT" },
     ]
 
     return (

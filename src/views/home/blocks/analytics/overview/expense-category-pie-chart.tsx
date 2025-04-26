@@ -31,7 +31,7 @@ type ExpenseCategoryPieChartProps = {
 export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartProps) {
     const { categoryData, dateRange, expenses } = props
 
-    const [selectedCategoryName, setSelectedCategoryName] = useState<null | string>(null)
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string>("Food")
 
     const selectedCategory = selectedCategoryName
         ? categoryData.find((c) => c.category === selectedCategoryName) || null
@@ -39,13 +39,12 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
 
     const handleClick = (data: CategoryData) => setSelectedCategoryName(data.category)
 
-    const closeDetails = () => setSelectedCategoryName(null)
-
     return (
-        <div className="mx-auto h-full w-full" style={{ maxHeight: "906px" }}>
-            <Card className="flex h-full flex-col" style={{ maxHeight: "inherit" }}>
+        <div className="mx-auto h-[906px] w-full">
+            <Card className="flex h-full flex-col">
                 <CardHeader className="shrink-0">
                     <CardTitle>Expense Distribution By Category</CardTitle>
+
                     <CardDescription>Click On A Slice To View Detailed Transactions</CardDescription>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -152,7 +151,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
 
                         <div className="h-2/5 w-full overflow-hidden border-t">
                             {selectedCategory ? (
-                                <TransactionDetails categoryData={selectedCategory} onClose={closeDetails} />
+                                <TransactionDetails categoryData={selectedCategory} />
                             ) : (
                                 <div className="flex h-full items-center justify-center p-6 text-center">
                                     <div>
@@ -173,17 +172,16 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
 
 type TransactionDetailsProps = {
     categoryData: CategoryData
-    onClose: () => void
 }
 
 const TransactionDetails = (props: TransactionDetailsProps) => {
-    const { categoryData, onClose } = props
+    const { categoryData } = props
 
     const color = categoryData.color || "#000000"
 
     return (
         <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between border-b p-4" style={{ borderTop: `4px solid ${color}` }}>
+            <div className="flex items-center justify-between border-b p-2" style={{ borderTop: `4px solid ${color}` }}>
                 <div className="flex items-center gap-2">
                     <h2 className="text-xl font-bold">{categoryData.category}</h2>
 
@@ -196,7 +194,6 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                 <button
                     aria-label="Close"
                     className="rounded-full p-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
-                    onClick={onClose}
                     type="button"
                 >
                     <X size={16} />

@@ -9,7 +9,6 @@ import useGetTradesByUserIdQuery from "@/api/trades/queries/use-get-trades-by-us
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import Container from "@/components/base/container"
-import PageHeading from "@/components/base/page-heading"
 
 import ExpenseTable from "../expenses/blocks/expenses-table"
 import IncomeTable from "../income/blocks/income-table"
@@ -32,8 +31,6 @@ export default function HomeView(props: HomeViewProps) {
 
     return (
         <Container maxWidth="xl">
-            <PageHeading bottomText="Welcome To Your Personalized Dashboard" title="Dashboard" />
-
             <Analytics expenses={expenses} incomes={incomes} trades={trades} />
 
             <Tabs className="w-full" defaultValue="incomes">

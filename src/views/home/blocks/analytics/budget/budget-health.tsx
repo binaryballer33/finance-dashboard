@@ -6,7 +6,6 @@ type BudgetHealthProps = {
     calculateTotalExpenses: () => number
     calculateTotalIncome: () => number
     expenses: Expense[]
-    filteredExpenses: Expense[]
 }
 
 // Helper function to determine expense ratio color
@@ -21,10 +20,10 @@ function getExpenseRatioColor(totalIncome: number, totalExpenses: number): strin
 }
 
 export default function BudgetHealth(props: BudgetHealthProps) {
-    const { calculateTotalExpenses, calculateTotalIncome, expenses, filteredExpenses } = props
+    const { calculateTotalExpenses, calculateTotalIncome, expenses } = props
 
     return (
-        <Card>
+        <Card className="flex-1">
             <CardHeader>
                 <CardTitle>Budget Health</CardTitle>
                 <CardDescription>How Well You're Managing Your Finances</CardDescription>
@@ -95,7 +94,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                 <span className="text-sm font-medium">
                                     {calculateTotalExpenses() > 0
                                         ? `${(
-                                              (filteredExpenses
+                                              (expenses
                                                   .filter(
                                                       (t) =>
                                                           t.category === "Food" ||
@@ -120,7 +119,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                     style={{
                                         width: `${
                                             calculateTotalExpenses() > 0
-                                                ? (filteredExpenses
+                                                ? (expenses
                                                       .filter(
                                                           (t) =>
                                                               t.category === "Food" ||
@@ -145,7 +144,7 @@ export default function BudgetHealth(props: BudgetHealthProps) {
                                         width: `${
                                             calculateTotalExpenses() > 0
                                                 ? 100 -
-                                                  (filteredExpenses
+                                                  (expenses
                                                       .filter(
                                                           (t) =>
                                                               t.category === "Food" ||

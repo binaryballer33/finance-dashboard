@@ -16,7 +16,6 @@ import ExpenseCategoryPieChart from "./overview/expense-category-pie-chart"
 import DailySpendingChart from "./spending-analysis/daily-spending-chart"
 import SpendingInsights from "./spending-analysis/spending-insights"
 import TopSpendingCategories from "./spending-analysis/top-spending-categories"
-import MonthlySavingsBalance from "./trend/monthly-savings-balance"
 import getCategoryData from "./utils/get-category-data"
 import getFilteredArray from "./utils/get-filtered-array-by-date-range"
 import getMonthlyData from "./utils/get-monthly-data"
@@ -76,11 +75,7 @@ export default function Analytics(props: AnalyticsProps) {
 
                     <FinanceCard amount={getTotalTrades()} subTitle="Total Trades Outcome" title="Total Trades" />
 
-                    <FinanceCard
-                        amount={-getTotalExpenses()}
-                        subTitle="Total Recurring Expenses And Transactions"
-                        title="Total Expenses"
-                    />
+                    <FinanceCard amount={-getTotalExpenses()} subTitle="All Expenses" title="Total Expenses" />
 
                     <FinanceCard
                         amount={getTotalIncome() - getTotalExpenses()}
@@ -94,14 +89,20 @@ export default function Analytics(props: AnalyticsProps) {
                         <TabsTrigger value="overview">Overview</TabsTrigger>
                         <TabsTrigger value="spending">Spending</TabsTrigger>
                         <TabsTrigger value="budget">Budget</TabsTrigger>
-                        <TabsTrigger value="trends">Trends</TabsTrigger>
                     </TabsList>
 
                     <TabsContent className="space-y-4" value="overview">
+                        <DailySpendingChart dateRange={dateRange} expenses={expenses} />
+
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                            <div className="flex flex-col gap-4">
+                            <div className="flex h-full flex-col gap-4">
                                 <TabbedIncomeExpenseCharts monthlyData={monthlyData()} />
-                                <p className="mt-16 h-[300px] text-center"> Place Holder Component</p>
+
+                                <BudgetHealth
+                                    calculateTotalExpenses={getTotalExpenses}
+                                    calculateTotalIncome={getTotalIncome}
+                                    expenses={expenses}
+                                />
                             </div>
 
                             <ExpenseCategoryPieChart
@@ -126,16 +127,11 @@ export default function Analytics(props: AnalyticsProps) {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="trends">
-                        <MonthlySavingsBalance monthlyData={monthlyData()} />
-                    </TabsContent>
-
                     <TabsContent value="budget">
                         <BudgetHealth
                             calculateTotalExpenses={getTotalExpenses}
                             calculateTotalIncome={getTotalIncome}
                             expenses={expenses}
-                            filteredExpenses={expenses}
                         />
                     </TabsContent>
                 </Tabs>

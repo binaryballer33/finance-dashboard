@@ -3,6 +3,8 @@
 import type { Expense, Income, Trade } from "@prisma/client"
 import type { DehydratedState } from "@tanstack/react-query"
 
+import { type ExtendedUser } from "@/types/types.d/next-auth-types"
+
 import createQueryClient from "@/api/query-client-server-component"
 import QUERY_KEYS from "@/api/query-keys"
 import { dehydrate } from "@tanstack/react-query"
@@ -22,6 +24,7 @@ type PrefetchHomePageDataDehydrateStateResponse = {
     expenses: Expense[]
     incomes: Income[]
     trades: Trade[]
+    user: ExtendedUser
 }
 
 /*
@@ -81,5 +84,6 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
         expenses,
         incomes,
         trades,
+        user,
     }
 }
