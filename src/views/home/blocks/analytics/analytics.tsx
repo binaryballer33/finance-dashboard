@@ -7,13 +7,12 @@ import { useCallback, useMemo, useState } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import TabbedIncomeExpenseCharts from "@/components/charts/tabbed-income-expense-charts"
+import TabbedIncomeExpenseCharts from "@/views/home/blocks/analytics/overview/tabbed-income-expense-charts"
 
 import BudgetHealth from "./budget/budget-health"
 import FinanceCard from "./cards/finance-card"
 import DateRangeSelector from "./common/date-range-selector"
 import ExpenseCategoryPieChart from "./overview/expense-category-pie-chart"
-import MonthlyIncomeExpenseBarChart from "./overview/monthly-income-expense-bar-chart"
 import DailySpendingChart from "./spending-analysis/daily-spending-chart"
 import SpendingInsights from "./spending-analysis/spending-insights"
 import TopSpendingCategories from "./spending-analysis/top-spending-categories"
@@ -101,20 +100,15 @@ export default function Analytics(props: AnalyticsProps) {
                     <TabsContent className="space-y-4" value="overview">
                         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                             <div className="flex flex-col gap-4">
-                                <div>
-                                    <MonthlyIncomeExpenseBarChart monthlyData={monthlyData()} />
-                                </div>
-                                <div>
-                                    <TabbedIncomeExpenseCharts monthlyData={monthlyData()} />
-                                </div>
+                                <TabbedIncomeExpenseCharts monthlyData={monthlyData()} />
+                                <p className="mt-16 h-[300px] text-center"> Place Holder Component</p>
                             </div>
-                            <div className="h-full">
-                                <ExpenseCategoryPieChart
-                                    categoryData={categoryData()}
-                                    dateRange={dateRange}
-                                    expenses={expenses}
-                                />
-                            </div>
+
+                            <ExpenseCategoryPieChart
+                                categoryData={categoryData()}
+                                dateRange={dateRange}
+                                expenses={expenses}
+                            />
                         </div>
                     </TabsContent>
 
@@ -140,7 +134,7 @@ export default function Analytics(props: AnalyticsProps) {
                         <BudgetHealth
                             calculateTotalExpenses={getTotalExpenses}
                             calculateTotalIncome={getTotalIncome}
-                            expenses={initialExpenses}
+                            expenses={expenses}
                             filteredExpenses={expenses}
                         />
                     </TabsContent>

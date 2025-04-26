@@ -182,7 +182,7 @@ async function createRealisticRecurringExpenses(userId: string) {
             },
             {
                 amount: 50 + Math.floor(Math.random() * 5),
-                category: "Streaming Services",
+                category: "Subscriptions",
                 description: "Netflix, Hulu, Disney+, HBO Max",
                 type: TransactionType.RECURRING,
                 userId,

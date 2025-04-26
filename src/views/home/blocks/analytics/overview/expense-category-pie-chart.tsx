@@ -22,70 +22,6 @@ import getTimeframeString from "../utils/get-timeframe-string"
 // Colors array for the pie chart
 const COLORS = Object.values(categoryColors)
 
-type TransactionDetailsProps = {
-    categoryData: CategoryData
-    onClose: () => void
-}
-
-// Transaction details panel component
-const TransactionDetails = (props: TransactionDetailsProps) => {
-    const { categoryData, onClose } = props
-
-    const color = categoryData.color || "#000000"
-
-    return (
-        <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between border-b p-4" style={{ borderTop: `4px solid ${color}` }}>
-                <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-bold">{categoryData.category}</h2>
-
-                    <Badge style={{ backgroundColor: color }}>{categoryData.percentage}%</Badge>
-
-                    <p className="text-muted-foreground">
-                        Total: ${formatAmount(categoryData.total)} • {categoryData.transactions.length} Transactions
-                    </p>
-                </div>
-                <button
-                    aria-label="Close"
-                    className="rounded-full p-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
-                    onClick={onClose}
-                    type="button"
-                >
-                    <X size={16} />
-                </button>
-            </div>
-
-            <ScrollArea className="flex-1 p-2">
-                <div className="space-y-1">
-                    {categoryData.transactions.map((transaction) => {
-                        const transactionPercentageOfTotal = Number(
-                            ((transaction.amount / categoryData.totalExpenses) * 100).toFixed(2),
-                        )
-
-                        return (
-                            <div className="rounded-md border bg-card p-2 dark:border-gray-500" key={transaction.id}>
-                                <div className="flex items-center justify-between">
-                                    <span className="font-medium">{transaction.description}</span>
-
-                                    <div className="flex items-center gap-2">
-                                        <Badge style={{ backgroundColor: color }}>
-                                            {transactionPercentageOfTotal}%
-                                        </Badge>
-                                        <span className="font-semibold">${formatAmount(transaction.amount)}</span>
-                                    </div>
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                    {getDayJsDateWithPlugins(transaction.date).format("MMM D, YYYY")}
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            </ScrollArea>
-        </div>
-    )
-}
-
 type ExpenseCategoryPieChartProps = {
     categoryData: CategoryData[]
     dateRange: DateRange
@@ -95,21 +31,25 @@ type ExpenseCategoryPieChartProps = {
 export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartProps) {
     const { categoryData, dateRange, expenses } = props
 
-    const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(null)
+    const [selectedCategoryName, setSelectedCategoryName] = useState<null | string>(null)
 
-    const handleClick = (data: CategoryData) => setSelectedCategory(data)
+    const selectedCategory = selectedCategoryName
+        ? categoryData.find((c) => c.category === selectedCategoryName) || null
+        : null
 
-    const closeDetails = () => setSelectedCategory(null)
+    const handleClick = (data: CategoryData) => setSelectedCategoryName(data.category)
+
+    const closeDetails = () => setSelectedCategoryName(null)
 
     return (
-        <div className="mx-auto h-full w-full max-w-4xl" style={{ maxHeight: "800px" }}>
+        <div className="mx-auto h-full w-full" style={{ maxHeight: "906px" }}>
             <Card className="flex h-full flex-col" style={{ maxHeight: "inherit" }}>
                 <CardHeader className="shrink-0">
                     <CardTitle>Expense Distribution By Category</CardTitle>
                     <CardDescription>Click On A Slice To View Detailed Transactions</CardDescription>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <div className="space-y-2">
+                        <div className="space-y-1">
                             <div className="flex justify-between">
                                 <span className="font-medium">Total Transactions:</span>
                                 <span>{expenses.length}</span>
@@ -121,7 +61,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                             </div>
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-1">
                             <div className="flex justify-between">
                                 <span className="font-medium">Categories:</span>
                                 <span>{categoryData.length}</span>
@@ -134,6 +74,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                         </div>
                     </div>
                 </CardHeader>
+
                 <CardContent className="flex-1 overflow-hidden">
                     <div className="flex h-full flex-col overflow-hidden">
                         <div className="h-3/5 w-full">
@@ -226,6 +167,69 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                     </div>
                 </CardContent>
             </Card>
+        </div>
+    )
+}
+
+type TransactionDetailsProps = {
+    categoryData: CategoryData
+    onClose: () => void
+}
+
+const TransactionDetails = (props: TransactionDetailsProps) => {
+    const { categoryData, onClose } = props
+
+    const color = categoryData.color || "#000000"
+
+    return (
+        <div className="flex h-full flex-col">
+            <div className="flex items-center justify-between border-b p-4" style={{ borderTop: `4px solid ${color}` }}>
+                <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-bold">{categoryData.category}</h2>
+
+                    <Badge style={{ backgroundColor: color }}>{categoryData.percentage}%</Badge>
+
+                    <p className="text-muted-foreground">
+                        Total: ${formatAmount(categoryData.total)} • {categoryData.transactions.length} Transactions
+                    </p>
+                </div>
+                <button
+                    aria-label="Close"
+                    className="rounded-full p-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
+                    onClick={onClose}
+                    type="button"
+                >
+                    <X size={16} />
+                </button>
+            </div>
+
+            <ScrollArea className="flex-1 p-2">
+                <div className="space-y-1">
+                    {categoryData.transactions.map((transaction) => {
+                        const transactionPercentageOfTotal = Number(
+                            ((transaction.amount / categoryData.totalExpenses) * 100).toFixed(2),
+                        )
+
+                        return (
+                            <div className="rounded-md border bg-card p-2 dark:border-gray-500" key={transaction.id}>
+                                <div className="flex items-center justify-between">
+                                    <span className="font-medium">{transaction.description}</span>
+
+                                    <div className="flex items-center gap-2">
+                                        <Badge style={{ backgroundColor: color }}>
+                                            {transactionPercentageOfTotal}%
+                                        </Badge>
+                                        <span className="font-semibold">${formatAmount(transaction.amount)}</span>
+                                    </div>
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                    {getDayJsDateWithPlugins(transaction.date).format("MMM D, YYYY")}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </ScrollArea>
         </div>
     )
 }

@@ -1,29 +1,26 @@
 "use client"
 
+import type { MonthlyData } from "@/types/monthly-data"
+
 import { useEffect, useState } from "react"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import IncomeExpenseBarChart from "./income-expense-bar-chart"
-import IncomeExpenseLineChart from "./income-expense-line-chart"
+import MonthlyIncomeExpenseAreaChart from "./monthly-income-expense-area-chart"
+import MonthlyIncomeExpenseBarChart from "./monthly-income-expense-bar-chart"
 
 type TabbedIncomeExpenseChartsProps = {
-    monthlyData: {
-        balance: number
-        expenses: number
-        income: number
-        name: string
-    }[]
+    monthlyData: MonthlyData[]
 }
 
 export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChartsProps) {
     const { monthlyData } = props
 
-    const [showIncome, setShowIncome] = useState(true)
-    const [showExpenses, setShowExpenses] = useState(true)
+    const [visibility, setVisibility] = useState({ balance: true, expenses: true, income: true })
+
     const [mounted, setMounted] = useState(false)
 
     // Only render the charts after component is mounted
@@ -38,13 +35,13 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
         <Card>
             <CardHeader>
                 <CardTitle>Financial Overview</CardTitle>
-                <CardDescription>View Your Income and Expenses In Different Chart Formats</CardDescription>
+
                 <div className="flex items-center space-x-4 pt-2">
                     <div className="flex items-center space-x-2">
                         <Checkbox
-                            checked={showIncome}
+                            checked={visibility.income}
                             id="show-income"
-                            onCheckedChange={(checked) => setShowIncome(checked as boolean)}
+                            onCheckedChange={(checked) => setVisibility({ ...visibility, income: checked as boolean })}
                         />
                         <Label className="flex items-center" htmlFor="show-income">
                             <div className="mr-1.5 h-3 w-3 rounded-full bg-emerald-500" />
@@ -54,35 +51,45 @@ export default function TabbedIncomeExpenseCharts(props: TabbedIncomeExpenseChar
 
                     <div className="flex items-center space-x-2">
                         <Checkbox
-                            checked={showExpenses}
+                            checked={visibility.expenses}
                             id="show-expenses"
-                            onCheckedChange={(checked) => setShowExpenses(checked as boolean)}
+                            onCheckedChange={(checked) =>
+                                setVisibility({ ...visibility, expenses: checked as boolean })
+                            }
                         />
                         <Label className="flex items-center" htmlFor="show-expenses">
                             <div className="mr-1.5 h-3 w-3 rounded-full bg-rose-500" />
                             Expenses
                         </Label>
                     </div>
+
+                    <div className="flex items-center space-x-2">
+                        <Checkbox
+                            checked={visibility.balance}
+                            id="show-balance"
+                            onCheckedChange={(checked) => setVisibility({ ...visibility, balance: checked as boolean })}
+                        />
+                        <Label className="flex items-center" htmlFor="show-balance">
+                            <div className="mr-1.5 h-3 w-3 rounded-full bg-yellow-500" />
+                            Balance
+                        </Label>
+                    </div>
                 </div>
             </CardHeader>
 
             <CardContent>
-                <Tabs className="w-full" defaultValue="area">
+                <Tabs className="w-full" defaultValue="bar">
                     <TabsList className="mb-4 grid w-full grid-cols-2">
-                        <TabsTrigger value="area">Area Chart</TabsTrigger>
                         <TabsTrigger value="bar">Bar Chart</TabsTrigger>
+                        <TabsTrigger value="area">Area Chart</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent className="h-[300px]" value="area">
-                        <IncomeExpenseLineChart
-                            data={monthlyData}
-                            showExpenses={showExpenses}
-                            showIncome={showIncome}
-                        />
+                    <TabsContent value="bar">
+                        <MonthlyIncomeExpenseBarChart monthlyData={monthlyData} visibility={visibility} />
                     </TabsContent>
 
-                    <TabsContent className="h-[300px]" value="bar">
-                        <IncomeExpenseBarChart data={monthlyData} showExpenses={showExpenses} showIncome={showIncome} />
+                    <TabsContent value="area">
+                        <MonthlyIncomeExpenseAreaChart monthlyData={monthlyData} visibility={visibility} />
                     </TabsContent>
                 </Tabs>
             </CardContent>

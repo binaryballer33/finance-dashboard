@@ -70,8 +70,8 @@ export default function CreateExpenseDialog(props: CreateExpenseDialogProps) {
                             label="Type"
                             name="type"
                             options={[
-                                { label: "One Time", value: TransactionType.ONE_TIME },
-                                { label: "Recurring", value: TransactionType.RECURRING },
+                                { color: "bg-emerald-500", label: "One Time", value: TransactionType.ONE_TIME },
+                                { color: "bg-rose-500", label: "Recurring", value: TransactionType.RECURRING },
                             ]}
                         />
                         <DialogFooter>
