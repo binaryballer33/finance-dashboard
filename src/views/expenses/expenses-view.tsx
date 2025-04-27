@@ -6,7 +6,7 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
-import FinanceCard from "../home/blocks/analytics/cards/finance-card"
+import FinanceCard from "../home/blocks/cards/finance-card"
 import ExpensesTable from "./blocks/expenses-table"
 
 type ExpensesViewProps = {

@@ -14,6 +14,8 @@ export default async function HomePage() {
 
     const { dehydratedState, user } = prefetchResult
 
+    if (!user) return <div>User not found</div>
+
     return (
         <HydrationBoundary state={dehydratedState}>
             <HomeView user={user} />
