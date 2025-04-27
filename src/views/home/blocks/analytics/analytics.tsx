@@ -69,7 +69,7 @@ export default function Analytics(props: AnalyticsProps) {
                     <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
                 </div>
             </div>
-            <div className="container mx-auto space-y-4 px-4 py-6 md:px-6">
+            <div className="mx-auto space-y-4 py-6">
                 <div className="mb-6 grid gap-6 overflow-x-auto md:grid-cols-4">
                     <FinanceCard amount={getTotalIncome()} subTitle="Total Money Coming In" title="Total Income" />
 

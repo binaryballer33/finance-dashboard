@@ -7,7 +7,6 @@ import type { Expense } from "@prisma/client"
 import { useState } from "react"
 
 import { categoryColors } from "@/mocks/categories"
-import { X } from "lucide-react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
@@ -191,13 +190,6 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                         Total: ${formatAmount(categoryData.total)} • {categoryData.transactions.length} Transactions
                     </p>
                 </div>
-                <button
-                    aria-label="Close"
-                    className="rounded-full p-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
-                    type="button"
-                >
-                    <X size={16} />
-                </button>
             </div>
 
             <ScrollArea className="flex-1 p-2">
