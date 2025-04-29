@@ -96,13 +96,13 @@ export default function HomeView(props: HomeViewProps) {
 
                             <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                                 <div className="flex h-full flex-col gap-4">
-                                    <TabbedIncomeExpenseCharts monthlyData={memoizedMonthlyData} />
-
                                     <BudgetHealth
                                         expenses={expenses}
                                         totalExpenses={totalExpenses}
                                         totalIncome={totalIncome}
                                     />
+
+                                    <TabbedIncomeExpenseCharts monthlyData={memoizedMonthlyData} />
                                 </div>
 
                                 <ExpenseCategoryPieChart

@@ -1,6 +1,11 @@
 import type { Expense } from "@prisma/client"
 
+import { useState } from "react"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+import formatAmount from "../utils/format-amount"
 
 type BudgetHealthProps = {
     expenses: Expense[]
@@ -11,14 +16,41 @@ type BudgetHealthProps = {
 export default function BudgetHealth(props: BudgetHealthProps) {
     const { expenses, totalExpenses, totalIncome } = props
 
+    const [budgetAmount, setBudgetAmount] = useState(3000)
+    const budgetAmountOptions = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
+
     return (
         <Card className="flex-1">
             <CardHeader>
                 <CardTitle>Budget Health</CardTitle>
-                <CardDescription>How Well You're Managing Your Finances</CardDescription>
+                <CardDescription>How Well Are You Managing Your Finances?</CardDescription>
             </CardHeader>
 
             <CardContent>
+                <div className="mb-4 flex items-center justify-around gap-2 max-sm:flex-col">
+                    <div className="flex items-center justify-center gap-2">
+                        <p className="text-nowrap">Budget Amount</p>
+
+                        <Select
+                            onValueChange={(value) => setBudgetAmount(Number(value))}
+                            value={budgetAmount.toString()}
+                        >
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {budgetAmountOptions.map((amount) => (
+                                    <SelectItem key={amount} value={amount.toString()}>
+                                        {formatAmount(amount)}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <p className="text-nowrap">Budget Remaining: ${formatAmount(budgetAmount - totalExpenses)}</p>
+                </div>
+
                 {expenses.length > 0 ? (
                     <div className="space-y-6">
                         <div>
