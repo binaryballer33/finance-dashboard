@@ -36,12 +36,12 @@ type HomeViewProps = {
 export default function HomeView(props: HomeViewProps) {
     const { user } = props
 
+    const [dateRange, setDateRange] = useState<DateRange>("1m")
+
     const { data: initialIncomes = [] } = useGetIncomeByUserIdQuery(user.id)
     const { data: initialTrades = [] } = useGetTradesByUserIdQuery(user.id)
     const infiniteQuery = useGetExpensesByUserIdInfiniteQuery(user.id)
     const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
-
-    const [dateRange, setDateRange] = useState<DateRange>("1m")
 
     const expenses = useMemo(() => {
         return dateRange !== "all" ? getFilteredArray(initialExpenses, dateRange) : initialExpenses
@@ -58,8 +58,8 @@ export default function HomeView(props: HomeViewProps) {
     const totalIncome = useMemo(() => getTotal({ usingArray: incomes, usingField: "amount" }), [incomes])
     const totalTrades = useMemo(() => getTotal({ usingArray: trades, usingField: "profitLoss" }), [trades])
     const totalExpenses = useMemo(() => getTotal({ usingArray: expenses, usingField: "amount" }), [expenses])
-    const memoizedCategoryData = useMemo(() => getCategoryData(expenses), [expenses])
-    const memoizedMonthlyData = useMemo(() => getMonthlyData(incomes, expenses), [incomes, expenses])
+    const categoryData = useMemo(() => getCategoryData(expenses), [expenses])
+    const monthlyData = useMemo(() => getMonthlyData(incomes, expenses), [incomes, expenses])
 
     return (
         <Container maxWidth="xl">
@@ -102,11 +102,11 @@ export default function HomeView(props: HomeViewProps) {
                                         totalIncome={totalIncome}
                                     />
 
-                                    <TabbedIncomeExpenseCharts monthlyData={memoizedMonthlyData} />
+                                    <TabbedIncomeExpenseCharts monthlyData={monthlyData} />
                                 </div>
 
                                 <ExpenseCategoryPieChart
-                                    categoryData={memoizedCategoryData}
+                                    categoryData={categoryData}
                                     dateRange={dateRange}
                                     expenses={expenses}
                                 />
@@ -117,10 +117,10 @@ export default function HomeView(props: HomeViewProps) {
                             <DailySpendingChart dateRange={dateRange} expenses={expenses} />
 
                             <div className="grid gap-4 md:grid-cols-2">
-                                <TopSpendingCategories categoryData={memoizedCategoryData} />
+                                <TopSpendingCategories categoryData={categoryData} />
 
                                 <SpendingInsights
-                                    monthlyData={memoizedMonthlyData}
+                                    monthlyData={monthlyData}
                                     totalExpenses={totalExpenses}
                                     totalIncome={totalIncome}
                                 />

@@ -1,8 +1,7 @@
 import type { MonthlyData } from "@/types/monthly-data"
+import type { Expense, Income } from "@prisma/client"
 
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
-
-import type { Expense, Income } from "./types"
 
 import getTotal from "./get-total"
 
