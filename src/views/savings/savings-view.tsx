@@ -9,8 +9,8 @@ import Container from "@/components/base/container"
 import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
-import FinanceCard from "../home/blocks/cards/finance-card"
 import getTotal from "../../lib/data-aggregation/get-total"
+import FinanceCard from "../home/blocks/cards/finance-card"
 
 type SavingsViewProps = {
     userId: string
