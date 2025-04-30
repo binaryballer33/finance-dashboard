@@ -2,7 +2,7 @@ import type { MonthlyData } from "@/types/monthly-data"
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip as ReTooltip, XAxis, YAxis } from "recharts"
 
-import formatAmount from "../utils/format-amount"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
 
 type MonthlyIncomeExpenseBarChartProps = {
     monthlyData: MonthlyData[]

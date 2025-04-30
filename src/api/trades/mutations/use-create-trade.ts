@@ -23,6 +23,8 @@ export default function useCreateTradeMutation() {
     return useMutation<null | PrismaTrade, Error, Trade, MutationContext>({
         mutationFn: (trade: Trade) => createTrade(trade),
 
+        mutationKey: QUERY_KEYS.CREATE_TRADE,
+
         onError(error, trade, context) {
             console.error(`Error Creating Trade: ${error}`)
             toast.error(`Error Creating Trade ${trade.ticker}`)

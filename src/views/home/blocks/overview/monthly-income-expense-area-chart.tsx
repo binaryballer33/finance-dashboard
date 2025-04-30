@@ -7,7 +7,7 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
 
-import formatAmount from "../utils/format-amount"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
 
 type MonthlyIncomeExpenseAreaChartProps = {
     monthlyData: MonthlyData[]

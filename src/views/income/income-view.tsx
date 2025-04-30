@@ -7,7 +7,7 @@ import PageHeading from "@/components/base/page-heading"
 import { H5 } from "@/components/base/typography"
 
 import FinanceCard from "../home/blocks/cards/finance-card"
-import getTotal from "../home/blocks/utils/get-total"
+import getTotal from "../../lib/data-aggregation/get-total"
 import IncomeTable from "./blocks/income-table"
 
 type IncomeViewProps = {

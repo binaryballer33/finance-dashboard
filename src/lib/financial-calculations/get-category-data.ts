@@ -3,8 +3,8 @@ import type { Expense } from "@prisma/client"
 
 import { categoryColors } from "@/mocks/categories"
 
-import getTotal from "./get-total"
-import groupArrayOfObjectsByField from "./group-array-of-objects-by-field"
+import getTotal from "@/lib/data-aggregation/get-total"
+import groupArrayOfObjectsByField from "@/lib/data-aggregation/group-array-of-objects-by-field"
 
 export default function getCategoryData(expenses: Expense[]) {
     const totalExpenses = getTotal({ usingArray: expenses, usingField: "amount" })

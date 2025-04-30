@@ -5,7 +5,7 @@ import { useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 import COLORS from "../utils/constants"
-import formatAmount from "../utils/format-amount"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
 
 type TopSpendingCategoriesProps = {
     categoryData: CategoryData[]

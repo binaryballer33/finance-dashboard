@@ -23,6 +23,8 @@ export default function useDeleteIncomeMutation() {
     return useMutation<null | PrismaIncome, Error, Income, MutationContext>({
         mutationFn: (income: Income) => deleteIncome(income),
 
+        mutationKey: QUERY_KEYS.DELETE_INCOME,
+
         onError(error, income, context) {
             console.error(`Error Deleting Income: ${error}`)
             toast.error(`Error Deleting Income ${income.description}`)

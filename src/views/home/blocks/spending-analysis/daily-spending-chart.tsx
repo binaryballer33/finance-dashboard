@@ -10,9 +10,9 @@ import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-dat
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartTooltip } from "@/components/ui/chart"
 
-import formatAmount from "../utils/format-amount"
-import getDailyTransactionTotals from "../utils/get-daily-transaction-totals"
-import getTimeframeString from "../utils/get-timeframe-string"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
+import getDailyTransactionTotals from "../../../../lib/financial-calculations/get-daily-transaction-totals"
+import getTimeframeString from "../../../../lib/financial-calculations/get-timeframe-string"
 
 type DailySpendingChartProps = {
     dateRange: DateRange

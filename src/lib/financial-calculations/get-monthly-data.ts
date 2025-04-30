@@ -1,9 +1,8 @@
 import type { MonthlyData } from "@/types/monthly-data"
 import type { Expense, Income } from "@prisma/client"
 
+import getTotal from "@/lib/data-aggregation/get-total"
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
-
-import getTotal from "./get-total"
 
 export default function getMonthlyData(incomes: Income[], expenses: Expense[]): MonthlyData[] {
     const monthlyDataMap: Record<string, { expenses: Expense[]; incomes: Income[] }> = {}

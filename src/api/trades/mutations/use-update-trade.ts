@@ -23,6 +23,8 @@ export default function useUpdateTradeMutation() {
     return useMutation<null | PrismaTrade, Error, Trade, MutationContext>({
         mutationFn: (trade: Trade) => updateTrade(trade),
 
+        mutationKey: QUERY_KEYS.UPDATE_TRADE,
+
         onError(error, trade, context) {
             console.error(`Error Updating Trade: ${error}`)
             toast.error(`Error Updating Trade ${trade.ticker}`)

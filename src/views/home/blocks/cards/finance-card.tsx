@@ -2,7 +2,7 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-import formatAmount from "../utils/format-amount"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
 
 type TotalIncomeProps = {
     amount: number

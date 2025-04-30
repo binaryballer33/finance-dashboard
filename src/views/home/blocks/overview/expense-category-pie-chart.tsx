@@ -15,8 +15,8 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import formatAmount from "../utils/format-amount"
-import getTimeframeString from "../utils/get-timeframe-string"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
+import getTimeframeString from "../../../../lib/financial-calculations/get-timeframe-string"
 
 // Colors array for the pie chart
 const COLORS = Object.values(categoryColors)

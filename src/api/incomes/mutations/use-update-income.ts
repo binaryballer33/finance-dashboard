@@ -23,6 +23,8 @@ export default function useUpdateIncomeMutation() {
     return useMutation<null | PrismaIncome, Error, Income, MutationContext>({
         mutationFn: (income: Income) => updateIncome(income),
 
+        mutationKey: QUERY_KEYS.UPDATE_INCOME,
+
         onError(error, income, context) {
             console.error(`Error Updating Income: ${error}`)
             toast.error(`Error Updating Income ${income.description}`)

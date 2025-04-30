@@ -23,6 +23,8 @@ export default function useUpdateExpenseMutation() {
     return useMutation<null | PrismaExpense, Error, Expense, MutationContext>({
         mutationFn: (expense: Expense) => updateExpense(expense),
 
+        mutationKey: QUERY_KEYS.UPDATE_EXPENSE,
+
         onError(error, expense, context) {
             console.error(`Error Updating Expense: ${error}`)
             toast.error(`Error Updating Expense ${expense.description}`)

@@ -24,6 +24,8 @@ export default function useDeleteExpenseMutation() {
     return useMutation<null | PrismaExpense, Error, Expense, MutationContext>({
         mutationFn: (expense: Expense) => deleteExpense(expense),
 
+        mutationKey: QUERY_KEYS.DELETE_EXPENSE,
+
         onError(error, expense, context) {
             console.error(`Error Deleting Expense: ${error}`)
             toast.error(`Error Deleting Expense ${expense.description}`)

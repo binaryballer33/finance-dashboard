@@ -24,6 +24,8 @@ export default function useCreateExpenseMutation() {
     return useMutation<null | PrismaExpense, Error, Expense, MutationContext>({
         mutationFn: (expense: Expense) => createExpense(expense),
 
+        mutationKey: QUERY_KEYS.CREATE_EXPENSE,
+
         onError(error, expense, context) {
             console.error(`Error Creating Expense: ${error}`)
             toast.error(`Error Creating Expense ${expense.description}`)

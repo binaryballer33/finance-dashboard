@@ -3,7 +3,7 @@ import type { CategoryData } from "@/types/category-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 import COLORS from "../utils/constants"
-import formatAmount from "../utils/format-amount"
+import formatAmount from "../../../../lib/financial-calculations/format-amount"
 
 type SpendingSummaryProps = {
     calculateTotalExpenses: () => number

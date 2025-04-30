@@ -3,7 +3,7 @@ import type { Expense } from "@prisma/client"
 
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
-import getDaysInRange from "./get-days-in-range"
+import getDaysInRange from "@/components/helper-functions/get-days-in-range"
 
 export default function getDailyTransactionTotals(expenses: Expense[], dateRange: DateRange) {
     const daysInRange = getDaysInRange(dateRange)

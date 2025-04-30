@@ -1,6 +1,6 @@
 import type { DateRange } from "@/types/date-range"
 
-import getFilteredArrayByDateRange from "./get-filtered-array-by-date-range"
+import getFilteredArrayByDateRange from "@/lib/data-aggregation/get-filtered-array-by-date-range"
 
 type GetTotalProps<ObjectOfSomeType extends Record<string, any>> = {
     usingArray: ObjectOfSomeType[]

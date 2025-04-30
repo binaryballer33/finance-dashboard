@@ -9,6 +9,11 @@ import useGetExpensesByUserIdInfiniteQuery from "@/api/expenses/queries/use-get-
 import useGetIncomeByUserIdQuery from "@/api/incomes/queries/use-get-income-by-userId"
 import useGetTradesByUserIdQuery from "@/api/trades/queries/use-get-trades-by-userId"
 
+import getFilteredArray from "@/lib/data-aggregation/get-filtered-array-by-date-range"
+import getTotal from "@/lib/data-aggregation/get-total"
+import getCategoryData from "@/lib/financial-calculations/get-category-data"
+import getMonthlyData from "@/lib/financial-calculations/get-monthly-data"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import ExpensesTable from "@/views/expenses/blocks/expenses-table"
@@ -20,10 +25,6 @@ import TabbedIncomeExpenseCharts from "@/views/home/blocks/overview/tabbed-incom
 import DailySpendingChart from "@/views/home/blocks/spending-analysis/daily-spending-chart"
 import SpendingInsights from "@/views/home/blocks/spending-analysis/spending-insights"
 import TopSpendingCategories from "@/views/home/blocks/spending-analysis/top-spending-categories"
-import getCategoryData from "@/views/home/blocks/utils/get-category-data"
-import getFilteredArray from "@/views/home/blocks/utils/get-filtered-array-by-date-range"
-import getMonthlyData from "@/views/home/blocks/utils/get-monthly-data"
-import getTotal from "@/views/home/blocks/utils/get-total"
 import IncomeTable from "@/views/income/blocks/income-table"
 import TradeTable from "@/views/investments/blocks/trade-table"
 

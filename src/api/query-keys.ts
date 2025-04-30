@@ -1,21 +1,21 @@
 const QUERY_KEYS = {
     // creates
+    CREATE_EXPENSE: ["create-expense"],
+    CREATE_INCOME: ["create-income"],
     CREATE_TRADE: ["create-trade"],
-    CREATE_TRANSACTION: ["create-transaction"],
     CREATE_USER: ["create-user"],
 
     // deletes
-    DELETE_EXPENSE_BY_ID: (id: string) => ["delete-expense", { id }],
-    DELETE_INCOME_BY_ID: (id: string) => ["delete-income", { id }],
-    DELETE_TRADE_BY_ID: (id: string) => ["delete-trade", { id }],
-    DELETE_USER_BY_ID: (id: string) => ["delete-user", { id }],
+    DELETE_EXPENSE: ["delete-expense"],
+    DELETE_INCOME: ["delete-income"],
+    DELETE_TRADE: ["delete-trade"],
+    DELETE_USER: ["delete-user"],
 
     // get many
     GET_ALL_EXPENSES_BY_USER_ID: (userId: string) => ["expenses", { userId }],
     GET_ALL_INCOMES_BY_USER_ID: (userId: string) => ["incomes", { userId }],
     GET_ALL_TRADES: ["trades"],
     GET_ALL_TRADES_BY_USER_ID: (userId: string) => ["trades", { userId }],
-    GET_ALL_TRANSACTIONS: ["transactions"],
     GET_ALL_USERS: ["user"],
 
     // get by id
@@ -25,10 +25,10 @@ const QUERY_KEYS = {
     GET_USER_BY_ID: (id: string) => ["user", { id }],
 
     // updates
-    UPDATE_EXPENSE_BY_ID: (id: string) => ["update-expense", { id }],
-    UPDATE_INCOME_BY_ID: (id: string) => ["update-income", { id }],
-    UPDATE_TRADE_BY_ID: (id: string) => ["update-trade", { id }],
-    UPDATE_USER_BY_ID: (id: string) => ["user", { id }],
+    UPDATE_EXPENSE: ["update-expense"],
+    UPDATE_INCOME: ["update-income"],
+    UPDATE_TRADE: ["update-trade"],
+    UPDATE_USER: ["user"],
 }
 
 export default QUERY_KEYS

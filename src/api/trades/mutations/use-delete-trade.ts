@@ -23,6 +23,8 @@ export default function useDeleteTradeMutation() {
     return useMutation<null | PrismaTrade, Error, Trade, MutationContext>({
         mutationFn: (trade: Trade) => deleteTrade(trade),
 
+        mutationKey: QUERY_KEYS.DELETE_TRADE,
+
         onError(error, trade, context) {
             console.error(`Error Deleting Trade: ${error}`)
             toast.error(`Error Deleting Trade ${trade.ticker}`)
