@@ -11,12 +11,6 @@ import updateTrade from "@/actions/trades/mutations/update-trade"
 type Trade = Omit<PrismaTrade, "createdAt" | "updatedAt">
 type MutationContext = { cacheBeforeMutation?: PrismaTrade[]; loadingToastId: number | string }
 
-/*
- * Id gets created after item is added to the database,
- * need to invalidate the cache when creating the card because the id is not known until the card is created
- * and if the cache is not invalidated, if you try to edit or delete that card with its id,
- * you will get an error because the cache doesn't have the id because you didn't re-fetch the data from the database
- */
 export default function useUpdateTradeMutation() {
     const queryClient = useQueryClient()
 

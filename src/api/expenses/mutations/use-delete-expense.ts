@@ -12,12 +12,6 @@ type Expense = Omit<PrismaExpense, "createdAt" | "updatedAt">
 type InfiniteQueryData = { pageParams: number[]; pages: Expense[][] }
 type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId: number | string }
 
-/*
- * Id gets created after item is added to the database,
- * need to invalidate the cache when creating the card because the id is not known until the card is created
- * and if the cache is not invalidated, if you try to edit or delete that card with its id,
- * you will get an error because the cache doesn't have the id because you didn't re-fetch the data from the database
- */
 export default function useDeleteExpenseMutation() {
     const queryClient = useQueryClient()
 
@@ -63,9 +57,7 @@ export default function useDeleteExpenseMutation() {
         },
 
         onSettled: async (_data, _error, expense, context) => {
-            if (context?.loadingToastId) {
-                toast.dismiss(context.loadingToastId)
-            }
+            if (context?.loadingToastId) toast.dismiss(context.loadingToastId)
 
             // invalidate the cache after expense deletion, causes a re-fetch of the data from the database, more expensive
             // await queryClient.invalidateQueries({

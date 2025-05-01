@@ -14,8 +14,8 @@ type MutationContext = { cacheBeforeMutation?: InfiniteQueryData; loadingToastId
 
 /*
  * Id gets created after item is added to the database,
- * need to invalidate the cache when creating the expense because the id is not known until the expense is created
- * and if the cache is not invalidated, if you try to edit or delete that expense with its id,
+ * need to invalidate the cache when creating the record because the id is not known until the record is created
+ * and if the cache is not invalidated, if you try to edit or delete that record with its id,
  * you will get an error because the cache doesn't have the id because you didn't re-fetch the data from the database
  */
 export default function useCreateExpenseMutation() {

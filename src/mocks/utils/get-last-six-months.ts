@@ -13,10 +13,7 @@ export default function getLastSixMonthsArray(): Dayjs[] {
     const today = new Date()
 
     for (let i = 0; i < 6; i += 1) {
-        let date = getDayJsDateWithPlugins(today)
-        date = date.subtract(i, "month")
-        date = date.startOf("month")
-
+        const date = getDayJsDateWithPlugins(today).subtract(i, "month").startOf("month")
         lastSixMonthsArray.push(date)
     }
 

@@ -13,8 +13,8 @@ type MutationContext = { cacheBeforeMutation?: PrismaTrade[]; loadingToastId: nu
 
 /*
  * Id gets created after item is added to the database,
- * need to invalidate the cache when creating the card because the id is not known until the card is created
- * and if the cache is not invalidated, if you try to edit or delete that card with its id,
+ * need to invalidate the cache when creating the record because the id is not known until the record is created
+ * and if the cache is not invalidated, if you try to edit or delete that record with its id,
  * you will get an error because the cache doesn't have the id because you didn't re-fetch the data from the database
  */
 export default function useCreateTradeMutation() {
