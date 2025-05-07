@@ -16,6 +16,32 @@ export default function getDateRangeStartDate(dateRange: DateRange, today: Dayjs
             return today.subtract(6, "month")
         case "1y":
             return today.subtract(1, "year")
+        case "Jan":
+            return today.set("month", 0).startOf("month")
+        case "Feb":
+            return today.set("month", 1).startOf("month")
+        case "Mar":
+            return today.set("month", 2).startOf("month")
+        case "Apr":
+            return today.set("month", 3).startOf("month")
+        case "May":
+            return today.set("month", 4).startOf("month")
+        case "Jun":
+            return today.set("month", 5).startOf("month")
+        case "Jul":
+            return today.set("month", 6).startOf("month")
+        case "Aug":
+            return today.set("month", 7).startOf("month")
+        case "Sep":
+            return today.set("month", 8).startOf("month")
+        case "Oct":
+            return today.set("month", 9).startOf("month")
+        case "Nov":
+            return today.set("month", 10).startOf("month")
+        case "Dec":
+            return today.set("month", 11).startOf("month")
+        case "all":
+            return today.subtract(10, "year")
         default:
             return today.subtract(14, "day")
     }

@@ -12,7 +12,9 @@ import useGetTradesByUserIdQuery from "@/api/trades/queries/use-get-trades-by-us
 import getFilteredArray from "@/lib/data-aggregation/get-filtered-array-by-date-range"
 import getTotal from "@/lib/data-aggregation/get-total"
 import getCategoryData from "@/lib/financial-calculations/get-category-data"
+import getDailyTransactionTotals from "@/lib/financial-calculations/get-daily-transaction-totals"
 import getMonthlyData from "@/lib/financial-calculations/get-monthly-data"
+import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -37,30 +39,25 @@ type HomeViewProps = {
 export default function HomeView(props: HomeViewProps) {
     const { user } = props
 
-    const [dateRange, setDateRange] = useState<DateRange>("1m")
+    const today = getDayJsDateWithPlugins(new Date())
+    const [dateRange, setDateRange] = useState<DateRange>((today.format("MMM") as DateRange) || "1m")
 
     const { data: initialIncomes = [] } = useGetIncomeByUserIdQuery(user.id)
     const { data: initialTrades = [] } = useGetTradesByUserIdQuery(user.id)
     const infiniteQuery = useGetExpensesByUserIdInfiniteQuery(user.id)
     const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
 
-    const expenses = useMemo(() => {
-        return dateRange !== "all" ? getFilteredArray(initialExpenses, dateRange) : initialExpenses
-    }, [initialExpenses, dateRange])
-
-    const incomes = useMemo(() => {
-        return dateRange !== "all" ? getFilteredArray(initialIncomes, dateRange) : initialIncomes
-    }, [initialIncomes, dateRange])
-
-    const trades = useMemo(() => {
-        return dateRange !== "all" ? getFilteredArray(initialTrades, dateRange) : initialTrades
-    }, [initialTrades, dateRange])
+    const expenses = useMemo(() => getFilteredArray(initialExpenses, dateRange), [initialExpenses, dateRange])
+    const incomes = useMemo(() => getFilteredArray(initialIncomes, dateRange), [initialIncomes, dateRange])
+    const trades = useMemo(() => getFilteredArray(initialTrades, dateRange), [initialTrades, dateRange])
 
     const totalIncome = useMemo(() => getTotal({ usingArray: incomes, usingField: "amount" }), [incomes])
     const totalTrades = useMemo(() => getTotal({ usingArray: trades, usingField: "profitLoss" }), [trades])
     const totalExpenses = useMemo(() => getTotal({ usingArray: expenses, usingField: "amount" }), [expenses])
+
     const categoryData = useMemo(() => getCategoryData(expenses), [expenses])
     const monthlyData = useMemo(() => getMonthlyData(incomes, expenses), [incomes, expenses])
+    const dailyTransactionData = useMemo(() => getDailyTransactionTotals(expenses, dateRange), [expenses, dateRange])
 
     return (
         <Container maxWidth="xl">
@@ -93,7 +90,7 @@ export default function HomeView(props: HomeViewProps) {
                         </TabsList>
 
                         <TabsContent className="space-y-4" value="overview">
-                            <DailySpendingChart dateRange={dateRange} expenses={expenses} />
+                            <DailySpendingChart dailyTransactionData={dailyTransactionData} dateRange={dateRange} />
 
                             <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                                 <div className="flex h-full flex-col gap-4">
@@ -115,7 +112,7 @@ export default function HomeView(props: HomeViewProps) {
                         </TabsContent>
 
                         <TabsContent className="space-y-4" value="spending">
-                            <DailySpendingChart dateRange={dateRange} expenses={expenses} />
+                            <DailySpendingChart dailyTransactionData={dailyTransactionData} dateRange={dateRange} />
 
                             <div className="grid gap-4 md:grid-cols-2">
                                 <TopSpendingCategories categoryData={categoryData} />
@@ -145,7 +142,7 @@ export default function HomeView(props: HomeViewProps) {
                                 </TabsContent>
 
                                 <TabsContent value="expenses">
-                                    <ExpensesTable infiniteQuery={infiniteQuery} userId={user.id} />
+                                    <ExpensesTable expenses={expenses} infiniteQuery={infiniteQuery} userId={user.id} />
                                 </TabsContent>
 
                                 <TabsContent value="trades">

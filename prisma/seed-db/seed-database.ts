@@ -44,7 +44,6 @@ async function createRealisticOneTimeExpenses(userId: string) {
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Churrascaria Dinner",
                 type: TransactionType.ONE_TIME,
-                userId,
             },
             {
                 amount: 50 + Math.floor(Math.random() * 50),
@@ -52,7 +51,6 @@ async function createRealisticOneTimeExpenses(userId: string) {
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Gasoline",
                 type: TransactionType.ONE_TIME,
-                userId,
             },
             {
                 amount: 30 + Math.floor(Math.random() * 50),
@@ -60,7 +58,6 @@ async function createRealisticOneTimeExpenses(userId: string) {
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Movie Date",
                 type: TransactionType.ONE_TIME,
-                userId,
             },
             {
                 amount: 50 + Math.floor(Math.random() * 50),
@@ -68,7 +65,6 @@ async function createRealisticOneTimeExpenses(userId: string) {
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Fitness Activities",
                 type: TransactionType.ONE_TIME,
-                userId,
             },
             {
                 amount: 120 + Math.floor(Math.random() * 100),
@@ -76,7 +72,6 @@ async function createRealisticOneTimeExpenses(userId: string) {
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Plane Ticket To Other Brazilian Cities",
                 type: TransactionType.ONE_TIME,
-                userId,
             },
             {
                 amount: 200 + Math.floor(Math.random() * 100),
@@ -84,20 +79,13 @@ async function createRealisticOneTimeExpenses(userId: string) {
                 date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
                 description: "Clothes Shopping",
                 type: TransactionType.ONE_TIME,
-                userId,
             },
-        ]
+        ] satisfies Pick<Expense, "amount" | "category" | "date" | "description" | "type">[]
 
-        for (let i = 0; i < expenses.length; i += 1) {
-            const { amount } = expenses[i]
-            const { category } = expenses[i]
-            const { description } = expenses[i]
-            const { type } = expenses[i]
-            const date = new Date(monthDate.set("date", 2).format("YYYY-MM-DD"))
-
-            const expense = { amount, category, date, description, type, userId }
-            expensesArray.push(expense)
-        }
+        expenses.forEach(({ amount, category, date, description, type }) => {
+            const createdExpense = { amount, category, date, description, type, userId }
+            expensesArray.push(createdExpense)
+        })
     })
 
     try {

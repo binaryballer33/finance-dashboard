@@ -4,6 +4,8 @@ import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-dat
 
 import getDateRangeStartDate from "@/components/helper-functions/get-date-range-start-date"
 
+import { months } from "../constants"
+
 export default function getFilteredArrayByDateRange<ObjectOfSomeType extends Record<string, any>>(
     array: ObjectOfSomeType[],
     dateRange: DateRange,
@@ -15,6 +17,11 @@ export default function getFilteredArrayByDateRange<ObjectOfSomeType extends Rec
 
     return array.filter((item) => {
         const date = getDayJsDateWithPlugins(item.date)
+
+        if (months.includes(dateRange)) {
+            return date.month() === startDate.month() && date.year() === startDate.year()
+        }
+
         return date.isBetween(startDate, today, "day", "[]")
     })
 }

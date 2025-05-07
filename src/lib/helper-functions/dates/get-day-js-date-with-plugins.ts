@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 import duration from "dayjs/plugin/duration"
 import isBetween from "dayjs/plugin/isBetween"
+import isLeapYear from "dayjs/plugin/isLeapYear"
 import isoWeek from "dayjs/plugin/isoWeek"
 import weekOfYear from "dayjs/plugin/weekOfYear"
 
@@ -12,6 +13,7 @@ dayjs.extend(duration)
 dayjs.extend(isoWeek)
 dayjs.extend(isBetween)
 dayjs.extend(customParseFormat)
+dayjs.extend(isLeapYear)
 
 /**
  * Docs: https://day.js.org/docs/en/display/format

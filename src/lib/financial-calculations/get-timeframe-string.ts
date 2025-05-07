@@ -14,6 +14,30 @@ export default function getTimeframeString(dateRange: DateRange) {
             return "Last 6 Months"
         case "1y":
             return "Last Year"
+        case "Jan":
+            return "January"
+        case "Feb":
+            return "February"
+        case "Mar":
+            return "March"
+        case "Apr":
+            return "April"
+        case "May":
+            return "May"
+        case "Jun":
+            return "June"
+        case "Jul":
+            return "July"
+        case "Aug":
+            return "August"
+        case "Sep":
+            return "September"
+        case "Oct":
+            return "October"
+        case "Nov":
+            return "November"
+        case "Dec":
+            return "December"
         case "all":
             return "All Time"
         default:

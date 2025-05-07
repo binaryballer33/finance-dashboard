@@ -127,6 +127,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                                         content={({ active, payload }) => {
                                             if (active && payload && payload.length) {
                                                 const data = payload[0].payload
+
                                                 return (
                                                     <div className="rounded-md border bg-background p-2 shadow-md">
                                                         <p
@@ -137,6 +138,10 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                                                         </p>
                                                         <p className="text-sm text-muted-foreground">
                                                             ${data.total.toFixed(2)} ({data.percentage}%)
+                                                        </p>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            {data.transactions.length}{" "}
+                                                            {`${data.transactions.length === 1 ? "Transaction" : "Transactions"}`}
                                                         </p>
                                                     </div>
                                                 )

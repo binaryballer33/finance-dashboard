@@ -1,32 +1,25 @@
+import type { DailyTransactionData } from "@/types/daily-transaction-data"
 import type { DateRange } from "@/types/date-range"
 import type { Expense } from "@prisma/client"
 
-import { useCallback } from "react"
-
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
+import { months } from "@/lib/constants"
+import formatAmount from "@/lib/financial-calculations/format-amount"
+import getTimeframeString from "@/lib/financial-calculations/get-timeframe-string"
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartTooltip } from "@/components/ui/chart"
 
-import formatAmount from "../../../../lib/financial-calculations/format-amount"
-import getDailyTransactionTotals from "../../../../lib/financial-calculations/get-daily-transaction-totals"
-import getTimeframeString from "../../../../lib/financial-calculations/get-timeframe-string"
-
 type DailySpendingChartProps = {
+    dailyTransactionData: DailyTransactionData[]
     dateRange: DateRange
-    expenses: Expense[]
 }
 
 export default function DailySpendingChart(props: DailySpendingChartProps) {
-    const { dateRange, expenses } = props
-
-    // prepare data for daily spending
-    const dailyTransactionTotals = useCallback(
-        () => getDailyTransactionTotals(expenses, dateRange),
-        [expenses, dateRange],
-    )
+    const { dailyTransactionData, dateRange } = props
+    const isMonthRange = months.includes(dateRange)
 
     return (
         <Card>
@@ -38,11 +31,14 @@ export default function DailySpendingChart(props: DailySpendingChartProps) {
             </CardHeader>
             <CardContent className="h-[300px]">
                 <ResponsiveContainer height="100%" width="100%">
-                    <AreaChart data={dailyTransactionTotals()}>
+                    <AreaChart data={dailyTransactionData}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
                             dataKey="date"
                             tickFormatter={(value, index) => {
+                                // For month ranges, only show every 5 days to avoid overcrowding
+                                if (isMonthRange && index % 5 !== 0) return ""
+
                                 // For longer periods, only show some of the dates to avoid overcrowding
                                 if (dateRange === "1y" && index % 30 !== 0) return ""
                                 if (dateRange === "6m" && index % 15 !== 0) return ""

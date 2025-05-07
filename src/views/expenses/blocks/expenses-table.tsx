@@ -14,13 +14,14 @@ import UpdateExpenseDialog from "./update-expense-dialog"
 import useCreateExpensesTableColumns from "./use-create-expenses-table-columns"
 
 type ExpensesTableProps = {
+    expenses?: Expense[]
     infiniteQuery: UseInfiniteQueryResult<InfiniteData<Expense[], unknown>, Error>
     userId: string
 }
 
 export default function ExpensesTable(props: ExpensesTableProps) {
-    const { infiniteQuery, userId } = props
-    const expenses = infiniteQuery.data?.pages.flatMap((page) => page) ?? []
+    const { expenses: expensesProp, infiniteQuery, userId } = props
+    const expenses = expensesProp ?? infiniteQuery.data?.pages.flatMap((page) => page) ?? []
 
     const { columns } = useCreateExpensesTableColumns()
 
