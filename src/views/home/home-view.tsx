@@ -63,7 +63,7 @@ export default function HomeView(props: HomeViewProps) {
         <Container maxWidth="xl">
             <div className="min-h-screen bg-background">
                 <div className="sticky top-0 z-10 border-b bg-background pb-2 pt-4">
-                    <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
+                    <DateRangeSelector currentDate={today} dateRange={dateRange} setDateRange={setDateRange} />
                 </div>
 
                 <div className="mx-auto space-y-4 py-6">

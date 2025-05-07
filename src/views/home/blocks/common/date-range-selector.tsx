@@ -1,15 +1,20 @@
 import type { DateRange } from "@/types/date-range"
+import type { Dayjs } from "dayjs"
 
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 type DateRangeSelectorProps = {
+    currentDate: Dayjs
     dateRange: DateRange
     setDateRange: (dateRange: DateRange) => void
 }
 
 export default function DateRangeSelector(props: DateRangeSelectorProps) {
-    const { dateRange, setDateRange } = props
+    const { currentDate, dateRange, setDateRange } = props
+
+    // Create an array of months sorted by proximity to current month
+    const sortedMonths = getMonthsSortedByCurrentDate(currentDate)
 
     return (
         <Tabs onValueChange={(v) => setDateRange(v as DateRange)} value={dateRange}>
@@ -27,20 +32,48 @@ export default function DateRangeSelector(props: DateRangeSelectorProps) {
                 <Separator className="mx-2 h-full" orientation="vertical" />
 
                 <div className="flex items-center gap-2 overflow-x-scroll max-sm:max-w-40 lg:flex-1">
-                    <TabsTrigger value="Jan">Jan</TabsTrigger>
-                    <TabsTrigger value="Feb">Feb</TabsTrigger>
-                    <TabsTrigger value="Mar">Mar</TabsTrigger>
-                    <TabsTrigger value="Apr">Apr</TabsTrigger>
-                    <TabsTrigger value="May">May</TabsTrigger>
-                    <TabsTrigger value="Jun">Jun</TabsTrigger>
-                    <TabsTrigger value="Jul">Jul</TabsTrigger>
-                    <TabsTrigger value="Aug">Aug</TabsTrigger>
-                    <TabsTrigger value="Sep">Sep</TabsTrigger>
-                    <TabsTrigger value="Oct">Oct</TabsTrigger>
-                    <TabsTrigger value="Nov">Nov</TabsTrigger>
-                    <TabsTrigger value="Dec">Dec</TabsTrigger>
+                    {sortedMonths.map((month) => (
+                        <TabsTrigger key={month.value} value={month.value}>
+                            {month.label}
+                        </TabsTrigger>
+                    ))}
                 </div>
             </TabsList>
         </Tabs>
     )
+}
+
+// Helper function to sort months by proximity to current month
+function getMonthsSortedByCurrentDate(currentDate: Dayjs) {
+    const currentMonth = currentDate.month() // 0-11 for Jan-Dec
+
+    type MonthItem = { label: string; value: string }
+
+    const months: MonthItem[] = [
+        { label: "Jan", value: "Jan" },
+        { label: "Feb", value: "Feb" },
+        { label: "Mar", value: "Mar" },
+        { label: "Apr", value: "Apr" },
+        { label: "May", value: "May" },
+        { label: "Jun", value: "Jun" },
+        { label: "Jul", value: "Jul" },
+        { label: "Aug", value: "Aug" },
+        { label: "Sep", value: "Sep" },
+        { label: "Oct", value: "Oct" },
+        { label: "Nov", value: "Nov" },
+        { label: "Dec", value: "Dec" },
+    ]
+
+    const sortedMonths: MonthItem[] = []
+
+    // Add current month first
+    sortedMonths.push(months[currentMonth])
+
+    // Add previous months in descending order, wrapping around if needed
+    for (let i = 1; i <= 11; i += 1) {
+        const index = (currentMonth - i + 12) % 12
+        sortedMonths.push(months[index])
+    }
+
+    return sortedMonths
 }
