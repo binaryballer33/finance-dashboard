@@ -43,6 +43,16 @@ export default function DailySpendingChart(props: DailySpendingChartProps) {
                                 if (dateRange === "1y" && index % 30 !== 0) return ""
                                 if (dateRange === "6m" && index % 15 !== 0) return ""
                                 if (dateRange === "3m" && index % 7 !== 0) return ""
+
+                                // For "all" date range, only show a fraction of dates based on the total number
+                                if (dateRange === "all") {
+                                    const totalDates = dailyTransactionData.length
+                                    // Skip more dates when we have more data points
+                                    // Aim to show at most ~12 labels on the x-axis
+                                    const skipFactor = Math.max(1, Math.floor(totalDates / 12))
+                                    if (index % skipFactor !== 0) return ""
+                                }
+
                                 return value
                             }}
                         />

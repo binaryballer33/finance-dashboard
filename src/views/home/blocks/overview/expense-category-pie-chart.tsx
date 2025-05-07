@@ -12,6 +12,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
@@ -30,7 +31,7 @@ type ExpenseCategoryPieChartProps = {
 export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartProps) {
     const { categoryData, dateRange, expenses } = props
 
-    const [selectedCategoryName, setSelectedCategoryName] = useState<string>("Food")
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string>("")
 
     const selectedCategory = selectedCategoryName
         ? categoryData.find((c) => c.category === selectedCategoryName) || null
@@ -38,11 +39,29 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
 
     const handleClick = (data: CategoryData) => setSelectedCategoryName(data.category)
 
+    const handleShowAllTransactions = () => setSelectedCategoryName("")
+
+    // Create an "all expenses" category data object for displaying all transactions
+    const allExpensesData: CategoryData = {
+        category: "All Expenses",
+        color: "#000000",
+        percentage: 100,
+        total: expenses.reduce((sum, expense) => sum + expense.amount, 0),
+        totalExpenses: expenses.reduce((sum, expense) => sum + expense.amount, 0),
+        transactions: expenses.sort(
+            (a, b) => getDayJsDateWithPlugins(b.date).valueOf() - getDayJsDateWithPlugins(a.date).valueOf(),
+        ),
+    }
+
     return (
         <div className="mx-auto h-[906px] w-full">
             <Card className="flex h-full flex-col">
                 <CardHeader className="shrink-0">
-                    <CardTitle>Expense Distribution By Category</CardTitle>
+                    <CardTitle className="flex items-center justify-between">
+                        <p>Expense Distribution By Category</p>
+
+                        <Button onClick={handleShowAllTransactions}>Show All Transactions</Button>
+                    </CardTitle>
 
                     <CardDescription>Click On A Slice To View Detailed Transactions</CardDescription>
 
@@ -157,14 +176,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                             {selectedCategory ? (
                                 <TransactionDetails categoryData={selectedCategory} />
                             ) : (
-                                <div className="flex h-full items-center justify-center p-6 text-center">
-                                    <div>
-                                        <h3 className="mb-2 text-lg font-medium">Select A Category</h3>
-                                        <p className="text-muted-foreground">
-                                            Click On A Pie Slice To View Detailed Transaction Information
-                                        </p>
-                                    </div>
-                                </div>
+                                <TransactionDetails categoryData={allExpensesData} />
                             )}
                         </div>
                     </div>
@@ -203,6 +215,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                         const transactionPercentageOfTotal = Number(
                             ((transaction.amount / categoryData.totalExpenses) * 100).toFixed(2),
                         )
+                        const categoryColor = categoryColors[transaction.category] || color
 
                         return (
                             <div className="rounded-md border bg-card p-2 dark:border-gray-500" key={transaction.id}>
@@ -210,7 +223,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                                     <span className="font-medium">{transaction.description}</span>
 
                                     <div className="flex items-center gap-2">
-                                        <Badge style={{ backgroundColor: color }}>
+                                        <Badge style={{ backgroundColor: categoryColor }}>
                                             {transactionPercentageOfTotal}%
                                         </Badge>
                                         <span className="font-semibold">${formatAmount(transaction.amount)}</span>

@@ -13,7 +13,6 @@ type DateRangeSelectorProps = {
 export default function DateRangeSelector(props: DateRangeSelectorProps) {
     const { currentDate, dateRange, setDateRange } = props
 
-    // Create an array of months sorted by proximity to current month
     const sortedMonths = getMonthsSortedByCurrentDate(currentDate)
 
     return (

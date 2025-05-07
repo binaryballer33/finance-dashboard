@@ -7,13 +7,13 @@ export default function getTimeframeString(dateRange: DateRange) {
         case "14d":
             return "Last 2 Weeks"
         case "1m":
-            return "Last Month"
+            return "Last 30 Days"
         case "3m":
-            return "Last 3 Months"
+            return "Last 90 Days"
         case "6m":
-            return "Last 6 Months"
+            return "Last 180 Days"
         case "1y":
-            return "Last Year"
+            return "Last 365 Days"
         case "Jan":
             return "January"
         case "Feb":

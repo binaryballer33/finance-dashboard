@@ -42,6 +42,8 @@ export default function getDaysInRange(range: DateRange) {
             return 30
         case "Dec":
             return 31
+        case "all":
+            return 3650 // 10 years worth of days
         default:
             return 14
     }
