@@ -199,7 +199,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                 <div className="flex items-center gap-2">
                     <h2 className="text-xl font-bold">{categoryData.category}</h2>
 
-                    <Badge style={{ backgroundColor: color }}>{categoryData.percentage}%</Badge>
+                    <Badge style={{ backgroundColor: color, color: "black" }}>{categoryData.percentage}%</Badge>
 
                     <p className="text-muted-foreground">
                         Total: ${formatAmount(categoryData.total)} • {categoryData.transactions.length} Transactions
