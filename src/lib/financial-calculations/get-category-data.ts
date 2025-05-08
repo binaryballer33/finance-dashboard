@@ -17,9 +17,9 @@ export default function getCategoryData(expenses: Expense[]) {
         return {
             category: category.group,
             color: categoryColors[category.group],
+            monthlyTotalExpenses: totalExpenses,
             percentage: percentageOfCategory,
             total: categoryTotal,
-            totalExpenses,
             transactions,
         } satisfies CategoryData
     })

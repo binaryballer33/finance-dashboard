@@ -15,7 +15,7 @@ export default async function getExpensesByUserId(
 
     try {
         return await prisma.expense.findMany({
-            orderBy: { amount: "desc" },
+            orderBy: { amount: "asc" },
             skip: skipPreviousRecords,
             take: limit,
             where: {

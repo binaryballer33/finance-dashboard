@@ -37,21 +37,17 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
         ? categoryData.find((c) => c.category === selectedCategoryName) || null
         : null
 
-    const handleClick = (data: CategoryData) => setSelectedCategoryName(data.category)
-
-    const handleShowAllTransactions = () => setSelectedCategoryName("")
-
     // Create an "all expenses" category data object for displaying all transactions
     const allExpensesData: CategoryData = {
         category: "All Expenses",
-        color: "#000000",
+        color: "bg-accent",
+        monthlyTotalExpenses: categoryData[0].monthlyTotalExpenses,
         percentage: 100,
-        total: expenses.reduce((sum, expense) => sum + expense.amount, 0),
-        totalExpenses: expenses.reduce((sum, expense) => sum + expense.amount, 0),
-        transactions: expenses.sort(
-            (a, b) => getDayJsDateWithPlugins(b.date).valueOf() - getDayJsDateWithPlugins(a.date).valueOf(),
-        ),
+        total: categoryData[0].monthlyTotalExpenses,
+        transactions: expenses,
     }
+
+    const handleClick = (data: CategoryData) => setSelectedCategoryName(data.category)
 
     return (
         <div className="mx-auto h-[906px] w-full">
@@ -60,7 +56,9 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                     <CardTitle className="flex items-center justify-between">
                         <p>Expense Distribution By Category</p>
 
-                        <Button onClick={handleShowAllTransactions}>Show All Transactions</Button>
+                        <Button className="p-2" onClick={() => setSelectedCategoryName("")}>
+                            All Expenses
+                        </Button>
                     </CardTitle>
 
                     <CardDescription>Click On A Slice To View Detailed Transactions</CardDescription>
@@ -213,7 +211,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                 <div className="space-y-1">
                     {categoryData.transactions.map((transaction) => {
                         const transactionPercentageOfTotal = Number(
-                            ((transaction.amount / categoryData.totalExpenses) * 100).toFixed(2),
+                            ((transaction.amount / categoryData.monthlyTotalExpenses) * 100).toFixed(2),
                         )
                         const categoryColor = categoryColors[transaction.category] || color
 
@@ -223,7 +221,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
                                     <span className="font-medium">{transaction.description}</span>
 
                                     <div className="flex items-center gap-2">
-                                        <Badge style={{ backgroundColor: categoryColor }}>
+                                        <Badge style={{ backgroundColor: categoryColor, color: "black" }}>
                                             {transactionPercentageOfTotal}%
                                         </Badge>
                                         <span className="font-semibold">${formatAmount(transaction.amount)}</span>
