@@ -1,6 +1,9 @@
 import type { DateRange } from "@/types/date-range"
 import type { Dayjs } from "dayjs"
 
+import { ChevronLeft, ChevronRight } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
@@ -30,9 +33,21 @@ export default function DateRangeSelector(props: DateRangeSelectorProps) {
 
                 <Separator className="mx-2 h-full" orientation="vertical" />
 
-                <div className="flex items-center gap-2 overflow-x-scroll max-sm:max-w-40 lg:flex-1">
+                <div className="flex items-center gap-1 overflow-x-auto max-sm:max-w-40 lg:flex-1">
+                    <div className="flex items-center gap-0">
+                        <Button className="h-7 w-7 p-0" size="icon" variant="ghost">
+                            <ChevronLeft className="h-4 w-4" />
+                        </Button>
+
+                        <span className="min-w-[2.5rem] text-center font-medium">{currentDate.year()}</span>
+
+                        <Button className="h-7 w-7 p-0" size="icon" variant="ghost">
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
+                    </div>
+
                     {sortedMonths.map((month) => (
-                        <TabsTrigger key={month.value} value={month.value}>
+                        <TabsTrigger className="p-2" key={month.value} value={month.value}>
                             {month.label}
                         </TabsTrigger>
                     ))}

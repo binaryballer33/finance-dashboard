@@ -18,17 +18,3 @@ export type DateRange =
     | "Nov"
     | "Oct"
     | "Sep"
-
-// export type MonthDateRange =
-//     | "Apr"
-//     | "Aug"
-//     | "Dec"
-//     | "Feb"
-//     | "Jan"
-//     | "Jul"
-//     | "Jun"
-//     | "Mar"
-//     | "May"
-//     | "Nov"
-//     | "Oct"
-//     | "Sep"

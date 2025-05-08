@@ -41,9 +41,9 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
     const allExpensesData: CategoryData = {
         category: "All Expenses",
         color: "bg-accent",
-        monthlyTotalExpenses: categoryData[0].monthlyTotalExpenses,
+        monthlyTotalExpenses: categoryData[0]?.monthlyTotalExpenses || 0,
         percentage: 100,
-        total: categoryData[0].monthlyTotalExpenses,
+        total: categoryData[0]?.monthlyTotalExpenses || 0,
         transactions: expenses,
     }
 
@@ -52,7 +52,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
     return (
         <div className="mx-auto h-[906px] w-full">
             <Card className="flex h-full flex-col">
-                <CardHeader className="shrink-0">
+                <CardHeader className="shrink-0 px-6 pb-2 pt-6">
                     <CardTitle className="flex items-center justify-between">
                         <p>Expense Distribution By Category</p>
 
@@ -61,7 +61,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                         </Button>
                     </CardTitle>
 
-                    <CardDescription>Click On A Slice To View Detailed Transactions</CardDescription>
+                    <CardDescription className="!mt-0">Click On A Slice To View Detailed Transactions</CardDescription>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="space-y-1">
