@@ -3,7 +3,7 @@
 import type { Expense } from "@prisma/client"
 import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import CustomTable from "@/components/tables/table"
 
@@ -21,7 +21,12 @@ type ExpensesTableProps = {
 
 export default function ExpensesTable(props: ExpensesTableProps) {
     const { expenses: expensesProp, infiniteQuery, userId } = props
-    const expenses = expensesProp ?? infiniteQuery.data?.pages.flatMap((page) => page) ?? []
+
+    // Deduplicate expenses to prevent duplicates in the table
+    const expenses = useMemo(() => {
+        const rawExpenses = expensesProp ?? infiniteQuery.data?.pages.flatMap((page) => page) ?? []
+        return Array.from(new Map(rawExpenses.map((expense) => [expense.id, expense])).values())
+    }, [expensesProp, infiniteQuery.data])
 
     const { columns } = useCreateExpensesTableColumns()
 

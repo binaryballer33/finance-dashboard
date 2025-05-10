@@ -45,7 +45,7 @@ export default async function prefetchHomePageDataDehydrateState(): Promise<null
         initialPageParam: 0,
 
         queryFn: async ({ pageParam = 0 }) => {
-            const expenses = (await getExpensesByUserId(user.id, pageParam, 100)) ?? []
+            const expenses = (await getExpensesByUserId(user.id, pageParam, 1000)) ?? []
             return expenses
         },
 

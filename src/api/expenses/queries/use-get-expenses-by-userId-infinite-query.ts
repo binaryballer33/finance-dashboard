@@ -5,7 +5,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 
 import getExpensesByUserId from "@/actions/expenses/queries/get-expenses-by-userId"
 
-const RECORDS_PER_PAGE = 100
+const RECORDS_PER_PAGE = 1000
 
 export default function useGetExpensesByUserIdInfiniteQuery(userId: string) {
     return useInfiniteQuery<Expense[]>({
@@ -22,7 +22,8 @@ export default function useGetExpensesByUserIdInfiniteQuery(userId: string) {
 
         queryFn: async (context) => {
             const pageParam = context.pageParam as number
-            const expenses = await getExpensesByUserId(userId, pageParam, RECORDS_PER_PAGE)
+            const skipAmount = pageParam * RECORDS_PER_PAGE
+            const expenses = await getExpensesByUserId(userId, skipAmount, RECORDS_PER_PAGE)
             return expenses ?? []
         },
 

@@ -7,12 +7,25 @@ export type Category = (
           color: string
           icon?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
           label: string
-          value: string
+          value: CategoryValue
       }
     | {
           color: string
           icon?: IconType
           label: string
-          value: string
+          value: CategoryValue
       }
 )[]
+
+export type CategoryValue =
+    | "Education"
+    | "Entertainment"
+    | "Food"
+    | "Health"
+    | "Housing"
+    | "Other"
+    | "Shopping"
+    | "Subscriptions"
+    | "Transportation"
+    | "Travel"
+    | "Utilities"

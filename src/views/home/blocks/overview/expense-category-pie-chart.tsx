@@ -112,7 +112,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                                             const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
                                             // Only show labels for segments with percentage >= 2 to avoid cluttering
-                                            if (percentage < 2) return null
+                                            if (percentage < 4.99) return null
 
                                             return (
                                                 <text
@@ -154,7 +154,7 @@ export default function ExpenseCategoryPieChart(props: ExpenseCategoryPieChartPr
                                                             {data.category}
                                                         </p>
                                                         <p className="text-sm text-muted-foreground">
-                                                            ${data.total.toFixed(2)} ({data.percentage}%)
+                                                            ${formatAmount(data.total)} ({data.percentage}%)
                                                         </p>
                                                         <p className="text-sm text-muted-foreground">
                                                             {data.transactions.length}{" "}

@@ -1,6 +1,5 @@
 import { randomUUID } from "crypto"
 
-import categories from "@/mocks/categories"
 import getLastSixMonthsArray from "@/mocks/utils/get-last-six-months"
 import { type Expense as PrismaExpense, type Income as PrismaIncome, TransactionType } from "@prisma/client"
 import { hash } from "bcryptjs"
@@ -30,108 +29,7 @@ async function dropTables() {
     console.log("Dropped Tables Successfully\n")
 }
 
-async function createRealisticOneTimeExpenses(userId: string) {
-    console.log("Attempting To Create One Time Expenses")
-
-    const expensesArray: Expense[] = []
-    const lastSixMonthsArray = getLastSixMonthsArray()
-
-    lastSixMonthsArray.forEach((monthDate) => {
-        const expenses = [
-            {
-                amount: 100 + Math.floor(Math.random() * 200),
-                category: "Food",
-                date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
-                description: "Churrascaria Dinner",
-                type: TransactionType.ONE_TIME,
-            },
-            {
-                amount: 50 + Math.floor(Math.random() * 50),
-                category: "Transportation",
-                date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
-                description: "Gasoline",
-                type: TransactionType.ONE_TIME,
-            },
-            {
-                amount: 30 + Math.floor(Math.random() * 50),
-                category: "Entertainment",
-                date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
-                description: "Movie Date",
-                type: TransactionType.ONE_TIME,
-            },
-            {
-                amount: 50 + Math.floor(Math.random() * 50),
-                category: "Health",
-                date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
-                description: "Fitness Activities",
-                type: TransactionType.ONE_TIME,
-            },
-            {
-                amount: 120 + Math.floor(Math.random() * 100),
-                category: "Transportation",
-                date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
-                description: "Plane Ticket To Other Brazilian Cities",
-                type: TransactionType.ONE_TIME,
-            },
-            {
-                amount: 200 + Math.floor(Math.random() * 100),
-                category: "Shopping",
-                date: new Date(monthDate.set("date", 2).format("YYYY-MM-DD")),
-                description: "Clothes Shopping",
-                type: TransactionType.ONE_TIME,
-            },
-        ] satisfies Pick<Expense, "amount" | "category" | "date" | "description" | "type">[]
-
-        expenses.forEach(({ amount, category, date, description, type }) => {
-            const createdExpense = { amount, category, date, description, type, userId }
-            expensesArray.push(createdExpense)
-        })
-    })
-
-    try {
-        const result = await prisma.expense.createMany({
-            data: expensesArray,
-        })
-        console.log(`Successfully Inserted ${result.count} Records To Expenses Table As One Time Expenses\n`)
-    } catch (error) {
-        console.error("Error Inserting Records To Expenses Table", error)
-    }
-}
-
-async function createFakeOneTimeExpenses(userId: string, count: number = 100) {
-    const fakeExpenses: Expense[] = []
-
-    Array.from({ length: count }).forEach(() => {
-        const amount = Number((Math.random() * 1000).toFixed(2)) // Random amount between 0 and 1000
-        const date = new Date()
-        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
-        const randomCategoryIndex = Math.floor(Math.random() * categories.length)
-        const category = categories[randomCategoryIndex].value
-        const description = `${categories[randomCategoryIndex].label} Expense For Me`
-
-        fakeExpenses.push({
-            amount,
-            category,
-            date,
-            description,
-            type: TransactionType.ONE_TIME,
-            userId,
-        })
-    })
-
-    try {
-        const result = await prisma.expense.createMany({
-            data: fakeExpenses,
-        })
-        console.log(`Successfully created ${result.count} expenses`)
-        return result
-    } catch (error) {
-        console.error("Error generating expenses:", error)
-        throw error
-    }
-}
-
-async function createRealisticRecurringExpenses(userId: string) {
+async function createRecurringExpenses(userId: string) {
     console.log("Attempting To Create Recurring Realistic Expenses")
 
     const expensesArray: Expense[] = []
@@ -140,20 +38,6 @@ async function createRealisticRecurringExpenses(userId: string) {
     lastSixMonthsArray.forEach((monthDate) => {
         const expenses: Omit<Expense, "createdAt" | "date" | "id" | "updatedAt">[] = [
             { amount: 1000, category: "Housing", description: "Rent", type: TransactionType.RECURRING, userId },
-            {
-                amount: 500 + Math.floor(Math.random() * 250),
-                category: "Food",
-                description: "Food Allowance",
-                type: TransactionType.RECURRING,
-                userId,
-            },
-            {
-                amount: 500 + Math.floor(Math.random() * 250),
-                category: "Entertainment",
-                description: "Entertainment",
-                type: TransactionType.RECURRING,
-                userId,
-            },
             {
                 amount: 200 + Math.floor(Math.random() * 50),
                 category: "Transportation",
@@ -230,7 +114,7 @@ async function createFakeRecurringExpenses(userId: string, count: number = 5) {
     }
 }
 
-async function createRealisticRecurringIncomes(userId: string) {
+async function createRecurringIncomes(userId: string) {
     console.log("Attempting To Create Recurring Realistic Incomes")
 
     const incomesArray: Income[] = []
@@ -379,6 +263,93 @@ async function createUsers() {
     }
 }
 
+async function createDailyTransactions(userId: string) {
+    console.log("Attempting To Create Daily Transactions")
+
+    const expenses: Expense[] = []
+    const lastSixMonthsArray = getLastSixMonthsArray()
+
+    lastSixMonthsArray.forEach((monthDate) => {
+        // Get the number of days in the month
+        const daysInMonth = monthDate.daysInMonth()
+
+        // For each day in the month
+        for (let day = 1; day <= daysInMonth; day += 1) {
+            // Generate 1-3 transactions per day
+            const transactionsCount = 1 + Math.floor(Math.random() * 3)
+
+            for (let i = 0; i < transactionsCount; i += 1) {
+                let amount = 10
+
+                const getRandomCategoryOrDescription = (array: string[]) => {
+                    return array[Math.floor(Math.random() * array.length)]
+                }
+
+                const getRandomTransactionAmount = (min: number, max: number) => {
+                    return Math.round((min + Math.random() * (max - min)) * 100) / 100
+                }
+
+                const date = new Date(monthDate.set("date", day).format("YYYY-MM-DD"))
+                const categories = ["Food", "Entertainment", "Transportation", "Shopping", "Health", "Travel"]
+                const category = getRandomCategoryOrDescription(categories)
+
+                let description = "Daily Transaction"
+                switch (category) {
+                    case "Food":
+                        const mealOptions = ["Breakfast", "Lunch", "Dinner", "Snack"]
+                        description = getRandomCategoryOrDescription(mealOptions)
+                        amount = getRandomTransactionAmount(15, 50)
+                        break
+                    case "Entertainment":
+                        const entertainmentOptions = ["Movie", "Concert", "Show", "Game"]
+                        description = getRandomCategoryOrDescription(entertainmentOptions)
+                        amount = getRandomTransactionAmount(10, 70)
+                        break
+                    case "Transportation":
+                        const transportationOptions = ["Uber Ride", "Bus Ride", "Train Ride", "Gas"]
+                        description = getRandomCategoryOrDescription(transportationOptions)
+                        amount = getRandomTransactionAmount(1, 30)
+                        break
+                    case "Shopping":
+                        const shoppingOptions = ["Home Goods", "Electronics", "Clothes"]
+                        description = getRandomCategoryOrDescription(shoppingOptions)
+                        amount = getRandomTransactionAmount(20, 50)
+                        break
+                    case "Health":
+                        const healthOptions = ["Vitamins", "Supplements", "Skin Care", "Massage"]
+                        description = getRandomCategoryOrDescription(healthOptions)
+                        amount = getRandomTransactionAmount(10, 30)
+                        break
+                    case "Travel":
+                        const travelOptions = ["Hotel", "Flight", "Rental Car", "Cruise", "Tour", "Attraction"]
+                        description = getRandomCategoryOrDescription(travelOptions)
+                        amount = getRandomTransactionAmount(100, 500)
+                        break
+                    default:
+                        const foodOptions = ["Breakfast", "Lunch", "Dinner", "Snack"]
+                        description = getRandomCategoryOrDescription(foodOptions)
+                        amount = getRandomTransactionAmount(15, 50)
+                        break
+                }
+
+                const dailyExpense = { amount, category, date, description, type: TransactionType.ONE_TIME, userId }
+                expenses.push(dailyExpense)
+            }
+        }
+    })
+
+    try {
+        const result = await prisma.expense.createMany({
+            data: expenses,
+        })
+        console.log(`Successfully Inserted ${result.count} Daily Transaction Records To Expenses Table\n`)
+        return result
+    } catch (error) {
+        console.error("Error Inserting Daily Transaction Records To Expenses Table", error)
+        throw error
+    }
+}
+
 async function seedDatabase() {
     try {
         // delete all records in the tables so you can start fresh and avoid any unique constraint violations when inserting records
@@ -390,14 +361,14 @@ async function seedDatabase() {
         await createUsers()
 
         await createTrades(gmailUserId)
-        await createRealisticOneTimeExpenses(gmailUserId)
-        await createRealisticRecurringExpenses(gmailUserId)
-        await createRealisticRecurringIncomes(gmailUserId)
+        await createRecurringExpenses(gmailUserId)
+        await createRecurringIncomes(gmailUserId)
+        await createDailyTransactions(gmailUserId)
 
         await createTrades(outlookUserId)
-        await createFakeOneTimeExpenses(outlookUserId, 10000)
         await createFakeRecurringExpenses(outlookUserId, 10)
         await createFakeRecurringIncomes(outlookUserId, 20)
+        await createDailyTransactions(outlookUserId)
 
         // sometime the seed will not fully work because all the yugioh cards or users are not created yet
         // await new Promise((resolve) => setTimeout(resolve, 3000))
