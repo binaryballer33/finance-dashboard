@@ -8,9 +8,8 @@ import getDaysInRange from "@/components/helper-functions/get-days-in-range"
 
 import { months } from "../constants"
 
-export default function getDailyTransactionTotals(expenses: Expense[], dateRange: DateRange) {
+export default function getDailyTransactionTotals(expenses: Expense[], dateRange: DateRange, currentDate: Dayjs) {
     const dailySpending = new Map<string, number>()
-    const today = getDayJsDateWithPlugins(new Date())
 
     if (dateRange === "all") {
         // Create data points only for dates that have transactions
@@ -25,22 +24,21 @@ export default function getDailyTransactionTotals(expenses: Expense[], dateRange
         if (months.includes(dateRange)) {
             // Handle month date ranges (e.g. "Jan", "Feb", etc.)
             const monthIndex = months.indexOf(dateRange)
-            const currentYear = today.year()
-            startDate = getDayJsDateWithPlugins(new Date(currentYear, monthIndex, 1))
+            startDate = getDayJsDateWithPlugins(new Date(currentDate.year(), monthIndex, 1))
             endDate = startDate.endOf("month")
         } else {
             // Handle other date ranges (7d, 14d, 1m, 3m, 6m, 1y, etc.)
             const daysInRange = getDaysInRange(dateRange)
-            endDate = today
-            startDate = today.subtract(daysInRange, "day")
+            endDate = currentDate
+            startDate = currentDate.subtract(daysInRange, "day")
         }
 
         // Generate all dates between start and end
-        let currentDate = startDate
-        while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, "day")) {
-            const dateKey = currentDate.format("YYYY-MM-DD")
+        let currentDateChecked = startDate
+        while (currentDateChecked.isBefore(endDate) || currentDateChecked.isSame(endDate, "day")) {
+            const dateKey = currentDateChecked.format("YYYY-MM-DD")
             dailySpending.set(dateKey, 0)
-            currentDate = currentDate.add(1, "day")
+            currentDateChecked = currentDateChecked.add(1, "day")
         }
 
         // Calculate daily totals

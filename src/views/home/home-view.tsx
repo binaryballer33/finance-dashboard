@@ -39,17 +39,27 @@ type HomeViewProps = {
 export default function HomeView(props: HomeViewProps) {
     const { user } = props
 
-    const today = getDayJsDateWithPlugins(new Date())
-    const [dateRange, setDateRange] = useState<DateRange>((today.format("MMM") as DateRange) || "1m")
+    // const today = getDayJsDateWithPlugins(new Date())
+    const [currentDate, setCurrentDate] = useState(getDayJsDateWithPlugins(new Date()))
+    const [dateRange, setDateRange] = useState<DateRange>((currentDate.format("MMM") as DateRange) || "1m")
 
     const { data: initialIncomes = [] } = useGetIncomeByUserIdQuery(user.id)
     const { data: initialTrades = [] } = useGetTradesByUserIdQuery(user.id)
     const infiniteQuery = useGetExpensesByUserIdInfiniteQuery(user.id)
     const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
 
-    const expenses = useMemo(() => getFilteredArray(initialExpenses, dateRange), [initialExpenses, dateRange])
-    const incomes = useMemo(() => getFilteredArray(initialIncomes, dateRange), [initialIncomes, dateRange])
-    const trades = useMemo(() => getFilteredArray(initialTrades, dateRange), [initialTrades, dateRange])
+    const expenses = useMemo(
+        () => getFilteredArray(initialExpenses, dateRange, currentDate),
+        [initialExpenses, dateRange, currentDate],
+    )
+    const incomes = useMemo(
+        () => getFilteredArray(initialIncomes, dateRange, currentDate),
+        [initialIncomes, dateRange, currentDate],
+    )
+    const trades = useMemo(
+        () => getFilteredArray(initialTrades, dateRange, currentDate),
+        [initialTrades, dateRange, currentDate],
+    )
 
     const totalIncome = useMemo(() => getTotal({ usingArray: incomes, usingField: "amount" }), [incomes])
     const totalTrades = useMemo(() => getTotal({ usingArray: trades, usingField: "profitLoss" }), [trades])
@@ -57,14 +67,22 @@ export default function HomeView(props: HomeViewProps) {
 
     const categoryData = useMemo(() => getCategoryData(expenses), [expenses])
     const monthlyData = useMemo(() => getMonthlyData(incomes, expenses), [incomes, expenses])
-    const dailyTransactionData = useMemo(() => getDailyTransactionTotals(expenses, dateRange), [expenses, dateRange])
+    const dailyTransactionData = useMemo(
+        () => getDailyTransactionTotals(expenses, dateRange, currentDate),
+        [expenses, dateRange, currentDate],
+    )
 
     // TODO: add a section to display upcoming recurring bills
     return (
         <Container maxWidth="xl">
             <div className="min-h-screen bg-background">
                 <div className="sticky top-0 z-10 border-b bg-background pb-2 pt-4">
-                    <DateRangeSelector currentDate={today} dateRange={dateRange} setDateRange={setDateRange} />
+                    <DateRangeSelector
+                        currentDate={currentDate}
+                        dateRange={dateRange}
+                        setCurrentDate={setCurrentDate}
+                        setDateRange={setDateRange}
+                    />
                 </div>
 
                 <div className="mx-auto space-y-4 py-6">

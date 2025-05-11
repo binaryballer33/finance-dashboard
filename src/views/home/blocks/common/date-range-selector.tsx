@@ -3,6 +3,8 @@ import type { Dayjs } from "dayjs"
 
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
+import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
+
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,13 +12,15 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 type DateRangeSelectorProps = {
     currentDate: Dayjs
     dateRange: DateRange
+    setCurrentDate: (currentDate: Dayjs) => void
     setDateRange: (dateRange: DateRange) => void
 }
 
 export default function DateRangeSelector(props: DateRangeSelectorProps) {
-    const { currentDate, dateRange, setDateRange } = props
+    const { currentDate, dateRange, setCurrentDate, setDateRange } = props
 
     const sortedMonths = getMonthsSortedByCurrentDate(currentDate)
+    const futureYear = currentDate.add(1, "year").isAfter(getDayJsDateWithPlugins(new Date()))
 
     return (
         <Tabs onValueChange={(v) => setDateRange(v as DateRange)} value={dateRange}>
@@ -35,13 +39,24 @@ export default function DateRangeSelector(props: DateRangeSelectorProps) {
 
                 <div className="flex items-center gap-1 overflow-x-auto max-sm:max-w-40 lg:flex-1">
                     <div className="flex items-center gap-0">
-                        <Button className="h-7 w-7 p-0" size="icon" variant="ghost">
+                        <Button
+                            className="h-7 w-7 p-0"
+                            onClick={() => setCurrentDate(currentDate.subtract(1, "year"))}
+                            size="icon"
+                            variant="ghost"
+                        >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
 
                         <span className="min-w-[2.5rem] text-center font-medium">{currentDate.year()}</span>
 
-                        <Button className="h-7 w-7 p-0" size="icon" variant="ghost">
+                        <Button
+                            className="h-7 w-7 p-0"
+                            disabled={futureYear}
+                            onClick={() => setCurrentDate(currentDate.add(1, "year"))}
+                            size="icon"
+                            variant="ghost"
+                        >
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>
@@ -57,36 +72,47 @@ export default function DateRangeSelector(props: DateRangeSelectorProps) {
     )
 }
 
-// Helper function to sort months by proximity to current month
 function getMonthsSortedByCurrentDate(currentDate: Dayjs) {
     const currentMonth = currentDate.month() // 0-11 for Jan-Dec
+    const currentYear = currentDate.year()
+    const today = getDayJsDateWithPlugins(new Date())
+    const isCurrentYear = currentYear === today.year()
 
-    type MonthItem = { label: string; value: string }
+    type MonthItem = { index: number; label: string; value: string }
 
     const months: MonthItem[] = [
-        { label: "Jan", value: "Jan" },
-        { label: "Feb", value: "Feb" },
-        { label: "Mar", value: "Mar" },
-        { label: "Apr", value: "Apr" },
-        { label: "May", value: "May" },
-        { label: "Jun", value: "Jun" },
-        { label: "Jul", value: "Jul" },
-        { label: "Aug", value: "Aug" },
-        { label: "Sep", value: "Sep" },
-        { label: "Oct", value: "Oct" },
-        { label: "Nov", value: "Nov" },
-        { label: "Dec", value: "Dec" },
+        { index: 0, label: "Jan", value: "Jan" },
+        { index: 1, label: "Feb", value: "Feb" },
+        { index: 2, label: "Mar", value: "Mar" },
+        { index: 3, label: "Apr", value: "Apr" },
+        { index: 4, label: "May", value: "May" },
+        { index: 5, label: "Jun", value: "Jun" },
+        { index: 6, label: "Jul", value: "Jul" },
+        { index: 7, label: "Aug", value: "Aug" },
+        { index: 8, label: "Sep", value: "Sep" },
+        { index: 9, label: "Oct", value: "Oct" },
+        { index: 10, label: "Nov", value: "Nov" },
+        { index: 11, label: "Dec", value: "Dec" },
     ]
 
     const sortedMonths: MonthItem[] = []
 
-    // Add current month first
-    sortedMonths.push(months[currentMonth])
+    if (isCurrentYear) {
+        sortedMonths.push(months[currentMonth])
 
-    // Add previous months in descending order, wrapping around if needed
-    for (let i = 1; i <= 11; i += 1) {
-        const index = (currentMonth - i + 12) % 12
-        sortedMonths.push(months[index])
+        // Add previous months in descending order
+        for (let i = 1; i <= currentMonth; i += 1) {
+            const index = currentMonth - i
+            sortedMonths.push(months[index])
+        }
+    } else if (currentYear < today.year()) {
+        // For past years, show all months in descending order (Dec to Jan)
+        for (let i = 11; i >= 0; i -= 1) {
+            sortedMonths.push(months[i])
+        }
+    } else {
+        // For future years (shouldn't happen with the UI constraints, but just in case)
+        sortedMonths.push(months[currentMonth])
     }
 
     return sortedMonths

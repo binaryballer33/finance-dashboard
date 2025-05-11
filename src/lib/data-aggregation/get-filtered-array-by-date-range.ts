@@ -1,4 +1,5 @@
 import type { DateRange } from "@/types/date-range"
+import type { Dayjs } from "dayjs"
 
 import getDayJsDateWithPlugins from "@/lib/helper-functions/dates/get-day-js-date-with-plugins"
 
@@ -9,6 +10,7 @@ import { months } from "../constants"
 export default function getFilteredArrayByDateRange<ObjectOfSomeType extends Record<string, any>>(
     array: ObjectOfSomeType[],
     dateRange: DateRange,
+    currentDate: Dayjs,
 ) {
     if (dateRange === "all") {
         return array.sort(
@@ -16,8 +18,7 @@ export default function getFilteredArrayByDateRange<ObjectOfSomeType extends Rec
         )
     }
 
-    const today = getDayJsDateWithPlugins(new Date())
-    const startDate = getDateRangeStartDate(dateRange, today)
+    const startDate = getDateRangeStartDate(dateRange, currentDate)
 
     return array
         .filter((item) => {
@@ -29,7 +30,7 @@ export default function getFilteredArrayByDateRange<ObjectOfSomeType extends Rec
             }
 
             // only return items between the start date and today
-            return date.isBetween(startDate, today, "day", "[]")
+            return date.isBetween(startDate, currentDate, "day", "[]")
         })
         .sort((a, b) => getDayJsDateWithPlugins(b.date).valueOf() - getDayJsDateWithPlugins(a.date).valueOf())
 }
