@@ -45,8 +45,7 @@ export default function HomeView(props: HomeViewProps) {
     const { data: initialIncomes = [] } = useGetIncomeByUserIdQuery(user.id)
     const { data: initialTrades = [] } = useGetTradesByUserIdQuery(user.id)
     const infiniteQuery = useGetExpensesByUserIdInfiniteQuery(user.id)
-    const initialExpenses = useMemo(() => infiniteQuery.data?.pages[0].map((page) => page) ?? [], [infiniteQuery.data])
-    // const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
+    const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
 
     const expenses = useMemo(() => getFilteredArray(initialExpenses, dateRange), [initialExpenses, dateRange])
     const incomes = useMemo(() => getFilteredArray(initialIncomes, dateRange), [initialIncomes, dateRange])
