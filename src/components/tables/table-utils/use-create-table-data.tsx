@@ -219,6 +219,13 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
         // global filter for the table
         globalFilterFn: fuzzyFilter,
 
+        initialState: {
+            pagination: {
+                pageIndex: 0,
+                pageSize: 20,
+            },
+        },
+
         // handle row state deletion
         meta: {
             /* table height */
@@ -248,7 +255,6 @@ export default function useCreateTableData<T extends RowWithId>(props: UseCreate
 
         // update the column order for dnd column reordering
         onColumnOrderChange: setColumnOrder,
-
         // state for the table
         state: {
             /* column order used for dnd column reordering */

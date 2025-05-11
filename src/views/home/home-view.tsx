@@ -45,7 +45,8 @@ export default function HomeView(props: HomeViewProps) {
     const { data: initialIncomes = [] } = useGetIncomeByUserIdQuery(user.id)
     const { data: initialTrades = [] } = useGetTradesByUserIdQuery(user.id)
     const infiniteQuery = useGetExpensesByUserIdInfiniteQuery(user.id)
-    const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
+    const initialExpenses = useMemo(() => infiniteQuery.data?.pages[0].map((page) => page) ?? [], [infiniteQuery.data])
+    // const initialExpenses = useMemo(() => infiniteQuery.data?.pages.flatMap((page) => page) ?? [], [infiniteQuery.data])
 
     const expenses = useMemo(() => getFilteredArray(initialExpenses, dateRange), [initialExpenses, dateRange])
     const incomes = useMemo(() => getFilteredArray(initialIncomes, dateRange), [initialIncomes, dateRange])
@@ -59,6 +60,7 @@ export default function HomeView(props: HomeViewProps) {
     const monthlyData = useMemo(() => getMonthlyData(incomes, expenses), [incomes, expenses])
     const dailyTransactionData = useMemo(() => getDailyTransactionTotals(expenses, dateRange), [expenses, dateRange])
 
+    // TODO: add a section to display upcoming recurring bills
     return (
         <Container maxWidth="xl">
             <div className="min-h-screen bg-background">

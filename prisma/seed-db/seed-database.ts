@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto"
 
-import getLastSixMonthsArray from "@/mocks/utils/get-last-six-months"
+import getPreviousMonthsFromToday from "@/mocks/utils/get-previous-months-from-today"
 import { type Expense as PrismaExpense, type Income as PrismaIncome, TransactionType } from "@prisma/client"
 import { hash } from "bcryptjs"
 
@@ -13,6 +13,7 @@ type Income = Omit<PrismaIncome, "createdAt" | "id" | "updatedAt">
 
 const outlookUserId = randomUUID()
 const gmailUserId = randomUUID()
+const numberOfMonths = 12
 
 async function dropTables() {
     // delete in proper order
@@ -33,7 +34,7 @@ async function createRecurringExpenses(userId: string) {
     console.log("Attempting To Create Recurring Realistic Expenses")
 
     const expensesArray: Expense[] = []
-    const lastSixMonthsArray = getLastSixMonthsArray()
+    const lastSixMonthsArray = getPreviousMonthsFromToday(numberOfMonths)
 
     lastSixMonthsArray.forEach((monthDate) => {
         const expenses: Omit<Expense, "createdAt" | "date" | "id" | "updatedAt">[] = [
@@ -118,7 +119,7 @@ async function createRecurringIncomes(userId: string) {
     console.log("Attempting To Create Recurring Realistic Incomes")
 
     const incomesArray: Income[] = []
-    const lastSixMonthsArray = getLastSixMonthsArray()
+    const lastSixMonthsArray = getPreviousMonthsFromToday(12)
 
     lastSixMonthsArray.forEach((monthDate) => {
         const incomes: Omit<Income, "createdAt" | "date" | "id" | "updatedAt" | "userId">[] = [
@@ -267,67 +268,68 @@ async function createDailyTransactions(userId: string) {
     console.log("Attempting To Create Daily Transactions")
 
     const expenses: Expense[] = []
-    const lastSixMonthsArray = getLastSixMonthsArray()
+    const previousMonthArray = getPreviousMonthsFromToday(numberOfMonths)
 
-    lastSixMonthsArray.forEach((monthDate) => {
+    previousMonthArray.forEach((month) => {
         // Get the number of days in the month
-        const daysInMonth = monthDate.daysInMonth()
+        const daysInMonth = month.daysInMonth()
 
-        // For each day in the month
+        const categoryDescriptions = {
+            Entertainment: ["Movie", "Concert", "Show", "Game"],
+            Food: ["Breakfast", "Lunch", "Dinner", "Snack"],
+            Health: ["Vitamins", "Supplements", "Skin Care", "Massage"],
+            Shopping: ["Home Goods", "Electronics", "Clothes"],
+            Transportation: ["Uber Ride", "Bus Ride", "Train Ride", "Gas"],
+            Travel: ["Hotel", "Flight", "Rental Car", "Cruise", "Tour", "Attraction"],
+        }
+        const categories = Object.keys(categoryDescriptions)
+
+        // Create 1-3 transactions per day for each day in the month
         for (let day = 1; day <= daysInMonth; day += 1) {
             // Generate 1-3 transactions per day
             const transactionsCount = 1 + Math.floor(Math.random() * 3)
 
             for (let i = 0; i < transactionsCount; i += 1) {
-                let amount = 10
-
                 const getRandomCategoryOrDescription = (array: string[]) => {
-                    return array[Math.floor(Math.random() * array.length)]
+                    return array[Math.floor(Math.random() * array.length)] as keyof typeof categoryDescriptions
                 }
 
                 const getRandomTransactionAmount = (min: number, max: number) => {
                     return Math.round((min + Math.random() * (max - min)) * 100) / 100
                 }
 
-                const date = new Date(monthDate.set("date", day).format("YYYY-MM-DD"))
-                const categories = ["Food", "Entertainment", "Transportation", "Shopping", "Health", "Travel"]
+                const date = new Date(month.set("date", day).format("YYYY-MM-DD"))
                 const category = getRandomCategoryOrDescription(categories)
 
-                let description = "Daily Transaction"
+                let description: string = ""
+                let amount = 10
                 switch (category) {
                     case "Food":
-                        const mealOptions = ["Breakfast", "Lunch", "Dinner", "Snack"]
-                        description = getRandomCategoryOrDescription(mealOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Food)
                         amount = getRandomTransactionAmount(15, 50)
                         break
                     case "Entertainment":
-                        const entertainmentOptions = ["Movie", "Concert", "Show", "Game"]
-                        description = getRandomCategoryOrDescription(entertainmentOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Entertainment)
                         amount = getRandomTransactionAmount(10, 70)
                         break
                     case "Transportation":
-                        const transportationOptions = ["Uber Ride", "Bus Ride", "Train Ride", "Gas"]
-                        description = getRandomCategoryOrDescription(transportationOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Transportation)
                         amount = getRandomTransactionAmount(1, 30)
                         break
                     case "Shopping":
-                        const shoppingOptions = ["Home Goods", "Electronics", "Clothes"]
-                        description = getRandomCategoryOrDescription(shoppingOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Shopping)
                         amount = getRandomTransactionAmount(20, 50)
                         break
                     case "Health":
-                        const healthOptions = ["Vitamins", "Supplements", "Skin Care", "Massage"]
-                        description = getRandomCategoryOrDescription(healthOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Health)
                         amount = getRandomTransactionAmount(10, 30)
                         break
                     case "Travel":
-                        const travelOptions = ["Hotel", "Flight", "Rental Car", "Cruise", "Tour", "Attraction"]
-                        description = getRandomCategoryOrDescription(travelOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Travel)
                         amount = getRandomTransactionAmount(100, 500)
                         break
                     default:
-                        const foodOptions = ["Breakfast", "Lunch", "Dinner", "Snack"]
-                        description = getRandomCategoryOrDescription(foodOptions)
+                        description = getRandomCategoryOrDescription(categoryDescriptions.Food)
                         amount = getRandomTransactionAmount(15, 50)
                         break
                 }
@@ -369,9 +371,6 @@ async function seedDatabase() {
         await createFakeRecurringExpenses(outlookUserId, 10)
         await createFakeRecurringIncomes(outlookUserId, 20)
         await createDailyTransactions(outlookUserId)
-
-        // sometime the seed will not fully work because all the yugioh cards or users are not created yet
-        // await new Promise((resolve) => setTimeout(resolve, 3000))
     } catch (error) {
         console.error("Error Seeding Database: ", error)
     }

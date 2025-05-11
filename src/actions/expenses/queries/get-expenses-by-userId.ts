@@ -14,7 +14,6 @@ export default async function getExpensesByUserId(
     const { id: validatedUserId } = VerifyUUIDSchema.parse({ id: userId })
 
     try {
-        console.log(`Fetching expenses for user ${validatedUserId} with skip=${skipPreviousRecords} and limit=${limit}`)
         const expenses = await prisma.expense.findMany({
             orderBy: [{ date: "desc" }, { id: "asc" }],
             skip: skipPreviousRecords,
@@ -23,7 +22,6 @@ export default async function getExpensesByUserId(
                 userId: validatedUserId,
             },
         })
-        console.log(`Found ${expenses.length} expenses out of requested ${limit}`)
         return expenses
     } catch (error) {
         console.error(`Error Retrieving Expenses With User Id ${validatedUserId}: ${error}`)
