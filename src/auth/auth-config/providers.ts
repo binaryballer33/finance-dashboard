@@ -58,6 +58,7 @@ const providers: NextAuthConfig["providers"] = [
 
             // return user object
             return {
+                budgetAmount: existingUserResponse.user.budgetAmount,
                 email: existingUserResponse.user.email,
                 emailVerified: existingUserResponse.user.emailVerified!,
                 firstName: existingUserResponse.user.firstName,

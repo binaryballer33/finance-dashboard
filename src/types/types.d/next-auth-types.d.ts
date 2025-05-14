@@ -4,6 +4,7 @@ import "next-auth"
 import "next-auth/jwt"
 
 interface ExtendedUser extends DefaultSession.user {
+    budgetAmount: number
     email: string
     emailVerified: Date
     firstName: string
@@ -41,6 +42,7 @@ declare module "next-auth" {
  */
 declare module "next-auth/jwt" {
     interface JWT {
+        budgetAmount?: number
         firstName?: string
         imageUrl?: string
         isTwoFactorEnabled?: boolean

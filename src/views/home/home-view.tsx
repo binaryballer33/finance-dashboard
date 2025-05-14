@@ -39,7 +39,6 @@ type HomeViewProps = {
 export default function HomeView(props: HomeViewProps) {
     const { user } = props
 
-    // const today = getDayJsDateWithPlugins(new Date())
     const [currentDate, setCurrentDate] = useState(getDayJsDateWithPlugins(new Date()))
     const [dateRange, setDateRange] = useState<DateRange>((currentDate.format("MMM") as DateRange) || "1m")
 
@@ -114,6 +113,7 @@ export default function HomeView(props: HomeViewProps) {
                             <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                                 <div className="flex h-full flex-col gap-4">
                                     <BudgetHealth
+                                        budgetAmount={user.budgetAmount}
                                         expenses={expenses}
                                         totalExpenses={totalExpenses}
                                         totalIncome={totalIncome}
@@ -145,7 +145,12 @@ export default function HomeView(props: HomeViewProps) {
                         </TabsContent>
 
                         <TabsContent value="budget">
-                            <BudgetHealth expenses={expenses} totalExpenses={totalExpenses} totalIncome={totalIncome} />
+                            <BudgetHealth
+                                budgetAmount={user.budgetAmount}
+                                expenses={expenses}
+                                totalExpenses={totalExpenses}
+                                totalIncome={totalIncome}
+                            />
                         </TabsContent>
 
                         <TabsContent value="tables">

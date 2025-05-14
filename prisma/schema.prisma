@@ -94,6 +94,7 @@ model User {
   isTwoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation   TwoFactorConfirmation? // 1:1 relation to TwoFactorConfirmation
   twoFactorConfirmationId String?
+  budgetAmount            Float                  @default(3000)
 
   // put these indexes in later to measure the performance and database size difference
   // @@index([id, email, firstName, lastName, createdAt, updatedAt])

@@ -10,17 +10,11 @@ import prisma from "@/lib/database/prisma"
 export default async function updateUserAccountSettings(userId: string, formData: Settings): Promise<ServerResponse> {
     try {
         const { id: validatedUserId } = VerifyUUIDSchema.parse({ id: userId })
-        const { firstName, isTwoFactorEnabled, lastName } = UserSettingsSchema.parse(formData)
+        const { firstName, lastName } = UserSettingsSchema.parse(formData)
 
         const user = await prisma.user.update({
-            data: {
-                firstName,
-                isTwoFactorEnabled,
-                lastName,
-            },
-            where: {
-                id: validatedUserId,
-            },
+            data: { firstName, lastName },
+            where: { id: validatedUserId },
         })
 
         // remove encrypted password from user object

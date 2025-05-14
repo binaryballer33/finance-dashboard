@@ -1,6 +1,8 @@
 import type { NextAuthConfig } from "next-auth"
 
-import getUserById from "@/actions/user/get-user-by-id" /*
+import getUserById from "@/actions/user/get-user-by-id"
+
+/*
  * the user object that is returned from the Credentials authorize callback is passed to the sign-in callback
  *
  * the user object that is returned from the OAuth Provider is passed to the sign-in callback, shape of user object depends on the oauth provider
@@ -59,7 +61,7 @@ const callbacks: NextAuthConfig["callbacks"] = {
         token.lastName = existingUserResponse.user.lastName
         token.isTwoFactorEnabled = existingUserResponse.user.isTwoFactorEnabled
         token.imageUrl = existingUserResponse.user.imageUrl!
-
+        token.budgetAmount = existingUserResponse.user.budgetAmount
         return token
     },
 
@@ -72,6 +74,7 @@ const callbacks: NextAuthConfig["callbacks"] = {
             session.user.isTwoFactorEnabled = token.isTwoFactorEnabled
 
         if (token.imageUrl && session.user) session.user.imageUrl = token.imageUrl
+        if (token.budgetAmount && session.user) session.user.budgetAmount = token.budgetAmount
 
         return session
     },

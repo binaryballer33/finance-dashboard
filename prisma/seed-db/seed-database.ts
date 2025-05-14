@@ -13,7 +13,7 @@ type Income = Omit<PrismaIncome, "createdAt" | "id" | "updatedAt">
 
 const outlookUserId = randomUUID()
 const gmailUserId = randomUUID()
-const numberOfMonths = 12
+const previousMonthsArray = getPreviousMonthsFromToday(36)
 
 async function dropTables() {
     // delete in proper order
@@ -34,9 +34,8 @@ async function createRecurringExpenses(userId: string) {
     console.log("Attempting To Create Recurring Realistic Expenses")
 
     const expensesArray: Expense[] = []
-    const lastSixMonthsArray = getPreviousMonthsFromToday(numberOfMonths)
 
-    lastSixMonthsArray.forEach((monthDate) => {
+    previousMonthsArray.forEach((monthDate) => {
         const expenses: Omit<Expense, "createdAt" | "date" | "id" | "updatedAt">[] = [
             { amount: 1000, category: "Housing", description: "Rent", type: TransactionType.RECURRING, userId },
             {
@@ -82,46 +81,12 @@ async function createRecurringExpenses(userId: string) {
     }
 }
 
-async function createFakeRecurringExpenses(userId: string, count: number = 5) {
-    console.log("Attempting To Create Fake Recurring Expenses")
-    const fakeExpenses: Expense[] = []
-
-    Array.from({ length: count }).forEach((_, index) => {
-        const amount = Number((Math.random() * 300).toFixed(2))
-
-        // get random month with the first date of that month within the last year
-        const date = new Date()
-        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
-        date.setDate(1) // Set to the first day of the month
-        date.setMonth(date.getMonth() - Math.floor(Math.random() * 12)) // Random month within the last year
-
-        fakeExpenses.push({
-            amount,
-            category: `Lorem ipsum ${index}`,
-            date,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-            type: TransactionType.RECURRING,
-            userId,
-        })
-    })
-
-    try {
-        const result = await prisma.expense.createMany({
-            data: fakeExpenses,
-        })
-        console.log(`Successfully Inserted ${result.count} Fake Recurring Expense Records To Expenses Table\n`)
-    } catch (error) {
-        console.error("Error Inserting Fake Recurring Expense Records To Expenses Table", error)
-    }
-}
-
 async function createRecurringIncomes(userId: string) {
     console.log("Attempting To Create Recurring Realistic Incomes")
 
     const incomesArray: Income[] = []
-    const lastSixMonthsArray = getPreviousMonthsFromToday(12)
 
-    lastSixMonthsArray.forEach((monthDate) => {
+    previousMonthsArray.forEach((monthDate) => {
         const incomes: Omit<Income, "createdAt" | "date" | "id" | "updatedAt" | "userId">[] = [
             {
                 amount: 1000 + Math.floor(Math.random() * 500),
@@ -174,40 +139,6 @@ async function createRecurringIncomes(userId: string) {
         console.log(`Successfully Inserted ${result.count} Recurring Realistic Income Records To Income Table\n`)
     } catch (error) {
         console.error("Error Inserting Recurring Realistic Income Records To Income Table", error)
-    }
-}
-
-async function createFakeRecurringIncomes(userId: string, count: number = 5) {
-    console.log("Attempting To Create Fake Recurring Incomes")
-
-    const fakeIncomes: Income[] = []
-
-    Array.from({ length: count }).forEach((_, index) => {
-        const amount = Number((Math.random() * 1000).toFixed(2))
-
-        // get random month with the first date of that month within the last year
-        const date = new Date()
-        date.setDate(date.getDate() - Math.floor(Math.random() * 365)) // Random date within the last year
-        date.setDate(1) // Set to the first day of the month
-        date.setMonth(date.getMonth() - Math.floor(Math.random() * 12)) // Random month within the last year
-
-        fakeIncomes.push({
-            amount,
-            category: `Lorem ipsum ${index}`,
-            date,
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-            type: TransactionType.RECURRING,
-            userId,
-        })
-    })
-
-    try {
-        const result = await prisma.income.createMany({
-            data: fakeIncomes,
-        })
-        console.log(`Successfully Inserted ${result.count} Fake Recurring Income Records To Income Table\n`)
-    } catch (error) {
-        console.error("Error Inserting Fake Recurring Income Records To Income Table", error)
     }
 }
 
@@ -264,14 +195,12 @@ async function createUsers() {
     }
 }
 
-async function createDailyTransactions(userId: string) {
-    console.log("Attempting To Create Daily Transactions")
+async function createOneTimeExpenses(userId: string) {
+    console.log("Attempting To Create One Time Expenses")
 
     const expenses: Expense[] = []
-    const previousMonthArray = getPreviousMonthsFromToday(numberOfMonths)
 
-    previousMonthArray.forEach((month) => {
-        // Get the number of days in the month
+    previousMonthsArray.forEach((month) => {
         const daysInMonth = month.daysInMonth()
 
         const categoryDescriptions = {
@@ -365,12 +294,12 @@ async function seedDatabase() {
         await createTrades(gmailUserId)
         await createRecurringExpenses(gmailUserId)
         await createRecurringIncomes(gmailUserId)
-        await createDailyTransactions(gmailUserId)
+        await createOneTimeExpenses(gmailUserId)
 
         await createTrades(outlookUserId)
-        await createFakeRecurringExpenses(outlookUserId, 10)
-        await createFakeRecurringIncomes(outlookUserId, 20)
-        await createDailyTransactions(outlookUserId)
+        await createRecurringExpenses(outlookUserId)
+        await createRecurringIncomes(outlookUserId)
+        await createOneTimeExpenses(outlookUserId)
     } catch (error) {
         console.error("Error Seeding Database: ", error)
     }

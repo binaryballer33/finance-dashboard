@@ -1,15 +1,13 @@
-"use client"
-
 import type { UserSettings } from "@/types/forms/update-user-account-settings"
+import type { ExtendedUser } from "@/types/types.d/next-auth-types"
 
-import { UserSettingsSchema } from "@/types/forms/update-user-account-settings"
+import { defaultValues, UserSettingsSchema } from "@/types/forms/update-user-account-settings"
 
 import { useState } from "react"
 
 import { useForm } from "react-hook-form"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Settings } from "lucide-react"
 import { toast } from "sonner"
 
 import { placeholderImage } from "@/lib/constants"
@@ -17,36 +15,27 @@ import handleServerResponse from "@/lib/helper-functions/handleServerResponse"
 
 import updateUserAccountSettings from "@/actions/user/update-user-account-settings"
 
-import useAuthUser from "@/hooks/use-auth-user"
-
 import routes from "@/routes/routes"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 
-import Container from "@/components/base/container"
-import FlexCenteredFullScreenContainer from "@/components/base/flex-box/flex-center-full-screen-container"
-import Field from "@/components/forms/fields"
 import Form from "@/components/forms/form-provider"
-import FormHead from "@/components/forms/form/form-head"
 import FormSubmitButton from "@/components/forms/form/form-submit-button"
 import CustomFormInput from "@/components/forms/rhf-custom-input"
 
-export default function UserAccountSettingsView() {
-    const user = useAuthUser()
+type UserInformationProps = {
+    user: ExtendedUser
+}
 
-    const defaultValues = {
-        firstName: user?.firstName || "",
-        isTwoFactorEnabled: user?.isTwoFactorEnabled || false,
-        lastName: user?.lastName || "",
-    } satisfies UserSettings
-
+export default function UserInformation({ user }: UserInformationProps) {
     const [avatar, setAvatar] = useState<null | string>(user?.imageUrl || null)
 
-    const form = useForm<UserSettings>({ defaultValues, resolver: zodResolver(UserSettingsSchema) })
-
-    // if user object don't render this page
-    if (!user) return null
+    const form = useForm<UserSettings>({
+        defaultValues,
+        resolver: zodResolver(UserSettingsSchema),
+    })
 
     const onSubmit = form.handleSubmit(async (formData) => {
         const response = await updateUserAccountSettings(user?.id, formData)
@@ -65,14 +54,12 @@ export default function UserAccountSettingsView() {
 
     return (
         <Form form={form} onSubmit={onSubmit}>
-            <FlexCenteredFullScreenContainer minHeight="85dvh">
-                <FormHead
-                    description="Update Your Account Settings"
-                    icon={<Settings className="h-20 w-20 text-primary" />}
-                    title="Account Settings"
-                />
-
-                <Container className="space-y-4" maxWidth="md">
+            <Card>
+                <CardHeader>
+                    <CardTitle>User Information</CardTitle>
+                    <CardDescription>Update your account information.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                     <div className="flex items-center space-x-4">
                         <Avatar className="h-24 w-24">
                             <AvatarImage alt="Profile picture" src={avatar || placeholderImage} />
@@ -91,15 +78,9 @@ export default function UserAccountSettingsView() {
 
                     <CustomFormInput<UserSettings> label="Last Name" name="lastName" type="text" />
 
-                    <Field.Switch
-                        helperText="Secure your account with two-factor authentication."
-                        label="Two-factor Authentication"
-                        name="isTwoFactorEnabled"
-                    />
-
                     <FormSubmitButton loadingTitle="Updating Account Settings" title="Update Account Settings" />
-                </Container>
-            </FlexCenteredFullScreenContainer>
+                </CardContent>
+            </Card>
         </Form>
     )
 }

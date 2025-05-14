@@ -7,7 +7,6 @@ const user = {
     investments: "/investments",
     profile: `/user/profile`,
     savings: "/savings",
-    settings: `/user/settings`,
 }
 
 const nextAuth = {

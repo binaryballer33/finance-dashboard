@@ -108,7 +108,9 @@ export default function CustomInput<T extends Record<string, any>>(props: Custom
                             {/* Icon on the far right of the input field, used to clear the text in the field */}
                             {field.value !== undefined && field.value !== "" && (
                                 <button
-                                    className="absolute inset-y-0 right-3 flex items-center"
+                                    className={`absolute inset-y-0 ${
+                                        type === "number" ? "right-8" : "right-3"
+                                    } flex items-center`}
                                     onClick={() => {
                                         // Safe type casting as we're clearing field value
                                         setValue(name, finalInputType === "number" ? 0 : ("" as any))
